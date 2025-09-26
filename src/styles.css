@@ -1,0 +1,403 @@
+/**
+ * PrettyPoly React Component Styles
+ * Base styles for grid layouts and responsive modes
+ */
+
+/* CSS Variables for theming (shadcn/ui compatible) */
+:root {
+  --pretty-poly-border: hsl(214.3 31.8% 91.4%);
+  --pretty-poly-border-hover: hsl(214.3 31.8% 85%);
+  --pretty-poly-foreground: hsl(222.2 84% 4.9%);
+  --pretty-poly-background: hsl(0 0% 100%);
+  --pretty-poly-muted: hsl(210 40% 98%);
+  --pretty-poly-accent: hsl(210 40% 96%);
+  --pretty-poly-destructive: hsl(0 84.2% 60.2%);
+
+  --pretty-poly-divider-size: 8px;
+  --pretty-poly-transition-duration: 0.15s;
+}
+
+[data-theme="dark"] {
+  --pretty-poly-border: hsl(217.2 32.6% 17.5%);
+  --pretty-poly-border-hover: hsl(217.2 32.6% 25%);
+  --pretty-poly-foreground: hsl(210 40% 98%);
+  --pretty-poly-background: hsl(222.2 84% 4.9%);
+  --pretty-poly-muted: hsl(217.2 32.6% 17.5%);
+  --pretty-poly-accent: hsl(217.2 32.6% 17.5%);
+}
+
+/* Base Grid Styles */
+.pretty-poly-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.pretty-poly-grid--dragging {
+  user-select: none;
+  cursor: grabbing;
+}
+
+.pretty-poly-grid--dragging * {
+  pointer-events: none;
+}
+
+/* Block Styles */
+.pretty-poly-block {
+  position: relative;
+  overflow: hidden;
+  transition: opacity var(--pretty-poly-transition-duration) ease-in-out;
+}
+
+.pretty-poly-block--collapsible {
+  transition: all var(--pretty-poly-transition-duration) ease-in-out;
+}
+
+.pretty-poly-block--collapsed {
+  opacity: 0.7;
+}
+
+.pretty-poly-block:focus-visible {
+  outline: 2px solid var(--pretty-poly-foreground);
+  outline-offset: -2px;
+}
+
+/* Block type variations */
+.pretty-poly-block--block {
+  /* Individual block styles */
+}
+
+.pretty-poly-block--group {
+  /* Group container styles */
+}
+
+/* Size unit variations */
+.pretty-poly-block--px {
+  /* Fixed pixel size blocks */
+}
+
+.pretty-poly-block--fr {
+  /* Fractional unit blocks */
+}
+
+.pretty-poly-block--auto {
+  /* Auto-sized blocks */
+}
+
+/* Divider Styles */
+.pretty-poly-divider {
+  position: relative;
+  background-color: transparent;
+  transition: background-color var(--pretty-poly-transition-duration) ease-in-out;
+  flex-shrink: 0;
+}
+
+.pretty-poly-divider:hover {
+  background-color: var(--pretty-poly-accent);
+}
+
+.pretty-poly-divider:focus-visible {
+  outline: 2px solid var(--pretty-poly-foreground);
+  background-color: var(--pretty-poly-accent);
+}
+
+.pretty-poly-divider--dragging {
+  background-color: var(--pretty-poly-border-hover);
+}
+
+.pretty-poly-divider-handle {
+  background-color: var(--pretty-poly-border);
+  transition: background-color var(--pretty-poly-transition-duration) ease-in-out;
+}
+
+.pretty-poly-divider:hover .pretty-poly-divider-handle {
+  background-color: var(--pretty-poly-border-hover);
+}
+
+/* Position-specific divider styles */
+.pretty-poly-divider--start {
+  /* Dividers at the start of blocks */
+}
+
+.pretty-poly-divider--end {
+  /* Dividers at the end of blocks */
+}
+
+/* Responsive Mode Styles */
+
+/* Grid Mode (Desktop) */
+.pretty-poly-grid[data-active-mode*="desktop"],
+.pretty-poly-grid[data-active-mode*="grid"] {
+  /* Full grid functionality */
+}
+
+/* Dock Mode (Mobile) */
+.pretty-poly-grid[data-active-mode*="mobile"],
+.pretty-poly-grid[data-active-mode*="dock"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.pretty-poly-dock-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--pretty-poly-background);
+  border-top: 1px solid var(--pretty-poly-border);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem;
+  z-index: 50;
+}
+
+.pretty-poly-dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: background-color var(--pretty-poly-transition-duration) ease-in-out;
+  cursor: pointer;
+  min-width: 3rem;
+}
+
+.pretty-poly-dock-item:hover {
+  background-color: var(--pretty-poly-accent);
+}
+
+.pretty-poly-dock-item:focus-visible {
+  outline: 2px solid var(--pretty-poly-foreground);
+  outline-offset: 2px;
+}
+
+.pretty-poly-dock-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.pretty-poly-dock-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Tab Mode */
+.pretty-poly-tabs-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.pretty-poly-tabs-header {
+  display: flex;
+  border-bottom: 1px solid var(--pretty-poly-border);
+  background-color: var(--pretty-poly-muted);
+}
+
+.pretty-poly-tab-button {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--pretty-poly-transition-duration) ease-in-out;
+  border-bottom: 2px solid transparent;
+}
+
+.pretty-poly-tab-button:hover {
+  background-color: var(--pretty-poly-accent);
+}
+
+.pretty-poly-tab-button--active {
+  border-bottom-color: var(--pretty-poly-foreground);
+  background-color: var(--pretty-poly-background);
+}
+
+.pretty-poly-tab-panel {
+  flex: 1;
+  overflow: auto;
+}
+
+/* Stack Mode (Mobile) */
+.pretty-poly-stack-container {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pretty-poly-stack-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--pretty-poly-background);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.pretty-poly-stack-panel--active {
+  transform: translateX(0);
+}
+
+.pretty-poly-stack-panel--prev {
+  transform: translateX(-100%);
+}
+
+/* Sidebar Mode */
+.pretty-poly-sidebar-container {
+  display: flex;
+  height: 100%;
+}
+
+.pretty-poly-sidebar {
+  transition: transform var(--pretty-poly-transition-duration) ease-in-out;
+}
+
+.pretty-poly-sidebar--collapsed {
+  transform: translateX(-100%);
+}
+
+.pretty-poly-sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.5rem;
+  border: 1px solid var(--pretty-poly-border);
+  border-radius: 0.375rem;
+  background-color: var(--pretty-poly-background);
+  cursor: pointer;
+}
+
+.pretty-poly-sidebar-main {
+  flex: 1;
+  overflow: auto;
+}
+
+/* Accordion Mode */
+.pretty-poly-accordion-container {
+  overflow: auto;
+}
+
+.pretty-poly-accordion-item {
+  border-bottom: 1px solid var(--pretty-poly-border);
+}
+
+.pretty-poly-accordion-trigger {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color var(--pretty-poly-transition-duration) ease-in-out;
+}
+
+.pretty-poly-accordion-trigger:hover {
+  background-color: var(--pretty-poly-accent);
+}
+
+.pretty-poly-accordion-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.pretty-poly-accordion-content--collapsed {
+  max-height: 0;
+}
+
+/* Utility Classes */
+.pretty-poly-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pretty-poly-no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Animations */
+@keyframes pretty-poly-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pretty-poly-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pretty-poly-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Responsive breakpoint utilities */
+@media (max-width: 767px) {
+  .pretty-poly-mobile-hidden {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pretty-poly-tablet-hidden {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pretty-poly-desktop-hidden {
+    display: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pretty-poly-divider-handle {
+    background-color: currentColor;
+  }
+
+  .pretty-poly-divider:hover .pretty-poly-divider-handle {
+    background-color: currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .pretty-poly-block,
+  .pretty-poly-divider,
+  .pretty-poly-divider-handle,
+  .pretty-poly-dock-item,
+  .pretty-poly-tab-button,
+  .pretty-poly-stack-panel,
+  .pretty-poly-sidebar,
+  .pretty-poly-accordion-content {
+    transition: none;
+  }
+}
