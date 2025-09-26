@@ -1,6 +1,6 @@
-import React, { forwardRef, useMemo } from 'react'
+import { forwardRef, useMemo } from 'react'
 import { clsx } from 'clsx'
-import type { BlockProps, ModeConfig, BlockType } from '../../types'
+import type { BlockProps, ModeConfig } from '../../types'
 import { useGridState, useGridActions } from '../Grid/GridProvider'
 import { useGridMode } from '../../hooks/useGridMode'
 

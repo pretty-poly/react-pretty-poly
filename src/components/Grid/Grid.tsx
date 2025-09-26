@@ -1,7 +1,7 @@
-import React, { forwardRef, useRef, useImperativeHandle, useMemo } from 'react'
+import { forwardRef, useRef, useImperativeHandle, useMemo } from 'react'
 import { clsx } from 'clsx'
-import type { GridProps, BlockConfig, GridState, LayoutMode } from '../../types'
-import { GridProvider, useGridContext, useGridState } from './GridProvider'
+import type { GridProps, BlockConfig, GridState } from '../../types'
+import { GridProvider, useGridContext } from './GridProvider'
 import { useGridResize } from '../../hooks/useGridResize'
 import { useGridKeyboard } from '../../hooks/useGridKeyboard'
 import { generateGridTemplate } from '../../utils/calculations'
@@ -27,6 +27,9 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
     const containerRef = useRef<HTMLDivElement>(null)
     const { state, resizeBlock, collapseBlock, expandBlock, switchMode, persistState, resetState } = useGridContext()
 
+    // Get resize state
+    const isDragging = state.resize.isDragging
+
     // Expose API through ref
     useImperativeHandle(ref, () => ({
       resizeBlock,
@@ -49,12 +52,8 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
       return blocks.find(block => !block.parentId)
     }, [blocks])
 
-    // Set up resize handling
+    // Legacy resize support (keeping for backward compatibility)
     const {
-      startResize,
-      isDragging,
-      activeBlockId,
-      resetBlock: resetBlockFromHook,
       isBlockCollapsed
     } = useGridResize({
       blocks,
@@ -88,6 +87,9 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
 
       // Get blocks grouped by parent
       const blocksByParent = blocks.reduce((acc, block) => {
+        // Skip the root block itself when grouping by parent
+        if (block.id === 'root') return acc
+
         const parentId = block.parentId || 'root'
         if (!acc[parentId]) acc[parentId] = []
         acc[parentId].push(block)
@@ -105,29 +107,59 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         })
         .join('\n  ')
 
-      // Generate simple grid styles based on JSX structure
-      const styles = `
-[data-block-id="root"] {
-  display: grid;
-  grid-template-columns: 320px 8px 1fr;
-  grid-template-rows: 1fr;
-  height: 100%;
-}
+      // Generate dynamic grid styles based on block tree structure
+      const generateGroupStyles = (parentId: string, visited: Set<string> = new Set()): string => {
+        // Prevent infinite recursion
+        if (visited.has(parentId)) {
+          console.warn(`Circular reference detected for parent: ${parentId}`)
+          return ''
+        }
 
-[data-block-id="dashboard-main"] {
-  display: grid;
-  grid-template-rows: 1fr 8px 300px;
-  grid-template-columns: 1fr;
-  height: 100%;
-}
+        // Create a new set for this branch to avoid cross-contamination
+        const newVisited = new Set(visited)
+        newVisited.add(parentId)
 
-[data-block-id="charts-area"] {
-  display: grid;
-  grid-template-columns: 2fr 8px 1fr;
-  grid-template-rows: 1fr;
-  height: 100%;
-}
+        const childBlocks = blocksByParent[parentId] || []
+        if (childBlocks.length === 0) return ''
 
+        // Sort by order
+        const sortedBlocks = [...childBlocks].sort((a, b) => (a.order || 0) - (b.order || 0))
+
+        // Generate grid template for this group
+        const parentBlock = blocks.find(b => b.id === parentId) || rootBlock
+        const direction = parentBlock?.direction || 'row'
+
+        const template = generateGridTemplate(sortedBlocks.map(block => ({
+          id: block.id,
+          sizeUnit: block.sizeUnit || 'fr',
+          size: block.defaultSize || 1,
+          dividerPosition: block.dividerPosition || 'none',
+          dividerSize: block.dividerSize || 8
+        })))
+
+        const templateProperty = direction === 'column' ? 'grid-template-rows' : 'grid-template-columns'
+
+        let groupStyle = `
+[data-block-id="${parentId}"] {
+  display: grid;
+  ${templateProperty}: ${template};
+  ${direction === 'column' ? 'grid-template-columns: 1fr;' : 'grid-template-rows: 1fr;'}
+  height: 100%;
+}`
+
+        // Generate styles for child groups recursively
+        for (const childBlock of sortedBlocks) {
+          if (childBlock.type === 'group') {
+            groupStyle += generateGroupStyles(childBlock.id, newVisited)
+          }
+        }
+
+        return groupStyle
+      }
+
+      const dynamicStyles = generateGroupStyles('root')
+
+      const baseStyles = `
 .pretty-poly-divider {
   background-color: #e5e7eb;
   cursor: col-resize;
@@ -135,11 +167,15 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
 
 .pretty-poly-divider[data-block-direction="column"] {
   cursor: row-resize;
+}
+
+.pretty-poly-divider--dragging {
+  background-color: #3b82f6;
 }`
 
       return {
         cssVariables: `:root {\n  ${variables}\n}`,
-        gridStyles: styles
+        gridStyles: dynamicStyles + baseStyles
       }
     }, [blocks, rootBlock])
 

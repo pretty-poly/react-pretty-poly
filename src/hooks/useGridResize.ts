@@ -1,13 +1,7 @@
-import { useCallback, useEffect, useRef } from 'react'
-import type { BlockConfig, Direction, SizeUnit } from '../types'
-import {
-  calculateConstrainedSize,
-  clamp,
-  getFlexSpacePx,
-  pxToFr,
-  findAdjacentBlock
-} from '../utils/calculations'
-import { validateTwoWayResize } from '../utils/constraints'
+import { useCallback, useEffect } from 'react'
+import type { BlockConfig, Direction } from '../types'
+import { useGridResize as useGridResizeContext } from '../components/Grid/GridProvider'
+import { getFlexSpacePx } from '../utils/calculations'
 
 export interface UseGridResizeOptions {
   blocks: BlockConfig[]
@@ -16,17 +10,9 @@ export interface UseGridResizeOptions {
   direction?: Direction
 }
 
-export interface ResizeState {
-  isDragging: boolean
-  activeBlockId?: string
-  activeDividerId?: string
-  startPosition: number
-  initialSize: number
-}
-
 /**
- * Main hook for handling grid resize operations
- * Ported from the original GridResize TypeScript implementation
+ * Hook for handling grid resize operations
+ * Now uses the context-based resize system instead of managing state locally
  */
 export function useGridResize({
   blocks,
@@ -34,18 +20,14 @@ export function useGridResize({
   onSizeChange,
   direction = 'row'
 }: UseGridResizeOptions) {
-  const resizeState = useRef<ResizeState>({
-    isDragging: false,
-    startPosition: 0,
-    initialSize: 0
-  })
-
-  /**
-   * Get the client axis for mouse/touch events based on direction
-   */
-  const getClientAxis = useCallback((direction: Direction): 'clientX' | 'clientY' => {
-    return direction === 'column' ? 'clientX' : 'clientY'
-  }, [])
+  const {
+    startResize,
+    updateResize,
+    endResize,
+    isDragging,
+    activeBlockId,
+    activeDividerId
+  } = useGridResizeContext()
 
   /**
    * Get container size in the relevant dimension
@@ -82,131 +64,6 @@ export function useGridResize({
     const flexSpace = getFlexSpacePx(containerSize, fixedSpace, gapSpace)
     return totalFr > 0 ? flexSpace / totalFr : 0
   }, [blocks, getContainerSize])
-
-  /**
-   * Start a resize operation
-   */
-  const startResize = useCallback((
-    blockId: string,
-    dividerId: string,
-    event: MouseEvent | TouchEvent
-  ) => {
-    const block = blocks.find(b => b.id === blockId)
-    if (!block) return
-
-    const clientAxis = getClientAxis(direction)
-    const startPosition = event instanceof MouseEvent
-      ? event[clientAxis]
-      : event.touches[0][clientAxis]
-
-    resizeState.current = {
-      isDragging: true,
-      activeBlockId: blockId,
-      activeDividerId: dividerId,
-      startPosition,
-      initialSize: block.defaultSize || 0
-    }
-
-    // Prevent text selection during drag
-    document.body.style.userSelect = 'none'
-    document.body.style.cursor = direction === 'column' ? 'col-resize' : 'row-resize'
-  }, [blocks, direction, getClientAxis])
-
-  /**
-   * Handle resize during drag
-   */
-  const handleResize = useCallback((event: MouseEvent | TouchEvent) => {
-    const state = resizeState.current
-    if (!state.isDragging || !state.activeBlockId) return
-
-    const block = blocks.find(b => b.id === state.activeBlockId)
-    if (!block) return
-
-    const clientAxis = getClientAxis(direction)
-    const currentPosition = event instanceof MouseEvent
-      ? event[clientAxis]
-      : event.touches[0][clientAxis]
-
-    const deltaPx = currentPosition - state.startPosition
-
-    if (block.sizeUnit === 'px') {
-      // Handle pixel-based resizing
-      const dividerPosition = block.dividerPosition || 'end'
-      const shouldInvertDelta = dividerPosition === 'start'
-
-      const newSize = calculateConstrainedSize(
-        deltaPx,
-        state.initialSize,
-        block.minSize,
-        block.maxSize,
-        shouldInvertDelta
-      )
-
-      // Apply collapse logic if enabled
-      // TODO: Implement collapse logic here
-
-      onSizeChange?.(state.activeBlockId, newSize)
-    } else if (block.sizeUnit === 'fr') {
-      // Handle fractional resizing (two-way)
-      const pixelsPerFr = calculatePixelsPerFr()
-      const deltaFr = pxToFr(deltaPx, pixelsPerFr)
-
-      // Find adjacent block for two-way resizing
-      const blockIndex = blocks.findIndex(b => b.id === state.activeBlockId)
-      const frBlocks = blocks.filter(b => b.sizeUnit === 'fr')
-      const adjacentBlock = findAdjacentBlock(
-        frBlocks.findIndex(b => b.id === state.activeBlockId),
-        frBlocks,
-        block.dividerPosition === 'start' ? 'start' : 'end'
-      )
-
-      if (adjacentBlock) {
-        // Calculate proposed deltas
-        const dividerPosition = block.dividerPosition || 'end'
-        let targetDelta: number
-        let adjacentDelta: number
-
-        if (dividerPosition === 'start') {
-          targetDelta = -deltaFr
-          adjacentDelta = deltaFr
-        } else {
-          targetDelta = deltaFr
-          adjacentDelta = -deltaFr
-        }
-
-        // Validate and adjust for constraints
-        const validation = validateTwoWayResize(
-          block,
-          adjacentBlock,
-          targetDelta,
-          adjacentDelta,
-          pixelsPerFr
-        )
-
-        // Apply the validated changes
-        const newTargetSize = (block.defaultSize || 1) + validation.adjustedTargetDelta
-        const newAdjacentSize = (adjacentBlock.defaultSize || 1) + validation.adjustedAdjacentDelta
-
-        onSizeChange?.(state.activeBlockId, newTargetSize)
-        onSizeChange?.(adjacentBlock.id, newAdjacentSize)
-      }
-    }
-  }, [blocks, direction, getClientAxis, calculatePixelsPerFr, onSizeChange])
-
-  /**
-   * End resize operation
-   */
-  const endResize = useCallback(() => {
-    resizeState.current = {
-      isDragging: false,
-      startPosition: 0,
-      initialSize: 0
-    }
-
-    // Restore normal cursor and text selection
-    document.body.style.userSelect = ''
-    document.body.style.cursor = ''
-  }, [])
 
   /**
    * Reset a block to its default size
@@ -252,12 +109,12 @@ export function useGridResize({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       e.preventDefault()
-      handleResize(e)
+      updateResize(e)
     }
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault()
-      handleResize(e)
+      updateResize(e)
     }
 
     const handleMouseUp = () => {
@@ -268,7 +125,7 @@ export function useGridResize({
       endResize()
     }
 
-    if (resizeState.current.isDragging) {
+    if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
       document.addEventListener('touchmove', handleTouchMove)
@@ -281,13 +138,13 @@ export function useGridResize({
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }
-  }, [handleResize, endResize])
+  }, [isDragging, updateResize, endResize])
 
   return {
     // State
-    isDragging: resizeState.current.isDragging,
-    activeBlockId: resizeState.current.activeBlockId,
-    activeDividerId: resizeState.current.activeDividerId,
+    isDragging,
+    activeBlockId,
+    activeDividerId,
 
     // Actions
     startResize,

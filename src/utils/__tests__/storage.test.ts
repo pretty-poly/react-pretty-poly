@@ -26,6 +26,11 @@ const mockGridState: GridState = {
     width: 1024,
     height: 768,
     orientation: 'landscape'
+  },
+  resize: {
+    isDragging: false,
+    startPosition: { x: 0, y: 0 },
+    initialSize: 0
   }
 }
 

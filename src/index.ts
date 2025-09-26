@@ -24,7 +24,6 @@ export {
 } from './hooks'
 export type {
   UseGridResizeOptions,
-  ResizeState,
   UseGridPersistenceOptions,
   UseGridKeyboardOptions
 } from './hooks'
@@ -32,6 +31,7 @@ export type {
 // Types
 export type {
   BlockType,
+  ResizeState,
   SizeUnit,
   Direction,
   DividerPosition,

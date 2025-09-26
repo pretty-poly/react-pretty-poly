@@ -25,6 +25,10 @@ export interface BlockConfig {
   maxSize?: number
   sizeUnit?: SizeUnit
 
+  // Runtime size tracking
+  size?: number
+  originalDefaultSize?: number
+
   // Collapse behavior
   collapsible?: boolean
   collapseAt?: number
@@ -86,12 +90,24 @@ export interface ViewportInfo {
   orientation: "portrait" | "landscape"
 }
 
+// Resize state
+export interface ResizeState {
+  isDragging: boolean
+  activeBlockId?: string
+  activeDividerId?: string
+  startPosition: { x: number; y: number }
+  initialSize: number
+  initialAdjacentBlockId?: string
+  initialAdjacentSize?: number
+}
+
 // Grid state
 export interface GridState {
   blocks: Record<string, BlockConfig>
   activeMode: string
   activeDivider?: string
   viewport: ViewportInfo
+  resize: ResizeState
 }
 
 // Grid context
@@ -104,6 +120,11 @@ export interface GridContextValue {
   collapseBlock: (blockId: string) => void
   expandBlock: (blockId: string) => void
   switchMode: (mode: string) => void
+
+  // Resize operations
+  startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void
+  updateResize: (event: MouseEvent | TouchEvent) => void
+  endResize: () => void
 
   // Persistence
   persistState: () => void
@@ -120,6 +141,9 @@ export type GridAction =
   | { type: "UPDATE_VIEWPORT"; payload: { viewport: ViewportInfo } }
   | { type: "LOAD_STATE"; payload: { state: Partial<GridState> } }
   | { type: "RESET_STATE" }
+  | { type: "START_RESIZE"; payload: { blockId: string; dividerId: string; startPosition: { x: number; y: number }; initialSize: number; initialAdjacentBlockId?: string; initialAdjacentSize?: number } }
+  | { type: "UPDATE_RESIZE"; payload: { currentPosition: { x: number; y: number } } }
+  | { type: "END_RESIZE" }
 
 // Component props
 export interface GridProps {

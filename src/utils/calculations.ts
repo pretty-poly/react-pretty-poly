@@ -135,7 +135,7 @@ export function generateGridTemplate(
     if (block.sizeUnit === "auto") {
       parts.push("auto")
     } else if (block.sizeUnit === "px") {
-      parts.push(`${block.size}px`)
+      parts.push(`var(--${block.id}-size, ${block.size}px)`)
     } else {
       parts.push(`var(--${block.id}-size, ${block.size}fr)`)
     }

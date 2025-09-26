@@ -3,7 +3,7 @@
  */
 
 export { useGridResize } from './useGridResize'
-export type { UseGridResizeOptions, ResizeState } from './useGridResize'
+export type { UseGridResizeOptions } from './useGridResize'
 
 export { useGridPersistence } from './useGridPersistence'
 export type { UseGridPersistenceOptions } from './useGridPersistence'
