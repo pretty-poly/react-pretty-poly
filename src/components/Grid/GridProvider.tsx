@@ -1,29 +1,34 @@
-import React, { createContext, useContext, useReducer, useEffect, useMemo } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useMemo,
+} from "react";
 import type {
   GridState,
   GridAction,
   GridContextValue,
   BlockConfig,
   ResponsiveModes,
-  ViewportInfo
-} from '../../types'
-import { useGridMode } from '../../hooks/useGridMode'
-import { useGridPersistence } from '../../hooks/useGridPersistence'
+  ViewportInfo,
+} from "../../types";
+import { useGridMode } from "../../hooks/useGridMode";
+import { useGridPersistence } from "../../hooks/useGridPersistence";
 import {
   calculateConstrainedSize,
   pxToFr,
   getFlexSpacePx,
-  findAdjacentBlock
-} from '../../utils/calculations'
+} from "../../utils/calculations";
 
 /**
  * Grid state reducer
  */
 function gridStateReducer(state: GridState, action: GridAction): GridState {
   switch (action.type) {
-    case 'RESIZE_BLOCK':
-      const block = state.blocks[action.payload.blockId]
-      if (!block) return state
+    case "RESIZE_BLOCK":
+      const block = state.blocks[action.payload.blockId];
+      if (!block) return state;
 
       return {
         ...state,
@@ -32,16 +37,16 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           [action.payload.blockId]: {
             ...block,
             defaultSize: action.payload.size,
-            size: action.payload.size
-          }
-        }
-      }
+            size: action.payload.size,
+          },
+        },
+      };
 
-    case 'COLLAPSE_BLOCK':
-      const collapseBlock = state.blocks[action.payload.blockId]
-      if (!collapseBlock) return state
+    case "COLLAPSE_BLOCK":
+      const collapseBlock = state.blocks[action.payload.blockId];
+      if (!collapseBlock) return state;
 
-      const collapseSize = collapseBlock.collapseTo || 0
+      const collapseSize = collapseBlock.collapseTo || 0;
       return {
         ...state,
         blocks: {
@@ -49,19 +54,21 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           [action.payload.blockId]: {
             ...collapseBlock,
             // Preserve original size for expand
-            originalDefaultSize: collapseBlock.originalDefaultSize || collapseBlock.defaultSize,
+            originalDefaultSize:
+              collapseBlock.originalDefaultSize || collapseBlock.defaultSize,
             defaultSize: collapseSize,
-            size: collapseSize
-          }
-        }
-      }
+            size: collapseSize,
+          },
+        },
+      };
 
-    case 'EXPAND_BLOCK':
-      const expandBlock = state.blocks[action.payload.blockId]
-      if (!expandBlock) return state
+    case "EXPAND_BLOCK":
+      const expandBlock = state.blocks[action.payload.blockId];
+      if (!expandBlock) return state;
 
       // Restore to the original default size defined in configuration
-      const originalSize = expandBlock.originalDefaultSize || expandBlock.defaultSize || 100
+      const originalSize =
+        expandBlock.originalDefaultSize || expandBlock.defaultSize || 100;
       return {
         ...state,
         blocks: {
@@ -69,38 +76,38 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           [action.payload.blockId]: {
             ...expandBlock,
             defaultSize: originalSize,
-            size: originalSize
-          }
-        }
-      }
+            size: originalSize,
+          },
+        },
+      };
 
-    case 'SET_ACTIVE_DIVIDER':
+    case "SET_ACTIVE_DIVIDER":
       return {
         ...state,
-        activeDivider: action.payload.dividerId
-      }
+        activeDivider: action.payload.dividerId,
+      };
 
-    case 'SWITCH_MODE':
+    case "SWITCH_MODE":
       return {
         ...state,
-        activeMode: action.payload.mode
-      }
+        activeMode: action.payload.mode,
+      };
 
-    case 'UPDATE_VIEWPORT':
+    case "UPDATE_VIEWPORT":
       return {
         ...state,
-        viewport: action.payload.viewport
-      }
+        viewport: action.payload.viewport,
+      };
 
-    case 'LOAD_STATE':
+    case "LOAD_STATE":
       return {
         ...state,
         ...action.payload.state,
         // Always preserve current viewport
-        viewport: state.viewport
-      }
+        viewport: state.viewport,
+      };
 
-    case 'RESET_STATE':
+    case "RESET_STATE":
       // Reset block sizes to their original defaults
       const resetBlocks = Object.fromEntries(
         Object.entries(state.blocks).map(([id, block]) => [
@@ -109,9 +116,9 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
             ...block,
             size: block.defaultSize,
             // Reset to original defaultSize stored somewhere, or current defaultSize
-          }
+          },
         ])
-      )
+      );
       return {
         ...state,
         blocks: resetBlocks,
@@ -119,11 +126,11 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
         resize: {
           isDragging: false,
           startPosition: { x: 0, y: 0 },
-          initialSize: 0
-        }
-      }
+          initialSize: 0,
+        },
+      };
 
-    case 'START_RESIZE':
+    case "START_RESIZE":
       return {
         ...state,
         resize: {
@@ -133,31 +140,31 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           startPosition: action.payload.startPosition,
           initialSize: action.payload.initialSize,
           initialAdjacentBlockId: action.payload.initialAdjacentBlockId,
-          initialAdjacentSize: action.payload.initialAdjacentSize
-        }
-      }
+          initialAdjacentSize: action.payload.initialAdjacentSize,
+        },
+      };
 
-    case 'UPDATE_RESIZE':
+    case "UPDATE_RESIZE":
       return {
         ...state,
         resize: {
           ...state.resize,
           // The resize calculation happens in the resize handler, not the reducer
-        }
-      }
+        },
+      };
 
-    case 'END_RESIZE':
+    case "END_RESIZE":
       return {
         ...state,
         resize: {
           isDragging: false,
           startPosition: { x: 0, y: 0 },
-          initialSize: 0
-        }
-      }
+          initialSize: 0,
+        },
+      };
 
     default:
-      return state
+      return state;
   }
 }
 
@@ -173,10 +180,10 @@ function createInitialState(
     acc[block.id] = {
       ...block,
       size: block.defaultSize,
-      originalDefaultSize: block.defaultSize // Store original size for expand functionality
-    }
-    return acc
-  }, {} as Record<string, BlockConfig>)
+      originalDefaultSize: block.defaultSize, // Store original size for expand functionality
+    };
+    return acc;
+  }, {} as Record<string, BlockConfig>);
 
   return {
     blocks: blocksMap,
@@ -185,23 +192,27 @@ function createInitialState(
     resize: {
       isDragging: false,
       startPosition: { x: 0, y: 0 },
-      initialSize: 0
-    }
-  }
+      initialSize: 0,
+    },
+  };
 }
 
 // Context
-const GridContext = createContext<GridContextValue | null>(null)
+const GridContext = createContext<GridContextValue | null>(null);
 
 export interface GridProviderProps {
-  children: React.ReactNode
-  blocks: BlockConfig[]
-  modes?: ResponsiveModes
-  gridId?: string
-  persist?: boolean | 'localStorage' | 'sessionStorage' | ((state: GridState) => void)
-  persistKey?: string
-  onModeChange?: (newMode: string, previousMode: string) => void
-  onLayoutChange?: (blocks: BlockConfig[]) => void
+  children: React.ReactNode;
+  blocks: BlockConfig[];
+  modes?: ResponsiveModes;
+  gridId?: string;
+  persist?:
+    | boolean
+    | "localStorage"
+    | "sessionStorage"
+    | ((state: GridState) => void);
+  persistKey?: string;
+  onModeChange?: (newMode: string, previousMode: string) => void;
+  onLayoutChange?: (blocks: BlockConfig[]) => void;
 }
 
 /**
@@ -211,44 +222,40 @@ export function GridProvider({
   children,
   blocks,
   modes,
-  gridId = 'default',
+  gridId = "default",
   persist = false,
   persistKey,
   onModeChange,
-  onLayoutChange
+  onLayoutChange,
 }: GridProviderProps) {
   // Mode management
-  const {
-    activeMode,
-    viewport,
-    setMode: setModeInternal
-  } = useGridMode(modes)
+  const { activeMode, viewport, setMode: setModeInternal } = useGridMode(modes);
 
   // Initialize state
   const [state, dispatch] = useReducer(
     gridStateReducer,
     createInitialState(blocks, viewport, activeMode)
-  )
+  );
 
   // Update viewport in state when it changes
   useEffect(() => {
     dispatch({
-      type: 'UPDATE_VIEWPORT',
-      payload: { viewport }
-    })
-  }, [viewport])
+      type: "UPDATE_VIEWPORT",
+      payload: { viewport },
+    });
+  }, [viewport]);
 
   // Update active mode in state when it changes
   useEffect(() => {
-    const previousMode = state.activeMode
+    const previousMode = state.activeMode;
     if (activeMode !== previousMode) {
       dispatch({
-        type: 'SWITCH_MODE',
-        payload: { mode: activeMode }
-      })
-      onModeChange?.(activeMode, previousMode)
+        type: "SWITCH_MODE",
+        payload: { mode: activeMode },
+      });
+      onModeChange?.(activeMode, previousMode);
     }
-  }, [activeMode, state.activeMode, onModeChange])
+  }, [activeMode, state.activeMode, onModeChange]);
 
   // Persistence
   const { saveState, clearState } = useGridPersistence({
@@ -256,302 +263,367 @@ export function GridProvider({
     enabled: persist,
     state,
     onStateLoad: (loadedState) => {
-      dispatch({ type: 'LOAD_STATE', payload: { state: loadedState } })
+      dispatch({ type: "LOAD_STATE", payload: { state: loadedState } });
     },
-    autoSave: true
-  })
+    autoSave: true,
+  });
 
   // Helper functions for resize operations
 
-  const getEventPosition = (event: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent): { x: number; y: number } => {
-    if ('touches' in event) {
-      return { x: event.touches[0].clientX, y: event.touches[0].clientY }
+  const getEventPosition = (
+    event: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent
+  ): { x: number; y: number } => {
+    if ("touches" in event) {
+      return { x: event.touches[0].clientX, y: event.touches[0].clientY };
     }
-    return { x: event.clientX, y: event.clientY }
-  }
+    return { x: event.clientX, y: event.clientY };
+  };
 
   // Create context value
-  const contextValue: GridContextValue = useMemo(() => ({
-    state: {
-      ...state,
-      activeMode,
-      viewport
-    },
-    dispatch,
+  const contextValue: GridContextValue = useMemo(
+    () => ({
+      state: {
+        ...state,
+        activeMode,
+        viewport,
+      },
+      dispatch,
 
-    // Grid operations
-    resizeBlock: (blockId: string, size: number) => {
-      dispatch({
-        type: 'RESIZE_BLOCK',
-        payload: { blockId, size }
-      })
-    },
+      // Grid operations
+      resizeBlock: (blockId: string, size: number) => {
+        dispatch({
+          type: "RESIZE_BLOCK",
+          payload: { blockId, size },
+        });
+      },
 
-    collapseBlock: (blockId: string) => {
-      dispatch({
-        type: 'COLLAPSE_BLOCK',
-        payload: { blockId }
-      })
-    },
+      collapseBlock: (blockId: string) => {
+        dispatch({
+          type: "COLLAPSE_BLOCK",
+          payload: { blockId },
+        });
+      },
 
-    expandBlock: (blockId: string) => {
-      dispatch({
-        type: 'EXPAND_BLOCK',
-        payload: { blockId }
-      })
-    },
+      expandBlock: (blockId: string) => {
+        dispatch({
+          type: "EXPAND_BLOCK",
+          payload: { blockId },
+        });
+      },
 
-    switchMode: (mode: string) => {
-      setModeInternal(mode)
-    },
+      switchMode: (mode: string) => {
+        setModeInternal(mode);
+      },
 
-    // Resize operations
-    startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => {
-      const block = state.blocks[blockId]
-      if (!block) return
+      // Resize operations
+      startResize: (
+        blockId: string,
+        dividerId: string,
+        event: React.MouseEvent | React.TouchEvent
+      ) => {
+        const block = state.blocks[blockId];
+        if (!block) return;
 
-      const startPosition = getEventPosition(event)
+        const startPosition = getEventPosition(event);
 
-      // Find adjacent block for two-way resizing
-      const siblingBlocks = Object.values(state.blocks).filter(b => b.parentId === block.parentId)
-      const sortedSiblings = siblingBlocks.sort((a, b) => (a.order || 0) - (b.order || 0))
-      const blockIndex = sortedSiblings.findIndex(b => b.id === blockId)
+        // Find adjacent block for two-way resizing
+        const siblingBlocks = Object.values(state.blocks).filter(
+          (b) => b.parentId === block.parentId
+        );
+        const sortedSiblings = siblingBlocks.sort(
+          (a, b) => (a.order || 0) - (b.order || 0)
+        );
+        const blockIndex = sortedSiblings.findIndex((b) => b.id === blockId);
 
-      let adjacentBlock = null
-      if (block.dividerPosition === 'start' && blockIndex > 0) {
-        adjacentBlock = sortedSiblings[blockIndex - 1]
-      } else if (block.dividerPosition === 'end' && blockIndex < sortedSiblings.length - 1) {
-        adjacentBlock = sortedSiblings[blockIndex + 1]
-      }
-
-      // Validation: Prevent resizing fr blocks when adjacent to px blocks
-      if (adjacentBlock && block.sizeUnit === 'fr' && adjacentBlock.sizeUnit === 'px') {
-        console.warn(`Cannot resize fr block "${blockId}" when adjacent to px block "${adjacentBlock.id}". Fr blocks fill available space and should not be directly resized. Consider resizing the px block instead.`)
-        return
-      }
-
-      dispatch({
-        type: 'START_RESIZE',
-        payload: {
-          blockId,
-          dividerId,
-          startPosition,
-          initialSize: block.defaultSize || 0,
-          initialAdjacentBlockId: adjacentBlock?.id,
-          initialAdjacentSize: adjacentBlock ? (adjacentBlock.originalDefaultSize || adjacentBlock.defaultSize || 0) : undefined
+        let adjacentBlock = null;
+        if (block.dividerPosition === "start" && blockIndex > 0) {
+          adjacentBlock = sortedSiblings[blockIndex - 1];
+        } else if (
+          block.dividerPosition === "end" &&
+          blockIndex < sortedSiblings.length - 1
+        ) {
+          adjacentBlock = sortedSiblings[blockIndex + 1];
         }
-      })
 
-      // Prevent text selection during drag
-      document.body.style.userSelect = 'none'
-      const parentBlock = block.parentId ? state.blocks[block.parentId] : null
-      const direction = parentBlock?.direction || 'row'
-      document.body.style.cursor = direction === 'row' ? 'col-resize' : 'row-resize'
-    },
-
-    updateResize: (event: MouseEvent | TouchEvent) => {
-      if (!state.resize.isDragging || !state.resize.activeBlockId) return
-
-      const block = state.blocks[state.resize.activeBlockId]
-      if (!block) return
-
-      const currentPosition = getEventPosition(event)
-
-      // Find the parent block to determine the resize direction
-      const parentBlock = block.parentId ? state.blocks[block.parentId] : null
-      const direction = parentBlock?.direction || 'row'
-
-      // Calculate delta based on the parent's direction
-      // If parent arranges children in 'row', dividers move horizontally (X axis)
-      // If parent arranges children in 'column', dividers move vertically (Y axis)
-      const deltaPx = direction === 'row'
-        ? currentPosition.x - state.resize.startPosition.x
-        : currentPosition.y - state.resize.startPosition.y
-
-
-      if (block.sizeUnit === 'px') {
-        // Handle pixel-based resizing
-        const dividerPosition = block.dividerPosition || 'end'
-        const shouldInvertDelta = dividerPosition === 'start'
-
-        const newSize = calculateConstrainedSize(
-          deltaPx,
-          state.resize.initialSize,
-          block.minSize,
-          block.maxSize,
-          shouldInvertDelta
-        )
+        // Validation: Prevent resizing fr blocks when adjacent to px blocks
+        if (
+          adjacentBlock &&
+          block.sizeUnit === "fr" &&
+          adjacentBlock.sizeUnit === "px"
+        ) {
+          console.warn(
+            `Cannot resize fr block "${blockId}" when adjacent to px block "${adjacentBlock.id}". Fr blocks fill available space and should not be directly resized. Consider resizing the px block instead.`
+          );
+          return;
+        }
 
         dispatch({
-          type: 'RESIZE_BLOCK',
-          payload: { blockId: state.resize.activeBlockId, size: newSize }
-        })
-      } else if (block.sizeUnit === 'fr') {
-        // Handle fractional resizing (two-way)
-        const siblingBlocks = Object.values(state.blocks).filter(b => b.parentId === block.parentId)
-        const frBlocks = siblingBlocks.filter(b => b.sizeUnit === 'fr')
+          type: "START_RESIZE",
+          payload: {
+            blockId,
+            dividerId,
+            startPosition,
+            initialSize: block.defaultSize || 0,
+            initialAdjacentBlockId: adjacentBlock?.id,
+            initialAdjacentSize: adjacentBlock
+              ? adjacentBlock.originalDefaultSize ||
+                adjacentBlock.defaultSize ||
+                0
+              : undefined,
+          },
+        });
 
-        // Measure the actual parent container dimensions
-        const parentElement = block.parentId
-          ? document.querySelector(`[data-block-id="${block.parentId}"]`)
-          : document.querySelector(`[data-block-id="root"]`)
+        // Prevent text selection during drag
+        document.body.style.userSelect = "none";
+        const parentBlock = block.parentId
+          ? state.blocks[block.parentId]
+          : null;
+        const direction = parentBlock?.direction || "row";
+        document.body.style.cursor =
+          direction === "row" ? "col-resize" : "row-resize";
+      },
 
-        const containerSize = parentElement
-          ? (direction === 'row' ? parentElement.clientWidth : parentElement.clientHeight)
-          : 1200 // Fallback only if element not found
-        // Measure actual pixel space used by px blocks (not configured defaultSize)
-        const pxBlocks = siblingBlocks
-          .filter(b => b.sizeUnit === 'px')
-          .reduce((sum, b) => {
-            const el = document.querySelector(`[data-block-id="${b.id}"]`)
-            if (!el) return sum
-            const size = direction === 'row' ? el.clientWidth : el.clientHeight
-            return sum + size
-          }, 0)
+      updateResize: (event: MouseEvent | TouchEvent) => {
+        if (!state.resize.isDragging || !state.resize.activeBlockId) return;
 
-        // Measure actual divider sizes from DOM (not calculated count × 8px)
-        const dividers = Array.from(parentElement?.querySelectorAll('[data-block-type="divider"]') || [])
-        const gapSpace = dividers.reduce((sum, el) => {
-          if (!(el instanceof HTMLElement)) return sum
-          const size = direction === 'row' ? el.clientWidth : el.clientHeight
-          return sum + size
-        }, 0)
+        const block = state.blocks[state.resize.activeBlockId];
+        if (!block) return;
 
-        const fixedSpace = pxBlocks
-        const flexSpace = getFlexSpacePx(containerSize, fixedSpace, gapSpace)
-        // Use current sizes, not original defaults, for accurate calculations during multi-step resizes
-        const totalFr = frBlocks.reduce((sum, b) => sum + (b.defaultSize || 1), 0)
-        const pixelsPerFr = totalFr > 0 ? flexSpace / totalFr : 0
+        const currentPosition = getEventPosition(event);
 
-        if (pixelsPerFr === 0) return // Prevent division by zero
+        // Find the parent block to determine the resize direction
+        const parentBlock = block.parentId
+          ? state.blocks[block.parentId]
+          : null;
+        const direction = parentBlock?.direction || "row";
 
-        const deltaFr = pxToFr(deltaPx, pixelsPerFr)
+        // Calculate delta based on the parent's direction
+        // If parent arranges children in 'row', dividers move horizontally (X axis)
+        // If parent arranges children in 'column', dividers move vertically (Y axis)
+        const deltaPx =
+          direction === "row"
+            ? currentPosition.x - state.resize.startPosition.x
+            : currentPosition.y - state.resize.startPosition.y;
 
-        // Find adjacent block based on block order
-        const sortedFrBlocks = frBlocks.sort((a, b) => (a.order || 0) - (b.order || 0))
-        const blockIndex = sortedFrBlocks.findIndex(b => b.id === state.resize.activeBlockId)
+        if (block.sizeUnit === "px") {
+          // Handle pixel-based resizing
+          const dividerPosition = block.dividerPosition || "end";
+          const shouldInvertDelta =
+            (direction === "column" && dividerPosition === "end") ||
+            (direction === "row" && dividerPosition === "start");
 
-        let adjacentBlock = null
-        if (block.dividerPosition === 'start' && blockIndex > 0) {
-          adjacentBlock = sortedFrBlocks[blockIndex - 1]
-        } else if (block.dividerPosition === 'end' && blockIndex < sortedFrBlocks.length - 1) {
-          adjacentBlock = sortedFrBlocks[blockIndex + 1]
-        }
+          const newSize = calculateConstrainedSize(
+            deltaPx,
+            state.resize.initialSize,
+            block.minSize,
+            block.maxSize,
+            shouldInvertDelta
+          );
 
-        if (adjacentBlock) {
-          const dividerPosition = block.dividerPosition || 'end'
-          let targetDelta: number
-          let adjacentDelta: number
+          dispatch({
+            type: "RESIZE_BLOCK",
+            payload: { blockId: state.resize.activeBlockId, size: newSize },
+          });
+        } else if (block.sizeUnit === "fr") {
+          // Handle fractional resizing (two-way)
+          const siblingBlocks = Object.values(state.blocks).filter(
+            (b) => b.parentId === block.parentId
+          );
+          const frBlocks = siblingBlocks.filter((b) => b.sizeUnit === "fr");
 
-          if (dividerPosition === 'start') {
-            // Divider at start: moving right grows target, shrinks previous
-            targetDelta = deltaFr
-            adjacentDelta = -deltaFr
-          } else {
-            // Divider at end: moving right grows target, shrinks next
-            targetDelta = deltaFr
-            adjacentDelta = -deltaFr
+          // Measure the actual parent container dimensions
+          const parentElement = block.parentId
+            ? document.querySelector(`[data-block-id="${block.parentId}"]`)
+            : document.querySelector(`[data-block-id="root"]`);
+
+          const containerSize = parentElement
+            ? direction === "row"
+              ? parentElement.clientWidth
+              : parentElement.clientHeight
+            : 1200; // Fallback only if element not found
+          // Measure actual pixel space used by px blocks (not configured defaultSize)
+          const pxBlocks = siblingBlocks
+            .filter((b) => b.sizeUnit === "px")
+            .reduce((sum, b) => {
+              const el = document.querySelector(`[data-block-id="${b.id}"]`);
+              if (!el) return sum;
+              const size =
+                direction === "row" ? el.clientWidth : el.clientHeight;
+              return sum + size;
+            }, 0);
+
+          // Measure actual divider sizes from DOM (not calculated count × 8px)
+          const dividers = Array.from(
+            parentElement?.querySelectorAll('[data-block-type="divider"]') || []
+          );
+          const gapSpace = dividers.reduce((sum, el) => {
+            if (!(el instanceof HTMLElement)) return sum;
+            const size = direction === "row" ? el.clientWidth : el.clientHeight;
+            return sum + size;
+          }, 0);
+
+          const fixedSpace = pxBlocks;
+          const flexSpace = getFlexSpacePx(containerSize, fixedSpace, gapSpace);
+          // Use current sizes, not original defaults, for accurate calculations during multi-step resizes
+          const totalFr = frBlocks.reduce(
+            (sum, b) => sum + (b.defaultSize || 1),
+            0
+          );
+          const pixelsPerFr = totalFr > 0 ? flexSpace / totalFr : 0;
+
+          if (pixelsPerFr === 0) return; // Prevent division by zero
+
+          const deltaFr = pxToFr(deltaPx, pixelsPerFr);
+
+          // Find adjacent block based on block order
+          const sortedFrBlocks = frBlocks.sort(
+            (a, b) => (a.order || 0) - (b.order || 0)
+          );
+          const blockIndex = sortedFrBlocks.findIndex(
+            (b) => b.id === state.resize.activeBlockId
+          );
+
+          let adjacentBlock = null;
+          if (block.dividerPosition === "start" && blockIndex > 0) {
+            adjacentBlock = sortedFrBlocks[blockIndex - 1];
+          } else if (
+            block.dividerPosition === "end" &&
+            blockIndex < sortedFrBlocks.length - 1
+          ) {
+            adjacentBlock = sortedFrBlocks[blockIndex + 1];
           }
 
-          // Apply minimum size constraints using initial sizes
-          const minSize = 0.1 // Minimum fr size
-          const newTargetSize = Math.max(minSize, state.resize.initialSize + targetDelta)
-          const newAdjacentSize = Math.max(minSize, (state.resize.initialAdjacentSize || 1) + adjacentDelta)
+          if (adjacentBlock) {
+            const dividerPosition = block.dividerPosition || "end";
+            let targetDelta: number;
+            let adjacentDelta: number;
 
-          // Ensure zero-sum by adjusting if constraints were applied
-          const actualTargetDelta = newTargetSize - state.resize.initialSize
-          const actualAdjacentDelta = newAdjacentSize - (state.resize.initialAdjacentSize || 1)
+            if (dividerPosition === "start") {
+              // Divider at start: moving right grows target, shrinks previous
+              targetDelta = deltaFr;
+              adjacentDelta = -deltaFr;
+            } else {
+              // Divider at end: moving right grows target, shrinks next
+              targetDelta = deltaFr;
+              adjacentDelta = -deltaFr;
+            }
 
-          if (Math.abs(actualTargetDelta + actualAdjacentDelta) < 0.01) {
-            dispatch({
-              type: 'RESIZE_BLOCK',
-              payload: { blockId: state.resize.activeBlockId, size: newTargetSize }
-            })
-            dispatch({
-              type: 'RESIZE_BLOCK',
-              payload: { blockId: adjacentBlock.id, size: newAdjacentSize }
-            })
+            // Apply minimum size constraints using initial sizes
+            const minSize = 0.1; // Minimum fr size
+            const newTargetSize = Math.max(
+              minSize,
+              state.resize.initialSize + targetDelta
+            );
+            const newAdjacentSize = Math.max(
+              minSize,
+              (state.resize.initialAdjacentSize || 1) + adjacentDelta
+            );
+
+            // Ensure zero-sum by adjusting if constraints were applied
+            const actualTargetDelta = newTargetSize - state.resize.initialSize;
+            const actualAdjacentDelta =
+              newAdjacentSize - (state.resize.initialAdjacentSize || 1);
+
+            if (Math.abs(actualTargetDelta + actualAdjacentDelta) < 0.01) {
+              dispatch({
+                type: "RESIZE_BLOCK",
+                payload: {
+                  blockId: state.resize.activeBlockId,
+                  size: newTargetSize,
+                },
+              });
+              dispatch({
+                type: "RESIZE_BLOCK",
+                payload: { blockId: adjacentBlock.id, size: newAdjacentSize },
+              });
+            }
           }
         }
-      }
-    },
+      },
 
-    endResize: () => {
-      dispatch({ type: 'END_RESIZE' })
+      endResize: () => {
+        dispatch({ type: "END_RESIZE" });
 
-      // Restore normal cursor and text selection
-      document.body.style.userSelect = ''
-      document.body.style.cursor = ''
-    },
+        // Restore normal cursor and text selection
+        document.body.style.userSelect = "";
+        document.body.style.cursor = "";
+      },
 
-    // Persistence
-    persistState: () => saveState(state),
-    resetState: () => {
-      dispatch({ type: 'RESET_STATE' })
-      clearState()
-    }
-  }), [state, activeMode, viewport, saveState, clearState, setModeInternal])
+      // Persistence
+      persistState: () => saveState(state),
+      resetState: () => {
+        dispatch({ type: "RESET_STATE" });
+        clearState();
+      },
+    }),
+    [state, activeMode, viewport, saveState, clearState, setModeInternal]
+  );
 
   // Notify parent of layout changes
   useEffect(() => {
     if (onLayoutChange) {
-      const blockConfigs = Object.values(state.blocks)
-      onLayoutChange(blockConfigs)
+      const blockConfigs = Object.values(state.blocks);
+      onLayoutChange(blockConfigs);
     }
-  }, [state.blocks, onLayoutChange])
+  }, [state.blocks, onLayoutChange]);
 
   return (
-    <GridContext.Provider value={contextValue}>
-      {children}
-    </GridContext.Provider>
-  )
+    <GridContext.Provider value={contextValue}>{children}</GridContext.Provider>
+  );
 }
 
 /**
  * Hook to access grid context
  */
 export function useGridContext(): GridContextValue {
-  const context = useContext(GridContext)
+  const context = useContext(GridContext);
   if (!context) {
-    throw new Error('useGridContext must be used within a GridProvider')
+    throw new Error("useGridContext must be used within a GridProvider");
   }
-  return context
+  return context;
 }
 
 /**
  * Hook to access grid state
  */
 export function useGridState() {
-  const { state } = useGridContext()
-  return state
+  const { state } = useGridContext();
+  return state;
 }
 
 /**
  * Hook to access grid actions
  */
 export function useGridActions() {
-  const { resizeBlock, collapseBlock, expandBlock, switchMode, persistState, resetState } = useGridContext()
+  const {
+    resizeBlock,
+    collapseBlock,
+    expandBlock,
+    switchMode,
+    persistState,
+    resetState,
+  } = useGridContext();
   return {
     resizeBlock,
     collapseBlock,
     expandBlock,
     switchMode,
     persistState,
-    resetState
-  }
+    resetState,
+  };
 }
 
 /**
  * Hook to access resize operations
  */
 export function useGridResize() {
-  const { startResize, updateResize, endResize, state } = useGridContext()
+  const { startResize, updateResize, endResize, state } = useGridContext();
   return {
     startResize,
     updateResize,
     endResize,
     isDragging: state.resize.isDragging,
     activeBlockId: state.resize.activeBlockId,
-    activeDividerId: state.resize.activeDividerId
-  }
+    activeDividerId: state.resize.activeDividerId,
+  };
 }
