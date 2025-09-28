@@ -11,7 +11,18 @@ export type { GridAPI } from './components/Grid'
 export { GridProvider, useGridContext, useGridState, useGridActions } from './components/Grid'
 export type { GridProviderProps } from './components/Grid'
 
-export { Block, BlockGroup } from './components/Block'
+export {
+  Block,
+  BlockGroup,
+  BlockContent,
+  BlockHeader,
+  BlockFooter,
+  BlockToolbar,
+  BlockTabs,
+  BlockSidebar,
+  BlockSidebarItem,
+  BlockSidebarSpacer
+} from './components/Block'
 export { Divider } from './components/Divider'
 
 // Hooks
@@ -47,7 +58,19 @@ export type {
   BlockProps,
   DividerProps,
   DeepPartial,
-  BlockTree
+  BlockTree,
+  ScrollMode,
+  HeaderPosition,
+  BlockContentProps,
+  BlockHeaderProps,
+  BlockFooterProps,
+  BlockToolbarProps,
+  Tab,
+  BlockTabsProps,
+  SidebarPosition,
+  BlockSidebarProps,
+  BlockSidebarItemProps,
+  BlockSidebarSpacerProps
 } from './types'
 
 // Utilities

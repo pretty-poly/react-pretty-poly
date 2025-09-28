@@ -202,3 +202,80 @@ export type BlockTree = {
   config: BlockConfig
   children: BlockTree[]
 }
+
+// Block content system types
+export type ScrollMode = 'vertical' | 'horizontal' | 'both' | 'none'
+export type HeaderPosition = 'top' | 'bottom'
+
+// Block content component props
+export interface BlockContentProps {
+  scrollMode?: ScrollMode
+  className?: string
+  children: React.ReactNode
+  'aria-label'?: string
+}
+
+export interface BlockHeaderProps {
+  position?: HeaderPosition
+  className?: string
+  children: React.ReactNode
+  'aria-label'?: string
+}
+
+export interface BlockFooterProps {
+  className?: string
+  children: React.ReactNode
+  'aria-label'?: string
+}
+
+export interface BlockToolbarProps {
+  left?: React.ReactNode
+  center?: React.ReactNode
+  right?: React.ReactNode
+  className?: string
+  'aria-label'?: string
+}
+
+export interface Tab {
+  id: string
+  label: string
+  icon?: React.ComponentType<{ className?: string }>
+  closable?: boolean
+  disabled?: boolean
+}
+
+export interface BlockTabsProps {
+  tabs: Tab[]
+  activeTab: string
+  onTabChange: (id: string) => void
+  onTabClose?: (id: string) => void
+  className?: string
+  'aria-label'?: string
+  allowOverflow?: boolean
+}
+
+// Block sidebar system types
+export type SidebarPosition = 'left' | 'right'
+
+export interface BlockSidebarProps {
+  position?: SidebarPosition
+  width?: number
+  className?: string
+  children: React.ReactNode
+  'aria-label'?: string
+}
+
+export interface BlockSidebarItemProps {
+  icon: React.ComponentType<{ className?: string }>
+  tooltip?: string
+  active?: boolean
+  disabled?: boolean
+  badge?: number | string
+  onClick?: () => void
+  className?: string
+  'aria-label'?: string
+}
+
+export interface BlockSidebarSpacerProps {
+  className?: string
+}

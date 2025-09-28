@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import BasicGridExample from "../examples/basic-grid";
 import ComprehensiveExample from "../examples/comprehensive";
 import DashboardExample from "../examples/dashboard";
+import VSCodeStyleContentExample from "../examples/vscode-style-content";
+import BlockContentShowcase from "../examples/block-content-showcase";
+import SimpleContentExample from "../examples/simple-content-example";
+import VSCodeActivityBarExample from "../examples/vscode-activity-bar";
 // import VSCodeCloneExample from '../examples/vscode-clone' // Temporarily disabled due to JSX errors
 
 interface ExampleInfo {
@@ -19,6 +23,12 @@ const examples: ExampleInfo[] = [
     key: "basic-grid",
   },
   {
+    name: "Simple Content Example",
+    description: "Basic usage of Block.Header, Block.Content, Block.Footer with tabs and toolbars",
+    component: SimpleContentExample,
+    key: "simple-content",
+  },
+  {
     name: "Comprehensive",
     description:
       "Full feature showcase: responsive modes, nested layouts, collapse/expand",
@@ -31,6 +41,27 @@ const examples: ExampleInfo[] = [
       "Dashboard layout with charts, metrics, and customizable panels",
     component: DashboardExample,
     key: "dashboard",
+  },
+  {
+    name: "VS Code Style Content",
+    description:
+      "VS Code-style interface with tabs, toolbars, scrollable content, and status bars",
+    component: VSCodeStyleContentExample,
+    key: "vscode-content",
+  },
+  {
+    name: "Block Content Showcase",
+    description:
+      "Demonstrates all scroll modes, structured content, and the new Block content system",
+    component: BlockContentShowcase,
+    key: "block-content",
+  },
+  {
+    name: "VS Code Activity Bar",
+    description:
+      "Complete VS Code-style activity bar with vertical sidebar, tooltips, and badge notifications",
+    component: VSCodeActivityBarExample,
+    key: "vscode-activity-bar",
   },
 ];
 
@@ -59,13 +90,6 @@ export default function ExampleSelector() {
     window.history.pushState({}, "", newUrl);
   };
 
-  const backToSelector = () => {
-    setShowSelector(true);
-    setSelectedExample("");
-
-    // Clear URL parameter
-    window.history.pushState({}, "", window.location.pathname);
-  };
 
   // If an example is selected, show it full page
   if (!showSelector && selectedExample) {

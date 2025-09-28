@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Block, Divider } from '../src'
-import type { BlockConfig, ResponsiveModes } from '../src'
+import type { BlockConfig, ResponsiveModes } from '../src/types'
 
 /**
  * Comprehensive example showcasing all features:

@@ -1,8 +1,16 @@
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, useMemo, Children, isValidElement } from 'react'
 import { clsx } from 'clsx'
 import type { BlockProps, ModeConfig } from '../../types'
 import { useGridState, useGridActions } from '../Grid/GridProvider'
 import { useGridMode } from '../../hooks/useGridMode'
+import { BlockContent } from './BlockContent'
+import { BlockHeader } from './BlockHeader'
+import { BlockFooter } from './BlockFooter'
+import { BlockToolbar } from './BlockToolbar'
+import { BlockTabs } from './BlockTabs'
+import { BlockSidebar } from './BlockSidebar'
+import { BlockSidebarItem } from './BlockSidebarItem'
+import { BlockSidebarSpacer } from './BlockSidebarSpacer'
 
 /**
  * Get mode-specific configuration for a block
@@ -28,6 +36,49 @@ function getModeConfig(props: BlockProps, activeMode: string): ModeConfig {
 }
 
 /**
+ * Detect if children contain structured block components
+ */
+function hasStructuredChildren(children: React.ReactNode): boolean {
+  let hasStructured = false
+
+  Children.forEach(children, (child) => {
+    if (isValidElement(child)) {
+      const displayName = (child.type as any)?.displayName || (child.type as any)?.name
+      if (displayName && (
+        displayName === 'Block.Header' ||
+        displayName === 'Block.Content' ||
+        displayName === 'Block.Footer' ||
+        displayName === 'Block.Toolbar' ||
+        displayName === 'Block.Tabs' ||
+        displayName === 'Block.Sidebar'
+      )) {
+        hasStructured = true
+      }
+    }
+  })
+
+  return hasStructured
+}
+
+/**
+ * Detect if children contain a sidebar component
+ */
+function hasSidebar(children: React.ReactNode): boolean {
+  let hasBlockSidebar = false
+
+  Children.forEach(children, (child) => {
+    if (isValidElement(child)) {
+      const displayName = (child.type as any)?.displayName || (child.type as any)?.name
+      if (displayName === 'Block.Sidebar') {
+        hasBlockSidebar = true
+      }
+    }
+  })
+
+  return hasBlockSidebar
+}
+
+/**
  * Block component for grid layouts
  */
 export const Block = forwardRef<HTMLDivElement, BlockProps>(
@@ -47,6 +98,10 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
     // Get block configuration from state
     const blockConfig = state?.blocks[id]
     const modeConfig = getModeConfig({ id, type, direction, children, className, 'aria-label': ariaLabel, ...props }, activeMode)
+
+    // Check if this block uses structured content layout
+    const isStructured = useMemo(() => hasStructuredChildren(children), [children])
+    const hasBlockSidebar = useMemo(() => hasSidebar(children), [children])
 
     // Determine if this block should be rendered in current mode
     const shouldRender = useMemo(() => {
@@ -170,6 +225,10 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         className={clsx(
           ...blockClasses,
           'relative',
+          // Apply flex layout for structured content
+          isStructured && !hasBlockSidebar && 'flex flex-col h-full',
+          // Apply horizontal flex layout when sidebar is present
+          isStructured && hasBlockSidebar && 'flex flex-row h-full',
           modeConfig.className,
           className
         )}
@@ -184,6 +243,8 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         data-block-collapse-to={blockConfig?.collapseTo}
         data-block-divider-position={blockConfig?.dividerPosition}
         data-block-divider-size={blockConfig?.dividerSize}
+        data-structured={isStructured}
+        data-has-sidebar={hasBlockSidebar}
         aria-label={ariaLabel}
         role={type === 'group' ? 'group' : undefined}
         tabIndex={supportsFeature('resizing') ? 0 : undefined}
@@ -212,5 +273,19 @@ export const BlockGroup = forwardRef<HTMLDivElement, BlockProps>(
 
 BlockGroup.displayName = 'Block.Group'
 
-// Add Group as a property of Block
-Object.assign(Block, { Group: BlockGroup })
+// Add all sub-components as properties of Block
+Object.assign(Block, {
+  Group: BlockGroup,
+  Header: BlockHeader,
+  Content: BlockContent,
+  Footer: BlockFooter,
+  Toolbar: BlockToolbar,
+  Tabs: BlockTabs,
+  Sidebar: BlockSidebar
+})
+
+// Add nested sidebar components
+Object.assign(BlockSidebar, {
+  Item: BlockSidebarItem,
+  Spacer: BlockSidebarSpacer
+})
