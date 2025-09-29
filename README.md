@@ -1,6 +1,6 @@
 # @pretty-poly/react
 
-A polymorphic React component library for creating resizable, responsive grid layouts that adapt to any context.
+A **shadcn/ui compatible** polymorphic React component library for creating resizable, responsive grid layouts that adapt to any context.
 
 ## Features
 
@@ -14,14 +14,24 @@ A polymorphic React component library for creating resizable, responsive grid la
 
 ## Installation
 
+### For New Projects
+
+```bash
+npm install @pretty-poly/react tailwindcss
+```
+
+### For Shadcn/UI Projects
+
 ```bash
 npm install @pretty-poly/react
 ```
 
+The library is fully compatible with existing shadcn/ui setups and will inherit your theme configuration automatically.
+
 ## Quick Start
 
 ```tsx
-import { Grid, Block, Divider } from '@pretty-poly/react'
+import { Grid, Block, Divider, cn } from '@pretty-poly/react'
 import '@pretty-poly/react/styles'
 
 const layout = [
@@ -245,6 +255,56 @@ See the `/examples` directory for:
 - `useGridMode()` - Manage responsive modes
 - `useGridPersistence()` - State persistence
 - `useGridKeyboard()` - Keyboard navigation
+
+## Shadcn/UI Integration
+
+### Automatic Theme Support
+
+Pretty Poly automatically inherits your shadcn/ui theme:
+
+```tsx
+// Uses your shadcn theme colors automatically
+<Block className="bg-card border border-border text-card-foreground">
+  Content styled with your theme
+</Block>
+```
+
+### Dark Mode
+
+Supports shadcn/ui dark mode out of the box:
+
+```tsx
+// Add dark mode toggle to your app
+<div className="dark"> {/* or use next-themes */}
+  <Grid>
+    {/* Components automatically adapt to dark theme */}
+  </Grid>
+</div>
+```
+
+### Custom Styling
+
+Use the `cn` utility for conditional classes:
+
+```tsx
+import { cn } from '@pretty-poly/react'
+
+<Block
+  className={cn(
+    "bg-background",
+    isActive && "border-primary",
+    isCollapsed && "opacity-50"
+  )}
+>
+```
+
+### Architecture
+
+Pretty Poly uses a **hybrid approach**:
+- **Core functionality**: Custom CSS for dynamic grid layouts (required)
+- **Visual styling**: Tailwind CSS + shadcn/ui variables (customizable)
+
+This ensures the dynamic resizing works perfectly while maintaining full shadcn/ui compatibility.
 
 ## Contributing
 

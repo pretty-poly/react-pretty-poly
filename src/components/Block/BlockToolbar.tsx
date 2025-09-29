@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { clsx } from 'clsx'
+import { cn } from '../../utils/cn'
 
 export interface BlockToolbarProps {
   left?: React.ReactNode
@@ -18,12 +18,12 @@ export const BlockToolbar = forwardRef<HTMLDivElement, BlockToolbarProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
+        className={cn(
           'pretty-poly-block-toolbar',
           'flex items-center justify-between',
           'w-full px-3 py-2', // Standard padding
-          'border-b border-gray-200', // Default border
-          'bg-gray-50', // Default background
+          'border-b', // Shadcn border uses default border color
+          'bg-muted', // Shadcn background
           className
         )}
         aria-label={ariaLabel || 'Toolbar'}

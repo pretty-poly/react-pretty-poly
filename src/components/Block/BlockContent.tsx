@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { clsx } from 'clsx'
+import { cn } from '../../utils/cn'
 
 export type ScrollMode = 'vertical' | 'horizontal' | 'both' | 'none'
 
@@ -26,7 +26,7 @@ export const BlockContent = forwardRef<HTMLDivElement, BlockContentProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
+        className={cn(
           'pretty-poly-block-content',
           'flex-1', // Fill remaining space
           'min-h-0', // Allow flex shrinking

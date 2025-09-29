@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import type { BlockConfig, Direction } from '../types'
+import type { BlockConfig } from '../types'
 
 export interface UseGridKeyboardOptions {
   enabled?: boolean

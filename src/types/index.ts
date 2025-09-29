@@ -181,8 +181,7 @@ export interface BlockProps {
 }
 
 export interface DividerProps {
-  targetId: string
-  position?: DividerPosition
+  targetId?: string // Optional - defaults to previous sibling block
   size?: number
   className?: string
 

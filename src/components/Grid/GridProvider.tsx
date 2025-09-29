@@ -407,10 +407,17 @@ export function GridProvider({
 
         if (block.sizeUnit === "px") {
           // Handle pixel-based resizing
-          const dividerPosition = block.dividerPosition || "end";
-          const shouldInvertDelta =
-            (direction === "column" && dividerPosition === "end") ||
-            (direction === "row" && dividerPosition === "start");
+          // Get position from divider's data attribute
+          const dividerEl = document.querySelector(`[data-block-id="${state.resize.activeDividerId}"]`);
+          const dividerPosition = dividerEl?.getAttribute('data-block-divider-position') || 'end';
+
+          // For position="start": divider is BEFORE the block
+          // - Dragging left (negative delta) should GROW the block (need inversion)
+          // - Dragging right (positive delta) should SHRINK the block (need inversion)
+          // For position="end": divider is AFTER the block
+          // - Dragging right (positive delta) should GROW the block (no inversion)
+          // - Dragging left (negative delta) should SHRINK the block (no inversion)
+          const shouldInvertDelta = dividerPosition === "start";
 
           const newSize = calculateConstrainedSize(
             deltaPx,
@@ -483,18 +490,21 @@ export function GridProvider({
             (b) => b.id === state.resize.activeBlockId
           );
 
+          // Get actual position from divider's data attribute first
+          const dividerEl = document.querySelector(`[data-block-id="${state.resize.activeDividerId}"]`);
+          const dividerPosition = dividerEl?.getAttribute('data-block-divider-position') || 'end';
+
           let adjacentBlock = null;
-          if (block.dividerPosition === "start" && blockIndex > 0) {
+          if (dividerPosition === "start" && blockIndex > 0) {
             adjacentBlock = sortedFrBlocks[blockIndex - 1];
           } else if (
-            block.dividerPosition === "end" &&
+            dividerPosition === "end" &&
             blockIndex < sortedFrBlocks.length - 1
           ) {
             adjacentBlock = sortedFrBlocks[blockIndex + 1];
           }
 
           if (adjacentBlock) {
-            const dividerPosition = block.dividerPosition || "end";
             let targetDelta: number;
             let adjacentDelta: number;
 

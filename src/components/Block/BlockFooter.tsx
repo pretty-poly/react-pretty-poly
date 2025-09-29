@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { clsx } from 'clsx'
+import { cn } from '../../utils/cn'
 
 export interface BlockFooterProps {
   className?: string
@@ -16,7 +16,7 @@ export const BlockFooter = forwardRef<HTMLDivElement, BlockFooterProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
+        className={cn(
           'pretty-poly-block-footer',
           'flex-shrink-0', // Don't shrink
           'flex flex-row items-center', // Default to horizontal layout

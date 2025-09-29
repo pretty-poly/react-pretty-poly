@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useImperativeHandle, useMemo } from 'react'
-import { clsx } from 'clsx'
 import type { GridProps, BlockConfig, GridState } from '../../types'
+import { cn } from '../../utils/cn'
 import { GridProvider, useGridContext } from './GridProvider'
 import { useGridResize } from '../../hooks/useGridResize'
 import { useGridKeyboard } from '../../hooks/useGridKeyboard'
@@ -53,9 +53,7 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
     }, [blocks])
 
     // Legacy resize support (keeping for backward compatibility)
-    const {
-      isBlockCollapsed
-    } = useGridResize({
+    useGridResize({
       blocks,
       containerRef,
       onSizeChange: resizeBlock,
@@ -194,8 +192,8 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
 
         <div
           ref={containerRef}
-          className={clsx(
-            'pretty-poly-grid relative',
+          className={cn(
+            'pretty-poly-grid relative overflow-hidden',
             isDragging && 'pretty-poly-grid--dragging',
             className
           )}

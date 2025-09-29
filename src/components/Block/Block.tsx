@@ -1,6 +1,6 @@
 import { forwardRef, useMemo, Children, isValidElement } from 'react'
-import { clsx } from 'clsx'
 import type { BlockProps, ModeConfig } from '../../types'
+import { cn } from '../../utils/cn'
 import { useGridState, useGridActions } from '../Grid/GridProvider'
 import { useGridMode } from '../../hooks/useGridMode'
 import { BlockContent } from './BlockContent'
@@ -174,9 +174,11 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       return (
         <div
           ref={ref}
-          className={clsx(
+          className={cn(
             ...blockClasses,
             'pretty-poly-dock-item',
+            'flex flex-col items-center p-2 rounded-md transition-colors cursor-pointer min-w-12',
+            'hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2',
             modeConfig.className,
             className
           )}
@@ -188,9 +190,9 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
           tabIndex={0}
           style={modeConfig.style}
         >
-          {Icon && <Icon className="pretty-poly-dock-icon" />}
+          {Icon && <Icon className="pretty-poly-dock-icon w-6 h-6 mb-1" />}
           {modeConfig.label && (
-            <span className="pretty-poly-dock-label">{modeConfig.label}</span>
+            <span className="pretty-poly-dock-label text-xs font-medium text-center">{modeConfig.label}</span>
           )}
         </div>
       )
@@ -201,9 +203,10 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       return (
         <div
           ref={ref}
-          className={clsx(
+          className={cn(
             ...blockClasses,
             'pretty-poly-tab-panel',
+            'flex-1 overflow-auto',
             modeConfig.className,
             className
           )}
@@ -222,13 +225,14 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
+        className={cn(
           ...blockClasses,
-          'relative',
+          'relative overflow-hidden',
           // Apply flex layout for structured content
           isStructured && !hasBlockSidebar && 'flex flex-col h-full',
           // Apply horizontal flex layout when sidebar is present
           isStructured && hasBlockSidebar && 'flex flex-row h-full',
+          'transition-opacity duration-150',
           modeConfig.className,
           className
         )}

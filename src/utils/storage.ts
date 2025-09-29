@@ -270,7 +270,7 @@ export function getAllGridStates(
  */
 export function createCustomAdapter(saveState: (state: GridState) => void): StorageAdapter {
   return {
-    save: (key: string, data: any) => saveState(data),
+    save: (_key: string, data: any) => saveState(data),
     load: () => null, // Custom adapters typically don't load
     remove: () => {},
     clear: () => {}

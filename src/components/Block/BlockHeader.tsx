@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { clsx } from 'clsx'
+import { cn } from '../../utils/cn'
 
 export type HeaderPosition = 'top' | 'bottom'
 
@@ -19,7 +19,7 @@ export const BlockHeader = forwardRef<HTMLDivElement, BlockHeaderProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
+        className={cn(
           'pretty-poly-block-header',
           'flex-shrink-0', // Don't shrink
           'flex flex-row items-center', // Default to horizontal layout

@@ -88,6 +88,8 @@ export {
   isZeroSum
 } from './utils/calculations'
 
+export { cn } from './utils/cn'
+
 export {
   validateBlockSize,
   validateTwoWayResize,
