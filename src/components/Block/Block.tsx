@@ -20,12 +20,12 @@ function getModeConfig(props: BlockProps, activeMode: string): ModeConfig {
   const modeConfig = props[activeMode] || {}
 
   // Filter out non-mode props
-  const { id, type, direction, children, className, 'aria-label': ariaLabel, ...otherProps } = props
+  const { id, type, direction, children, className, divider, noDivider, 'aria-label': ariaLabel, ...otherProps } = props
 
   // Remove known mode configs from otherProps
   const cleanOtherProps = Object.fromEntries(
     Object.entries(otherProps).filter(([key]) =>
-      !['mobile', 'tablet', 'desktop', 'dock', 'grid', 'stack', 'tabs', 'sidebar', 'accordion'].includes(key)
+      !['mobile', 'tablet', 'desktop', 'dock', 'grid', 'stack', 'tabs', 'sidebar', 'accordion', 'divider', 'noDivider'].includes(key)
     )
   )
 
@@ -88,6 +88,8 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
     direction = 'row',
     children,
     className,
+    divider,
+    noDivider,
     'aria-label': ariaLabel,
     ...props
   }, ref) => {
@@ -247,6 +249,8 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         data-block-collapse-to={blockConfig?.collapseTo}
         data-block-divider-position={blockConfig?.dividerPosition}
         data-block-divider-size={blockConfig?.dividerSize}
+        data-block-divider={divider !== undefined ? JSON.stringify(divider) : undefined}
+        data-block-no-divider={noDivider}
         data-structured={isStructured}
         data-has-sidebar={hasBlockSidebar}
         aria-label={ariaLabel}

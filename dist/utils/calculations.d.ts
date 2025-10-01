@@ -54,6 +54,7 @@ export declare function calculateConstrainedSize(deltaPx: number, initialSize: n
 /**
  * Generate CSS grid template value with dividers
  * @param blocks Block configurations
+ * @param gridId Grid ID for scoping CSS variables
  * @returns CSS grid-template string
  */
 export declare function generateGridTemplate(blocks: Array<{
@@ -62,7 +63,20 @@ export declare function generateGridTemplate(blocks: Array<{
     size: number | "auto";
     dividerPosition?: "start" | "end" | "none";
     dividerSize?: number;
-}>): string;
+}>, gridId?: string): string;
+/**
+ * Generate CSS grid template from template items (for auto divider mode)
+ * @param items Template items including blocks and dividers
+ * @param gridId Grid ID for scoping CSS variables
+ * @returns CSS grid-template string
+ */
+export declare function generateGridTemplateFromItems(items: Array<{
+    id: string;
+    type: 'block' | 'divider';
+    sizeUnit?: 'px' | 'fr' | 'auto';
+    size?: number;
+    dividerSize?: number;
+}>, gridId?: string): string;
 /**
  * Convert fractional resize delta to pixels
  * @param deltaFr Change in fr units

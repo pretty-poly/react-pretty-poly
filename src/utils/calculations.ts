@@ -112,6 +112,7 @@ export function calculateConstrainedSize(
 /**
  * Generate CSS grid template value with dividers
  * @param blocks Block configurations
+ * @param gridId Grid ID for scoping CSS variables
  * @returns CSS grid-template string
  */
 export function generateGridTemplate(
@@ -121,7 +122,8 @@ export function generateGridTemplate(
     size: number | "auto"
     dividerPosition?: "start" | "end" | "none"
     dividerSize?: number
-  }>
+  }>,
+  gridId?: string
 ): string {
   const parts: string[] = []
 
@@ -135,9 +137,11 @@ export function generateGridTemplate(
     if (block.sizeUnit === "auto") {
       parts.push("auto")
     } else if (block.sizeUnit === "px") {
-      parts.push(`var(--${block.id}-size, ${block.size}px)`)
+      const varName = gridId ? `--${gridId}-${block.id}-size` : `--${block.id}-size`
+      parts.push(`var(${varName}, ${block.size}px)`)
     } else {
-      parts.push(`var(--${block.id}-size, ${block.size}fr)`)
+      const varName = gridId ? `--${gridId}-${block.id}-size` : `--${block.id}-size`
+      parts.push(`var(${varName}, ${block.size}fr)`)
     }
 
     // Add divider at end if needed
@@ -147,6 +151,45 @@ export function generateGridTemplate(
   })
 
   return parts.join(" ")
+}
+
+/**
+ * Generate CSS grid template from template items (for auto divider mode)
+ * @param items Template items including blocks and dividers
+ * @param gridId Grid ID for scoping CSS variables
+ * @returns CSS grid-template string
+ */
+export function generateGridTemplateFromItems(
+  items: Array<{
+    id: string
+    type: 'block' | 'divider'
+    sizeUnit?: 'px' | 'fr' | 'auto'
+    size?: number
+    dividerSize?: number
+  }>,
+  gridId?: string
+): string {
+  const parts: string[] = []
+
+  items.forEach(item => {
+    if (item.type === 'divider') {
+      // Divider is a fixed-size grid item
+      parts.push(`${item.dividerSize || 8}px`)
+    } else {
+      // Block with CSS variable support
+      if (item.sizeUnit === 'auto') {
+        parts.push('auto')
+      } else if (item.sizeUnit === 'px') {
+        const varName = gridId ? `--${gridId}-${item.id}-size` : `--${item.id}-size`
+        parts.push(`var(${varName}, ${item.size || 1}px)`)
+      } else {
+        const varName = gridId ? `--${gridId}-${item.id}-size` : `--${item.id}-size`
+        parts.push(`var(${varName}, ${item.size || 1}fr)`)
+      }
+    }
+  })
+
+  return parts.join(' ')
 }
 
 /**

@@ -1,7 +1,7 @@
 export type BlockType = "block" | "group";
 export type SizeUnit = "px" | "fr" | "auto";
 export type Direction = "row" | "column";
-export type DividerPosition = "start" | "end" | "none";
+export type DividerPosition = "start" | "end" | "none" | "auto";
 export type LayoutMode = "grid" | "dock" | "stack" | "tabs" | "sidebar" | "accordion";
 export interface BlockConfig {
     id: string;
@@ -154,6 +154,8 @@ export interface GridProps {
     className?: string;
     defaultLayout?: BlockConfig[];
     modes?: ResponsiveModes;
+    dividers?: "auto" | "manual" | "none";
+    dividerConfig?: GridDividerConfig;
     persist?: boolean | "localStorage" | "sessionStorage" | ((state: GridState) => void);
     persistKey?: string;
     onLayoutChange?: (layout: BlockConfig[]) => void;
@@ -166,11 +168,34 @@ export interface BlockProps {
     direction?: Direction;
     children?: React.ReactNode;
     className?: string;
+    divider?: boolean | DividerConfig;
+    noDivider?: boolean;
     [modeName: string]: ModeConfig | any;
     "aria-label"?: string;
 }
+export interface DividerConfig {
+    position?: DividerPosition;
+    size?: number;
+    className?: string;
+    handle?: React.ComponentType<{
+        className?: string;
+        direction: Direction;
+    }>;
+    onDoubleClick?: () => void;
+    "aria-label"?: string;
+}
+export interface GridDividerConfig {
+    defaultSize?: number;
+    defaultClassName?: string;
+    defaultHandle?: React.ComponentType<{
+        className?: string;
+        direction: Direction;
+    }>;
+    overrides?: Record<string, Partial<DividerConfig>>;
+}
 export interface DividerProps {
     targetId?: string;
+    position?: DividerPosition;
     size?: number;
     className?: string;
     handle?: React.ComponentType<{

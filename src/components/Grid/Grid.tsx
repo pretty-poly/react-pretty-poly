@@ -4,7 +4,10 @@ import { cn } from '../../utils/cn'
 import { GridProvider, useGridContext } from './GridProvider'
 import { useGridResize } from '../../hooks/useGridResize'
 import { useGridKeyboard } from '../../hooks/useGridKeyboard'
-import { generateGridTemplate } from '../../utils/calculations'
+import { generateGridTemplate, generateGridTemplateFromItems } from '../../utils/calculations'
+// Note: These imports are used in the children processing, not CSS grid template generation
+import { injectAutomaticDividers, processChildrenRecursively, type DividerInjectionResult } from '../../utils/children-divider-injection'
+import { Divider } from '../Divider/Divider'
 
 /**
  * Grid API for imperative control
@@ -23,7 +26,7 @@ export interface GridAPI {
  * Internal Grid component (wrapped by provider)
  */
 const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'modes' | 'persist' | 'persistKey' | 'onLayoutChange' | 'onModeChange'>>(
-  ({ children, className, 'aria-label': ariaLabel }, ref) => {
+  ({ children, className, dividers = 'manual', dividerConfig, 'aria-label': ariaLabel }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const { state, resizeBlock, collapseBlock, expandBlock, switchMode, persistState, resetState } = useGridContext()
 
@@ -77,6 +80,37 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
       onExpandBlock: expandBlock
     })
 
+    // Process children to inject automatic dividers and get template info
+    // IMPORTANT: This must come BEFORE gridStyles useMemo because gridStyles depends on templateItems
+    const dividerInjectionResult = useMemo<DividerInjectionResult>(() => {
+      // Process the root level children first
+      const rootResult = injectAutomaticDividers(
+        children,
+        dividers,
+        dividerConfig,
+        state.blocks,
+        Divider
+      )
+
+      if (dividers === 'auto') {
+        // Then recursively process any nested groups
+        const processedChildren = processChildrenRecursively(
+          rootResult.children,
+          dividers,
+          dividerConfig,
+          state.blocks,
+          Divider
+        )
+
+        return {
+          children: processedChildren,
+          templateItems: rootResult.templateItems
+        }
+      }
+
+      return rootResult
+    }, [children, dividers, dividerConfig, state.blocks])
+
     // Generate CSS styles for the grid
     const { gridStyles, cssVariables } = useMemo(() => {
       if (!rootBlock) {
@@ -94,14 +128,14 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         return acc
       }, {} as Record<string, BlockConfig[]>)
 
-      // Generate CSS variables for block sizes
+      // Generate CSS variables for block sizes (scoped by grid ID to prevent collisions)
       const variables = blocks
         .filter(block => block.defaultSize !== undefined)
         .map(block => {
           const sizeValue = block.sizeUnit === 'px'
             ? `${block.defaultSize}px`
             : `${block.defaultSize}fr`
-          return `--${block.id}-size: ${sizeValue};`
+          return `--${rootBlock.id}-${block.id}-size: ${sizeValue};`
         })
         .join('\n  ')
 
@@ -127,18 +161,30 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         const parentBlock = blocks.find(b => b.id === parentId) || rootBlock
         const direction = parentBlock?.direction || 'row'
 
-        const template = generateGridTemplate(sortedBlocks.map(block => ({
-          id: block.id,
-          sizeUnit: block.sizeUnit || 'fr',
-          size: block.defaultSize || 1,
-          dividerPosition: block.dividerPosition || 'none',
-          dividerSize: block.dividerSize || 8
-        })))
+        // For automatic dividers, use template items from divider injection
+        // For manual/none mode, use traditional block-based template generation
+        let template: string
+        if (dividers === 'auto' && parentId === rootBlock.id) {
+          // For root level in auto mode, use the template items which include dividers
+          template = generateGridTemplateFromItems(dividerInjectionResult.templateItems, rootBlock.id)
+        } else {
+          // For manual/none mode or nested groups, use traditional template generation
+          const blocksForTemplate = sortedBlocks.map(block => ({
+            id: block.id,
+            sizeUnit: block.sizeUnit || 'fr',
+            size: block.defaultSize || 1,
+            dividerPosition: block.dividerPosition === 'auto' ? 'none' : (block.dividerPosition || 'none'),
+            dividerSize: block.dividerSize || dividerConfig?.defaultSize || 8
+          }))
+
+          template = generateGridTemplate(blocksForTemplate, rootBlock.id)
+        }
 
         const templateProperty = direction === 'column' ? 'grid-template-rows' : 'grid-template-columns'
 
+        // Scope selector by grid ID to prevent collisions across multiple grids
         let groupStyle = `
-[data-block-id="${parentId}"] {
+[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"] {
   display: grid;
   ${templateProperty}: ${template};
   ${direction === 'column' ? 'grid-template-columns: 1fr;' : 'grid-template-rows: 1fr;'}
@@ -175,7 +221,7 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         cssVariables: `:root {\n  ${variables}\n}`,
         gridStyles: dynamicStyles + baseStyles
       }
-    }, [blocks, rootBlock])
+    }, [blocks, rootBlock, dividerInjectionResult, dividers, dividerConfig])
 
     if (!rootBlock) {
       console.warn('No root block found in grid configuration')
@@ -203,7 +249,7 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
           aria-label={ariaLabel || 'Resizable grid layout'}
           role="application"
         >
-          {children}
+          {dividerInjectionResult.children}
         </div>
       </>
     )
@@ -225,6 +271,8 @@ export const Grid = forwardRef<GridAPI, GridProps>(
     onLayoutChange,
     onModeChange,
     className,
+    dividers = 'manual',
+    dividerConfig,
     'aria-label': ariaLabel
   }, ref) => {
     return (
@@ -239,6 +287,8 @@ export const Grid = forwardRef<GridAPI, GridProps>(
         <GridInternal
           ref={ref}
           className={className}
+          dividers={dividers}
+          dividerConfig={dividerConfig}
           aria-label={ariaLabel}
         >
           {children}

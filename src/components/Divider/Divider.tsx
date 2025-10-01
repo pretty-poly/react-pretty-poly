@@ -27,6 +27,7 @@ const DefaultHandle: React.FC<{ className?: string; direction: Direction }> = ({
 export const Divider = forwardRef<HTMLDivElement, DividerProps>(
   ({
     targetId,
+    position,
     size = 8,
     className,
     handle: CustomHandle,
@@ -39,7 +40,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     const { startResize, isDragging, activeDividerId } = useGridResize()
     const { supportsFeature } = useGridMode()
 
-    // Auto-detect target block and position from DOM
+    // Auto-detect target block and position from DOM (only if not explicitly provided)
     const [actualTargetId, setActualTargetId] = useState<string>('')
     const [detectedPosition, setDetectedPosition] = useState<'start' | 'end'>('end')
 
@@ -48,8 +49,19 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       const dividerEl = localRef.current
       if (!dividerEl) return
 
+      // If both targetId and position are explicitly provided, use them
+      if (targetId && position && position !== 'auto' && position !== 'none') {
+        if (targetId !== actualTargetId) {
+          setActualTargetId(targetId)
+        }
+        if (position !== detectedPosition) {
+          setDetectedPosition(position)
+        }
+        return
+      }
+
       let resolvedTargetId = targetId
-      let resolvedPosition: 'start' | 'end' = 'end'
+      let resolvedPosition: 'start' | 'end' = (position === 'start' || position === 'end') ? position : 'end'
 
       if (!targetId) {
         // Smart auto-detection: prefer px blocks over fr blocks
@@ -67,10 +79,10 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           // If one is fr and the other is px, always target the px block
           if (prevBlock.sizeUnit === 'fr' && nextBlock.sizeUnit === 'px') {
             resolvedTargetId = nextBlockId!
-            resolvedPosition = 'start' // We're before the block
+            resolvedPosition = 'start' // We're before the px block
           } else if (prevBlock.sizeUnit === 'px' && nextBlock.sizeUnit === 'fr') {
             resolvedTargetId = prevBlockId!
-            resolvedPosition = 'end' // We're after the block
+            resolvedPosition = 'end' // We're after the px block
           } else {
             // Default: resize the previous sibling block
             resolvedTargetId = prevBlockId!
@@ -134,7 +146,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       if (resolvedPosition !== detectedPosition) {
         setDetectedPosition(resolvedPosition)
       }
-    }, [targetId, actualTargetId, detectedPosition, state.blocks])
+    }, [targetId, position, actualTargetId, detectedPosition, state.blocks])
 
     // Detect position on mount and when dependencies change
     useEffect(() => {
