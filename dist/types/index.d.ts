@@ -75,6 +75,7 @@ export interface GridState {
     resize: ResizeState;
 }
 export interface GridContextValue {
+    gridId: string;
     state: GridState;
     dispatch: React.Dispatch<GridAction>;
     resizeBlock: (blockId: string, size: number) => void;

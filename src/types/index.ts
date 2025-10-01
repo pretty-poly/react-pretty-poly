@@ -112,6 +112,7 @@ export interface GridState {
 
 // Grid context
 export interface GridContextValue {
+  gridId: string
   state: GridState
   dispatch: React.Dispatch<GridAction>
 

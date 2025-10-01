@@ -188,7 +188,6 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
   display: grid;
   ${templateProperty}: ${template};
   ${direction === 'column' ? 'grid-template-columns: 1fr;' : 'grid-template-rows: 1fr;'}
-  height: 100%;
 }`
 
         // Generate styles for child groups recursively
@@ -203,23 +202,9 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
 
       const dynamicStyles = generateGroupStyles('root')
 
-      const baseStyles = `
-.pretty-poly-divider {
-  background-color: #e5e7eb;
-  cursor: col-resize;
-}
-
-.pretty-poly-divider[data-block-direction="column"] {
-  cursor: row-resize;
-}
-
-.pretty-poly-divider--dragging {
-  background-color: #3b82f6;
-}`
-
       return {
         cssVariables: `:root {\n  ${variables}\n}`,
-        gridStyles: dynamicStyles + baseStyles
+        gridStyles: dynamicStyles
       }
     }, [blocks, rootBlock, dividerInjectionResult, dividers, dividerConfig])
 
@@ -275,10 +260,15 @@ export const Grid = forwardRef<GridAPI, GridProps>(
     dividerConfig,
     'aria-label': ariaLabel
   }, ref) => {
+    // Find root block ID for gridId
+    const rootBlock = defaultLayout.find(block => !block.parentId)
+    const gridId = rootBlock?.id || 'root'
+
     return (
       <GridProvider
         blocks={defaultLayout}
         modes={modes}
+        gridId={gridId}
         persist={persist}
         persistKey={persistKey}
         onLayoutChange={onLayoutChange}

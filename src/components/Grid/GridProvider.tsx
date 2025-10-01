@@ -282,6 +282,7 @@ export function GridProvider({
   // Create context value
   const contextValue: GridContextValue = useMemo(
     () => ({
+      gridId,
       state: {
         ...state,
         activeMode,
@@ -566,7 +567,7 @@ export function GridProvider({
         clearState();
       },
     }),
-    [state, activeMode, viewport, saveState, clearState, setModeInternal]
+    [gridId, state, activeMode, viewport, saveState, clearState, setModeInternal]
   );
 
   // Notify parent of layout changes

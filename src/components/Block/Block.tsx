@@ -1,7 +1,7 @@
 import { forwardRef, useMemo, Children, isValidElement } from 'react'
 import type { BlockProps, ModeConfig } from '../../types'
 import { cn } from '../../utils/cn'
-import { useGridState, useGridActions } from '../Grid/GridProvider'
+import { useGridContext, useGridState, useGridActions } from '../Grid/GridProvider'
 import { useGridMode } from '../../hooks/useGridMode'
 import { BlockContent } from './BlockContent'
 import { BlockHeader } from './BlockHeader'
@@ -93,6 +93,7 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
     'aria-label': ariaLabel,
     ...props
   }, ref) => {
+    const { gridId } = useGridContext()
     const state = useGridState()
     const { collapseBlock, expandBlock } = useGridActions()
     const { activeMode, currentLayoutType, supportsFeature } = useGridMode()
@@ -238,6 +239,7 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
           modeConfig.className,
           className
         )}
+        data-grid-id={gridId}
         data-block-id={id}
         data-block-type={type}
         data-block-direction={direction}
