@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Main Bundle (ESM)",
+    "path": "dist/index.js",
+    "limit": "150 KB"
+  },
+  {
+    "name": "Main Bundle (Gzipped)",
+    "path": "dist/index.js",
+    "limit": "35 KB",
+    "gzip": true
+  },
+  {
+    "name": "Main Bundle (CJS)",
+    "path": "dist/index.cjs",
+    "limit": "75 KB"
+  },
+  {
+    "name": "Main Bundle CJS (Gzipped)",
+    "path": "dist/index.cjs",
+    "limit": "25 KB",
+    "gzip": true
+  },
+  {
+    "name": "Styles",
+    "path": "dist/style.css",
+    "limit": "25 KB"
+  },
+  {
+    "name": "Styles (Gzipped)",
+    "path": "dist/style.css",
+    "limit": "5 KB",
+    "gzip": true
+  }
+]

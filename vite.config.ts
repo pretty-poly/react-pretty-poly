@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import tailwindcss from '@tailwindcss/vite'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { resolve } from 'path'
 
 // https://vitejs.dev/config/
@@ -11,6 +12,12 @@ export default defineConfig({
     tailwindcss(),
     dts({
       insertTypesEntry: true,
+    }),
+    visualizer({
+      filename: 'dist/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+      template: 'treemap', // sunburst, treemap, network
     }),
   ],
   resolve: {
@@ -34,5 +41,6 @@ export default defineConfig({
         },
       },
     },
+    chunkSizeWarningLimit: 150, // Warn if chunks > 150 KB
   },
 })
