@@ -78,7 +78,7 @@ function It() {
             return u = u.displayName, u || (u = I.displayName || I.name || "", u = u !== "" ? "ForwardRef(" + u + ")" : "ForwardRef"), u;
           case P:
             return I = u.displayName || null, I !== null ? I : e(u.type) || "Memo";
-          case f:
+          case p:
             I = u._payload, u = u._init;
             try {
               return e(u(I));
@@ -109,7 +109,7 @@ function It() {
     }
     function r(u) {
       if (u === d) return "<>";
-      if (typeof u == "object" && u !== null && u.$$typeof === f)
+      if (typeof u == "object" && u !== null && u.$$typeof === p)
         return "<...>";
       try {
         var I = e(u);
@@ -144,7 +144,7 @@ function It() {
         configurable: !0
       });
     }
-    function p() {
+    function f() {
       var u = e(this.type);
       return W[u] || (W[u] = !0, console.error(
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
@@ -159,7 +159,7 @@ function It() {
         _owner: N
       }, (_ !== void 0 ? _ : null) !== null ? Object.defineProperty(u, "ref", {
         enumerable: !1,
-        get: p
+        get: f
       }) : Object.defineProperty(u, "ref", { enumerable: !1, value: null }), u._store = {}, Object.defineProperty(u._store, "validated", {
         configurable: !1,
         enumerable: !1,
@@ -235,7 +235,7 @@ React keys must be passed directly to JSX without using spread:
     function b(u) {
       typeof u == "object" && u !== null && u.$$typeof === x && u._store && (u._store.validated = 1);
     }
-    var w = Ke, x = Symbol.for("react.transitional.element"), c = Symbol.for("react.portal"), d = Symbol.for("react.fragment"), m = Symbol.for("react.strict_mode"), a = Symbol.for("react.profiler"), g = Symbol.for("react.consumer"), k = Symbol.for("react.context"), E = Symbol.for("react.forward_ref"), T = Symbol.for("react.suspense"), j = Symbol.for("react.suspense_list"), P = Symbol.for("react.memo"), f = Symbol.for("react.lazy"), R = Symbol.for("react.activity"), B = Symbol.for("react.client.reference"), K = w.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, H = Object.prototype.hasOwnProperty, G = Array.isArray, U = console.createTask ? console.createTask : function() {
+    var w = Ke, x = Symbol.for("react.transitional.element"), c = Symbol.for("react.portal"), d = Symbol.for("react.fragment"), m = Symbol.for("react.strict_mode"), a = Symbol.for("react.profiler"), g = Symbol.for("react.consumer"), k = Symbol.for("react.context"), E = Symbol.for("react.forward_ref"), T = Symbol.for("react.suspense"), j = Symbol.for("react.suspense_list"), P = Symbol.for("react.memo"), p = Symbol.for("react.lazy"), R = Symbol.for("react.activity"), B = Symbol.for("react.client.reference"), K = w.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, H = Object.prototype.hasOwnProperty, G = Array.isArray, U = console.createTask ? console.createTask : function() {
       return null;
     };
     w = {
@@ -300,8 +300,8 @@ const De = "-", jt = (e) => {
       return l[0] === "" && l.length !== 1 && l.shift(), Je(l, t) || Rt(i);
     },
     getConflictingClassGroupIds: (i, l) => {
-      const p = o[i] || [];
-      return l && r[i] ? [...p, ...r[i]] : p;
+      const f = o[i] || [];
+      return l && r[i] ? [...f, ...r[i]] : f;
     }
   };
 }, Je = (e, t) => {
@@ -395,12 +395,12 @@ const De = "-", jt = (e) => {
   } = e;
   let r = (n) => {
     const s = [];
-    let i = 0, l = 0, p = 0, h;
+    let i = 0, l = 0, f = 0, h;
     for (let c = 0; c < n.length; c++) {
       let d = n[c];
       if (i === 0 && l === 0) {
         if (d === _e) {
-          s.push(n.slice(p, c)), p = c + Ot;
+          s.push(n.slice(f, c)), f = c + Ot;
           continue;
         }
         if (d === "/") {
@@ -410,7 +410,7 @@ const De = "-", jt = (e) => {
       }
       d === "[" ? i++ : d === "]" ? i-- : d === "(" ? l++ : d === ")" && l--;
     }
-    const y = s.length === 0 ? n : n.substring(p), b = $t(y), w = b !== y, x = h && h > p ? h - p : void 0;
+    const y = s.length === 0 ? n : n.substring(f), b = $t(y), w = b !== y, x = h && h > f ? h - f : void 0;
     return {
       modifiers: s,
       hasImportantModifier: w,
@@ -459,7 +459,7 @@ const De = "-", jt = (e) => {
     getConflictingClassGroupIds: n,
     sortModifiers: s
   } = t, i = [], l = e.trim().split(Gt);
-  let p = "";
+  let f = "";
   for (let h = l.length - 1; h >= 0; h -= 1) {
     const y = l[h], {
       isExternal: b,
@@ -469,17 +469,17 @@ const De = "-", jt = (e) => {
       maybePostfixModifierPosition: d
     } = o(y);
     if (b) {
-      p = y + (p.length > 0 ? " " + p : p);
+      f = y + (f.length > 0 ? " " + f : f);
       continue;
     }
     let m = !!d, a = r(m ? c.substring(0, d) : c);
     if (!a) {
       if (!m) {
-        p = y + (p.length > 0 ? " " + p : p);
+        f = y + (f.length > 0 ? " " + f : f);
         continue;
       }
       if (a = r(c), !a) {
-        p = y + (p.length > 0 ? " " + p : p);
+        f = y + (f.length > 0 ? " " + f : f);
         continue;
       }
       m = !1;
@@ -493,9 +493,9 @@ const De = "-", jt = (e) => {
       const P = T[j];
       i.push(k + P);
     }
-    p = y + (p.length > 0 ? " " + p : p);
+    f = y + (f.length > 0 ? " " + f : f);
   }
-  return p;
+  return f;
 };
 function Lt() {
   let e = 0, t, o, r = "";
@@ -513,16 +513,16 @@ const Xe = (e) => {
 };
 function Bt(e, ...t) {
   let o, r, n, s = i;
-  function i(p) {
+  function i(f) {
     const h = t.reduce((y, b) => b(y), e());
-    return o = Ct(h), r = o.cache.get, n = o.cache.set, s = l, l(p);
+    return o = Ct(h), r = o.cache.get, n = o.cache.set, s = l, l(f);
   }
-  function l(p) {
-    const h = r(p);
+  function l(f) {
+    const h = r(f);
     if (h)
       return h;
-    const y = Ut(p, o);
-    return n(p, y), y;
+    const y = Ut(f, o);
+    return n(f, y), y;
   }
   return function() {
     return s(Lt.apply(null, arguments));
@@ -543,7 +543,7 @@ const q = (e) => {
   const r = et.exec(e);
   return r ? r[1] ? t(r[1]) : o : !1;
 }, rt = (e) => e === "position" || e === "percentage", ot = (e) => e === "image" || e === "url", st = (e) => e === "length" || e === "size" || e === "bg-size", nt = (e) => e === "length", nr = (e) => e === "number", ir = (e) => e === "family-name", it = (e) => e === "shadow", ar = () => {
-  const e = q("color"), t = q("font"), o = q("text"), r = q("font-weight"), n = q("tracking"), s = q("leading"), i = q("breakpoint"), l = q("container"), p = q("spacing"), h = q("radius"), y = q("shadow"), b = q("inset-shadow"), w = q("text-shadow"), x = q("drop-shadow"), c = q("blur"), d = q("perspective"), m = q("aspect"), a = q("ease"), g = q("animate"), k = () => ["auto", "avoid", "all", "avoid-page", "page", "left", "right", "column"], E = () => [
+  const e = q("color"), t = q("font"), o = q("text"), r = q("font-weight"), n = q("tracking"), s = q("leading"), i = q("breakpoint"), l = q("container"), f = q("spacing"), h = q("radius"), y = q("shadow"), b = q("inset-shadow"), w = q("text-shadow"), x = q("drop-shadow"), c = q("blur"), d = q("perspective"), m = q("aspect"), a = q("ease"), g = q("animate"), k = () => ["auto", "avoid", "all", "avoid-page", "page", "left", "right", "column"], E = () => [
     "center",
     "top",
     "bottom",
@@ -561,9 +561,9 @@ const q = (e) => {
     "bottom-left",
     // Deprecated since Tailwind CSS v4.1.0, see https://github.com/tailwindlabs/tailwindcss/pull/17378
     "left-bottom"
-  ], T = () => [...E(), z, S], j = () => ["auto", "hidden", "clip", "visible", "scroll"], P = () => ["auto", "contain", "none"], f = () => [z, S, p], R = () => [ce, "full", "auto", ...f()], B = () => [ne, "none", "subgrid", z, S], K = () => ["auto", {
+  ], T = () => [...E(), z, S], j = () => ["auto", "hidden", "clip", "visible", "scroll"], P = () => ["auto", "contain", "none"], p = () => [z, S, f], R = () => [ce, "full", "auto", ...p()], B = () => [ne, "none", "subgrid", z, S], K = () => ["auto", {
     span: ["full", ne, z, S]
-  }, ne, z, S], H = () => [ne, "auto", z, S], G = () => ["auto", "min", "max", "fr", z, S], U = () => ["start", "end", "center", "between", "around", "evenly", "stretch", "baseline", "center-safe", "end-safe"], D = () => ["start", "end", "center", "stretch", "center-safe", "end-safe"], W = () => ["auto", ...f()], Y = () => [ce, "auto", "full", "dvw", "dvh", "lvw", "lvh", "svw", "svh", "min", "max", "fit", ...f()], v = () => [e, z, S], L = () => [...E(), qe, Ye, {
+  }, ne, z, S], H = () => [ne, "auto", z, S], G = () => ["auto", "min", "max", "fr", z, S], U = () => ["start", "end", "center", "between", "around", "evenly", "stretch", "baseline", "center-safe", "end-safe"], D = () => ["start", "end", "center", "stretch", "center-safe", "end-safe"], W = () => ["auto", ...p()], Y = () => [ce, "auto", "full", "dvw", "dvh", "lvw", "lvh", "svw", "svh", "min", "max", "fit", ...p()], v = () => [e, z, S], L = () => [...E(), qe, Ye, {
     position: [z, S]
   }], u = () => ["no-repeat", {
     repeat: ["", "x", "y", "space", "round"]
@@ -584,7 +584,7 @@ const q = (e) => {
     c,
     z,
     S
-  ], X = () => ["none", O, z, S], re = () => ["none", O, z, S], ve = () => [O, z, S], ze = () => [ce, "full", ...f()];
+  ], X = () => ["none", O, z, S], re = () => ["none", O, z, S], ve = () => [O, z, S], ze = () => [ce, "full", ...p()];
   return {
     cacheSize: 500,
     theme: {
@@ -840,7 +840,7 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/flex-basis
        */
       basis: [{
-        basis: [ce, "full", "auto", l, ...f()]
+        basis: [ce, "full", "auto", l, ...p()]
       }],
       /**
        * Flex Direction
@@ -966,21 +966,21 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/gap
        */
       gap: [{
-        gap: f()
+        gap: p()
       }],
       /**
        * Gap X
        * @see https://tailwindcss.com/docs/gap
        */
       "gap-x": [{
-        "gap-x": f()
+        "gap-x": p()
       }],
       /**
        * Gap Y
        * @see https://tailwindcss.com/docs/gap
        */
       "gap-y": [{
-        "gap-y": f()
+        "gap-y": p()
       }],
       /**
        * Justify Content
@@ -1055,63 +1055,63 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/padding
        */
       p: [{
-        p: f()
+        p: p()
       }],
       /**
        * Padding X
        * @see https://tailwindcss.com/docs/padding
        */
       px: [{
-        px: f()
+        px: p()
       }],
       /**
        * Padding Y
        * @see https://tailwindcss.com/docs/padding
        */
       py: [{
-        py: f()
+        py: p()
       }],
       /**
        * Padding Start
        * @see https://tailwindcss.com/docs/padding
        */
       ps: [{
-        ps: f()
+        ps: p()
       }],
       /**
        * Padding End
        * @see https://tailwindcss.com/docs/padding
        */
       pe: [{
-        pe: f()
+        pe: p()
       }],
       /**
        * Padding Top
        * @see https://tailwindcss.com/docs/padding
        */
       pt: [{
-        pt: f()
+        pt: p()
       }],
       /**
        * Padding Right
        * @see https://tailwindcss.com/docs/padding
        */
       pr: [{
-        pr: f()
+        pr: p()
       }],
       /**
        * Padding Bottom
        * @see https://tailwindcss.com/docs/padding
        */
       pb: [{
-        pb: f()
+        pb: p()
       }],
       /**
        * Padding Left
        * @see https://tailwindcss.com/docs/padding
        */
       pl: [{
-        pl: f()
+        pl: p()
       }],
       /**
        * Margin
@@ -1181,7 +1181,7 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/margin#adding-space-between-children
        */
       "space-x": [{
-        "space-x": f()
+        "space-x": p()
       }],
       /**
        * Space Between X Reverse
@@ -1193,7 +1193,7 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/margin#adding-space-between-children
        */
       "space-y": [{
-        "space-y": f()
+        "space-y": p()
       }],
       /**
        * Space Between Y Reverse
@@ -1362,7 +1362,7 @@ const q = (e) => {
         leading: [
           /** Deprecated since Tailwind CSS v4.0.0. @see https://github.com/tailwindlabs/tailwindcss.com/issues/2027#issuecomment-2620152757 */
           s,
-          ...f()
+          ...p()
         ]
       }],
       /**
@@ -1463,7 +1463,7 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/text-indent
        */
       indent: [{
-        indent: f()
+        indent: p()
       }],
       /**
        * Vertical Alignment
@@ -2427,21 +2427,21 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/border-spacing
        */
       "border-spacing": [{
-        "border-spacing": f()
+        "border-spacing": p()
       }],
       /**
        * Border Spacing X
        * @see https://tailwindcss.com/docs/border-spacing
        */
       "border-spacing-x": [{
-        "border-spacing-x": f()
+        "border-spacing-x": p()
       }],
       /**
        * Border Spacing Y
        * @see https://tailwindcss.com/docs/border-spacing
        */
       "border-spacing-y": [{
-        "border-spacing-y": f()
+        "border-spacing-y": p()
       }],
       /**
        * Table Layout
@@ -2733,126 +2733,126 @@ const q = (e) => {
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-m": [{
-        "scroll-m": f()
+        "scroll-m": p()
       }],
       /**
        * Scroll Margin X
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-mx": [{
-        "scroll-mx": f()
+        "scroll-mx": p()
       }],
       /**
        * Scroll Margin Y
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-my": [{
-        "scroll-my": f()
+        "scroll-my": p()
       }],
       /**
        * Scroll Margin Start
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-ms": [{
-        "scroll-ms": f()
+        "scroll-ms": p()
       }],
       /**
        * Scroll Margin End
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-me": [{
-        "scroll-me": f()
+        "scroll-me": p()
       }],
       /**
        * Scroll Margin Top
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-mt": [{
-        "scroll-mt": f()
+        "scroll-mt": p()
       }],
       /**
        * Scroll Margin Right
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-mr": [{
-        "scroll-mr": f()
+        "scroll-mr": p()
       }],
       /**
        * Scroll Margin Bottom
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-mb": [{
-        "scroll-mb": f()
+        "scroll-mb": p()
       }],
       /**
        * Scroll Margin Left
        * @see https://tailwindcss.com/docs/scroll-margin
        */
       "scroll-ml": [{
-        "scroll-ml": f()
+        "scroll-ml": p()
       }],
       /**
        * Scroll Padding
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-p": [{
-        "scroll-p": f()
+        "scroll-p": p()
       }],
       /**
        * Scroll Padding X
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-px": [{
-        "scroll-px": f()
+        "scroll-px": p()
       }],
       /**
        * Scroll Padding Y
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-py": [{
-        "scroll-py": f()
+        "scroll-py": p()
       }],
       /**
        * Scroll Padding Start
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-ps": [{
-        "scroll-ps": f()
+        "scroll-ps": p()
       }],
       /**
        * Scroll Padding End
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-pe": [{
-        "scroll-pe": f()
+        "scroll-pe": p()
       }],
       /**
        * Scroll Padding Top
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-pt": [{
-        "scroll-pt": f()
+        "scroll-pt": p()
       }],
       /**
        * Scroll Padding Right
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-pr": [{
-        "scroll-pr": f()
+        "scroll-pr": p()
       }],
       /**
        * Scroll Padding Bottom
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-pb": [{
-        "scroll-pb": f()
+        "scroll-pb": p()
       }],
       /**
        * Scroll Padding Left
        * @see https://tailwindcss.com/docs/scroll-padding
        */
       "scroll-pl": [{
-        "scroll-pl": f()
+        "scroll-pl": p()
       }],
       /**
        * Scroll Snap Align
@@ -3061,14 +3061,14 @@ function Ce(e = cr) {
       const g = (m.minWidth ? 1 : 0) + (m.maxWidth ? 1 : 0);
       return (a.minWidth ? 1 : 0) + (a.maxWidth ? 1 : 0) - g;
     }), ((d = c[0]) == null ? void 0 : d[0]) || Object.keys(e)[0] || "desktop";
-  }, [t, e, r]), l = J(() => e[i], [e, i]), p = J(() => (l == null ? void 0 : l.type) || "grid", [l]), h = V((c) => {
+  }, [t, e, r]), l = J(() => e[i], [e, i]), f = J(() => (l == null ? void 0 : l.type) || "grid", [l]), h = V((c) => {
     if (c && !e[c]) {
       console.warn(`Mode "${c}" not found in configuration`);
       return;
     }
     n(c);
   }, [e]), y = V((c) => i === c, [i]), b = J(() => Object.keys(e), [e]), w = V((c) => {
-    switch (p) {
+    switch (f) {
       case "grid":
         return ["resizing", "dividers", "collapse"].includes(c);
       case "sidebar":
@@ -3083,7 +3083,7 @@ function Ce(e = cr) {
       default:
         return !1;
     }
-  }, [p]), x = J(() => {
+  }, [f]), x = J(() => {
     const c = Object.entries(e).map(([g, k]) => ({ name: g, ...k })).sort((g, k) => (g.breakpoint || 0) - (k.breakpoint || 0)), d = c.findIndex((g) => g.name === i), m = c[d + 1], a = c[d - 1];
     return {
       current: i,
@@ -3109,7 +3109,7 @@ function Ce(e = cr) {
     viewport: t,
     activeMode: i,
     currentModeConfig: l,
-    currentLayoutType: p,
+    currentLayoutType: f,
     // Mode management
     setMode: h,
     isMode: y,
@@ -3285,7 +3285,7 @@ function mr({
   autoSave: n = !0,
   saveDelay: s = 500
 }) {
-  const i = fe(null), l = fe(), p = fe(""), h = fe(!1);
+  const i = fe(null), l = fe(), f = fe(""), h = fe(!1);
   Q(() => {
     if (!t) {
       i.current = null;
@@ -3302,9 +3302,9 @@ function mr({
     if (!i.current || !t)
       return;
     const d = JSON.stringify(c);
-    if (d !== p.current)
+    if (d !== f.current)
       try {
-        dr(e, c, i.current), p.current = d;
+        dr(e, c, i.current), f.current = d;
       } catch (m) {
         console.warn("Failed to save grid state:", m);
       }
@@ -3315,7 +3315,7 @@ function mr({
   }, [y, s, o]), w = V(() => {
     if (!(!i.current || !t || typeof t == "function"))
       try {
-        fr(e, i.current), p.current = "";
+        fr(e, i.current), f.current = "";
       } catch (c) {
         console.warn("Failed to clear grid state:", c);
       }
@@ -3481,8 +3481,8 @@ function xr(e, t) {
       };
     case "RESET_STATE":
       const l = Object.fromEntries(
-        Object.entries(e.blocks).map(([p, h]) => [
-          p,
+        Object.entries(e.blocks).map(([f, h]) => [
+          f,
           {
             ...h,
             size: h.defaultSize
@@ -3562,9 +3562,9 @@ function kr({
   onModeChange: i,
   onLayoutChange: l
 }) {
-  const { activeMode: p, viewport: h, setMode: y } = Ce(o), [b, w] = Et(
+  const { activeMode: f, viewport: h, setMode: y } = Ce(o), [b, w] = Et(
     xr,
-    wr(t, h, p)
+    wr(t, h, f)
   );
   Q(() => {
     w({
@@ -3573,11 +3573,11 @@ function kr({
     });
   }, [h]), Q(() => {
     const a = b.activeMode;
-    p !== a && (w({
+    f !== a && (w({
       type: "SWITCH_MODE",
-      payload: { mode: p }
-    }), i == null || i(p, a));
-  }, [p, b.activeMode, i]);
+      payload: { mode: f }
+    }), i == null || i(f, a));
+  }, [f, b.activeMode, i]);
   const { saveState: x, clearState: c } = mr({
     gridId: s || r,
     enabled: n,
@@ -3591,7 +3591,7 @@ function kr({
       gridId: r,
       state: {
         ...b,
-        activeMode: p,
+        activeMode: f,
         viewport: h
       },
       dispatch: w,
@@ -3625,9 +3625,9 @@ function kr({
           (H) => H.parentId === E.parentId
         ).sort(
           (H, G) => (H.order || 0) - (G.order || 0)
-        ), f = P.findIndex((H) => H.id === a);
+        ), p = P.findIndex((H) => H.id === a);
         let R = null;
-        if (E.dividerPosition === "start" && f > 0 ? R = P[f - 1] : E.dividerPosition === "end" && f < P.length - 1 && (R = P[f + 1]), R && E.sizeUnit === "fr" && R.sizeUnit === "px") {
+        if (E.dividerPosition === "start" && p > 0 ? R = P[p - 1] : E.dividerPosition === "end" && p < P.length - 1 && (R = P[p + 1]), R && E.sizeUnit === "fr" && R.sizeUnit === "px") {
           console.warn(
             `Cannot resize fr block "${a}" when adjacent to px block "${R.id}". Fr blocks fill available space and should not be directly resized. Consider resizing the px block instead.`
           );
@@ -3667,7 +3667,7 @@ function kr({
         } else if (g.sizeUnit === "fr") {
           const P = Object.values(b.blocks).filter(
             (N) => N.parentId === g.parentId
-          ), f = P.filter((N) => N.sizeUnit === "fr"), R = g.parentId ? document.querySelector(`[data-block-id="${g.parentId}"]`) : document.querySelector('[data-block-id="root"]'), B = R ? T === "row" ? R.clientWidth : R.clientHeight : 1200, K = P.filter((N) => N.sizeUnit === "px").reduce((N, $) => {
+          ), p = P.filter((N) => N.sizeUnit === "fr"), R = g.parentId ? document.querySelector(`[data-block-id="${g.parentId}"]`) : document.querySelector('[data-block-id="root"]'), B = R ? T === "row" ? R.clientWidth : R.clientHeight : 1200, K = P.filter((N) => N.sizeUnit === "px").reduce((N, $) => {
             const Z = document.querySelector(`[data-block-id="${$.id}"]`);
             if (!Z) return N;
             const C = T === "row" ? Z.clientWidth : Z.clientHeight;
@@ -3678,12 +3678,12 @@ function kr({
             if (!($ instanceof HTMLElement)) return N;
             const Z = T === "row" ? $.clientWidth : $.clientHeight;
             return N + Z;
-          }, 0), D = lt(B, K, G), W = f.reduce(
+          }, 0), D = lt(B, K, G), W = p.reduce(
             (N, $) => N + ($.defaultSize || 1),
             0
           ), Y = W > 0 ? D / W : 0;
           if (Y === 0) return;
-          const v = vr(j, Y), L = f.sort(
+          const v = vr(j, Y), L = p.sort(
             (N, $) => (N.order || 0) - ($.order || 0)
           ), u = L.findIndex(
             (N) => N.id === b.resize.activeBlockId
@@ -3721,7 +3721,7 @@ function kr({
         w({ type: "RESET_STATE" }), c();
       }
     }),
-    [r, b, p, h, x, c, y]
+    [r, b, f, h, x, c, y]
   );
   return Q(() => {
     if (l) {
@@ -3780,7 +3780,7 @@ function zr({
     updateResize: s,
     endResize: i,
     isDragging: l,
-    activeBlockId: p,
+    activeBlockId: f,
     activeDividerId: h
   } = ut(), y = V(() => {
     if (!t.current) return 0;
@@ -3821,7 +3821,7 @@ function zr({
   }, [l, s, i]), {
     // State
     isDragging: l,
-    activeBlockId: p,
+    activeBlockId: f,
     activeDividerId: h,
     // Actions
     startResize: n,
@@ -3843,7 +3843,7 @@ function Er({
   onExpandBlock: s,
   containerRef: i,
   stepSize: l = 10,
-  largeStepSize: p = 50
+  largeStepSize: f = 50
 }) {
   const h = V(() => {
     const d = document.activeElement;
@@ -3859,8 +3859,7 @@ function Er({
     ), g = d.getBoundingClientRect(), k = {
       x: g.left + g.width / 2,
       y: g.top + g.height / 2
-    };
-    let E = a.filter((T) => {
+    }, E = a.filter((T) => {
       if (T === d) return !1;
       const j = T.getBoundingClientRect(), P = {
         x: j.left + j.width / 2,
@@ -3880,12 +3879,12 @@ function Er({
       }
     });
     return E.length === 0 ? null : (E.sort((T, j) => {
-      const P = T.getBoundingClientRect(), f = j.getBoundingClientRect(), R = {
+      const P = T.getBoundingClientRect(), p = j.getBoundingClientRect(), R = {
         x: P.left + P.width / 2,
         y: P.top + P.height / 2
       }, B = {
-        x: f.left + f.width / 2,
-        y: f.top + f.height / 2
+        x: p.left + p.width / 2,
+        y: p.top + p.height / 2
       }, K = Math.sqrt(
         Math.pow(R.x - k.x, 2) + Math.pow(R.y - k.y, 2)
       ), H = Math.sqrt(
@@ -3899,7 +3898,7 @@ function Er({
     if (!m) return;
     const a = y(m);
     if (!a) return;
-    const g = d.ctrlKey || d.metaKey, k = d.shiftKey, E = k ? p : l;
+    const g = d.ctrlKey || d.metaKey, k = d.shiftKey, E = k ? f : l;
     if (!g && !k)
       switch (d.key) {
         case "ArrowUp":
@@ -3919,8 +3918,8 @@ function Er({
           break;
         case "ArrowRight":
           d.preventDefault();
-          const f = b(m, "right");
-          f && (f.focus(), r == null || r(f.dataset.blockId || ""));
+          const p = b(m, "right");
+          p && (p.focus(), r == null || r(p.dataset.blockId || ""));
           break;
         case "Enter":
         case " ":
@@ -3967,7 +3966,7 @@ function Er({
     n,
     s,
     l,
-    p
+    f
   ]), x = V((d) => {
     if (!(i != null && i.current)) return;
     const m = i.current.querySelector(
@@ -4001,14 +4000,14 @@ function Tr(e, t, o, r, n) {
   return n || o === "none" ? !1 : o === "manual" ? !!r : o === "auto" ? t ? !1 : !n : !1;
 }
 function Ir(e, t, o, r) {
-  var p;
+  var f;
   const { targetId: n, position: s } = Ar(e, t), i = {
     targetId: n,
     position: s,
     size: (r == null ? void 0 : r.defaultSize) || 8,
     className: r == null ? void 0 : r.defaultClassName,
     handle: r == null ? void 0 : r.defaultHandle
-  }, l = (p = r == null ? void 0 : r.overrides) == null ? void 0 : p[e.id];
+  }, l = (f = r == null ? void 0 : r.overrides) == null ? void 0 : f[e.id];
   if (l && Object.assign(i, l), typeof o == "object" && o !== null) {
     const h = o;
     Object.assign(i, h), h.position && h.position !== "auto" && (h.position === "start" ? (i.targetId = e.id, i.position = "start") : h.position === "end" && (i.targetId = e.id, i.position = "end"));
@@ -4053,17 +4052,17 @@ function ft(e, t, o, r, n) {
     };
   }
   const s = be.toArray(e), i = [], l = [];
-  return s.forEach((p, h) => {
-    if (!le(p)) {
-      i.push(p);
+  return s.forEach((f, h) => {
+    if (!le(f)) {
+      i.push(f);
       return;
     }
-    const y = Ne(p);
+    const y = Ne(f);
     if (!y) {
-      i.push(p);
+      i.push(f);
       return;
     }
-    i.push(p);
+    i.push(f);
     const b = {
       id: y.id,
       type: "block",
@@ -4121,7 +4120,7 @@ function pt(e, t, o, r, n) {
     var h, y;
     if (!le(s))
       return s;
-    const i = ((h = s.type) == null ? void 0 : h.displayName) || ((y = s.type) == null ? void 0 : y.name), l = i === "Block.Group" || i === "BlockGroup", p = i === "Block";
+    const i = ((h = s.type) == null ? void 0 : h.displayName) || ((y = s.type) == null ? void 0 : y.name), l = i === "Block.Group" || i === "BlockGroup", f = i === "Block";
     if (l) {
       const b = ft(
         s.props.children,
@@ -4134,7 +4133,7 @@ function pt(e, t, o, r, n) {
         ...s.props,
         children: b.children
       });
-    } else if (p && be.toArray(s.props.children).some((w) => {
+    } else if (f && be.toArray(s.props.children).some((w) => {
       var c, d;
       if (!le(w)) return !1;
       const x = ((c = w.type) == null ? void 0 : c.displayName) || ((d = w.type) == null ? void 0 : d.name);
@@ -4177,7 +4176,7 @@ const Rr = ({
     handle: n,
     "aria-label": s
   }, i) => {
-    const l = fe(null), p = i || l, h = dt(), { startResize: y, isDragging: b, activeDividerId: w } = ut(), { supportsFeature: x } = Ce(), [c, d] = me(""), [m, a] = me("end"), g = V(() => {
+    const l = fe(null), f = i || l, h = dt(), { startResize: y, isDragging: b, activeDividerId: w } = ut(), { supportsFeature: x } = Ce(), [c, d] = me(""), [m, a] = me("end"), g = V(() => {
       const G = l.current;
       if (!G) return;
       if (e && t && t !== "auto" && t !== "none") {
@@ -4212,28 +4211,28 @@ const Rr = ({
     }, [g]), Q(() => {
       g();
     }, [h.blocks]);
-    const k = c ? h.blocks[c] : null;
-    if (!k && c && console.warn(`Divider target block "${c}" not found`), !x("resizing"))
-      return null;
-    const T = k != null && k.parentId ? h.blocks[k.parentId] : null, j = ((T == null ? void 0 : T.type) === "group" ? T.direction : void 0) || "row", P = j === "column", f = b && c && w === `${c}-${m}-divider`, R = P ? "row-resize" : "col-resize", B = V((G) => {
+    const k = c ? h.blocks[c] : null, E = k != null && k.parentId ? h.blocks[k.parentId] : null, T = ((E == null ? void 0 : E.type) === "group" ? E.direction : void 0) || "row", j = T === "column", P = b && c && w === `${c}-${m}-divider`, p = j ? "row-resize" : "col-resize", R = V((G) => {
       if (!c) return;
       G.preventDefault();
       const U = `${c}-${m}-divider`;
       y(c, U, G);
-    }, [c, m, y]), K = V(() => {
+    }, [c, m, y]), B = V(() => {
       k == null || k.defaultSize;
-    }, [k]), H = n || Rr;
+    }, [k]);
+    if (!k && c && console.warn(`Divider target block "${c}" not found`), !x("resizing"))
+      return null;
+    const H = n || Rr;
     return /* @__PURE__ */ M.jsx(
       "div",
       {
-        ref: p,
+        ref: f,
         className: te(
           "pretty-poly-divider",
           "flex items-center justify-center",
           "select-none touch-none transition-colors",
           "hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring focus-visible:bg-accent",
-          P ? "cursor-row-resize" : "cursor-col-resize",
-          f && "pretty-poly-divider--dragging",
+          j ? "cursor-row-resize" : "cursor-col-resize",
+          P && "pretty-poly-divider--dragging",
           m === "start" && "pretty-poly-divider--start",
           m === "end" && "pretty-poly-divider--end",
           r
@@ -4241,11 +4240,11 @@ const Rr = ({
         "data-block-id": c ? `${c}-${m}-divider` : "loading-divider",
         "data-block-type": "divider",
         "data-block-target": c || "",
-        "data-block-direction": j,
+        "data-block-direction": T,
         "data-block-divider-position": m,
         style: {
-          [P ? "height" : "width"]: `${o}px`,
-          cursor: R
+          [j ? "height" : "width"]: `${o}px`,
+          cursor: p
         },
         role: "separator",
         "aria-label": s || `Resize ${c || "block"}`,
@@ -4253,9 +4252,9 @@ const Rr = ({
         "aria-valuemin": k == null ? void 0 : k.minSize,
         "aria-valuemax": k == null ? void 0 : k.maxSize,
         tabIndex: 0,
-        onMouseDown: B,
-        onTouchStart: B,
-        onDoubleClick: K,
+        onMouseDown: R,
+        onTouchStart: R,
+        onDoubleClick: B,
         onKeyDown: (G) => {
           (G.key === "ArrowLeft" || G.key === "ArrowRight" || G.key === "ArrowUp" || G.key === "ArrowDown") && G.preventDefault();
         },
@@ -4264,9 +4263,9 @@ const Rr = ({
           {
             className: te(
               "transition-colors hover:bg-foreground/20",
-              f && "bg-foreground/30"
+              P && "bg-foreground/30"
             ),
-            direction: j
+            direction: T
           }
         )
       }
@@ -4276,21 +4275,21 @@ const Rr = ({
 $e.displayName = "Divider";
 const mt = ee(
   ({ children: e, className: t, dividers: o = "manual", dividerConfig: r, "aria-label": n }, s) => {
-    const i = fe(null), { state: l, resizeBlock: p, collapseBlock: h, expandBlock: y, switchMode: b, persistState: w, resetState: x } = Se(), c = l.resize.isDragging;
+    const i = fe(null), { state: l, resizeBlock: f, collapseBlock: h, expandBlock: y, switchMode: b, persistState: w, resetState: x } = Se(), c = l.resize.isDragging;
     At(s, () => ({
-      resizeBlock: p,
+      resizeBlock: f,
       collapseBlock: h,
       expandBlock: y,
       switchMode: b,
       persistState: w,
       resetState: x,
       getState: () => l
-    }), [p, h, y, b, w, x, l]);
+    }), [f, h, y, b, w, x, l]);
     const d = J(() => Object.values(l.blocks).sort((T, j) => (T.order || 0) - (j.order || 0)), [l.blocks]), m = J(() => d.find((E) => !E.parentId), [d]);
     zr({
       blocks: d,
       containerRef: i,
-      onSizeChange: p,
+      onSizeChange: f,
       direction: (m == null ? void 0 : m.direction) || "row"
     }), Er({
       enabled: !0,
@@ -4299,8 +4298,8 @@ const mt = ee(
       onResizeBlock: (E, T) => {
         const j = l.blocks[E];
         if (j) {
-          const P = j.defaultSize || 0, f = Math.max(0, P + T);
-          p(E, f);
+          const P = j.defaultSize || 0, p = Math.max(0, P + T);
+          f(E, p);
         }
       },
       onCollapseBlock: h,
@@ -4327,24 +4326,24 @@ const mt = ee(
     }, [e, o, r, l.blocks]), { gridStyles: g, cssVariables: k } = J(() => {
       if (!m)
         return { gridStyles: "", cssVariables: "" };
-      const E = d.reduce((f, R) => {
-        if (R.id === "root") return f;
+      const E = d.reduce((p, R) => {
+        if (R.id === "root") return p;
         const B = R.parentId || "root";
-        return f[B] || (f[B] = []), f[B].push(R), f;
-      }, {}), T = d.filter((f) => f.defaultSize !== void 0).map((f) => {
-        const R = f.sizeUnit === "px" ? `${f.defaultSize}px` : `${f.defaultSize}fr`;
-        return `--${m.id}-${f.id}-size: ${R};`;
+        return p[B] || (p[B] = []), p[B].push(R), p;
+      }, {}), T = d.filter((p) => p.defaultSize !== void 0).map((p) => {
+        const R = p.sizeUnit === "px" ? `${p.defaultSize}px` : `${p.defaultSize}fr`;
+        return `--${m.id}-${p.id}-size: ${R};`;
       }).join(`
-  `), j = (f, R = /* @__PURE__ */ new Set()) => {
-        if (R.has(f))
-          return console.warn(`Circular reference detected for parent: ${f}`), "";
+  `), j = (p, R = /* @__PURE__ */ new Set()) => {
+        if (R.has(p))
+          return console.warn(`Circular reference detected for parent: ${p}`), "";
         const B = new Set(R);
-        B.add(f);
-        const K = E[f] || [];
+        B.add(p);
+        const K = E[p] || [];
         if (K.length === 0) return "";
-        const H = [...K].sort((v, L) => (v.order || 0) - (L.order || 0)), G = d.find((v) => v.id === f) || m, U = (G == null ? void 0 : G.direction) || "row";
+        const H = [...K].sort((v, L) => (v.order || 0) - (L.order || 0)), G = d.find((v) => v.id === p) || m, U = (G == null ? void 0 : G.direction) || "row";
         let D;
-        if (o === "auto" && f === m.id)
+        if (o === "auto" && p === m.id)
           D = yr(a.templateItems, m.id);
         else {
           const v = H.map((L) => ({
@@ -4358,7 +4357,7 @@ const mt = ee(
         }
         const W = U === "column" ? "grid-template-rows" : "grid-template-columns";
         let Y = `
-[data-grid-id="${m.id}"][data-block-id="${f}"] {
+[data-grid-id="${m.id}"][data-block-id="${p}"] {
   display: grid;
   ${W}: ${D};
   ${U === "column" ? "grid-template-columns: 1fr;" : "grid-template-rows: 1fr;"}
@@ -4410,7 +4409,7 @@ const Nr = ee(
     onLayoutChange: s,
     onModeChange: i,
     className: l,
-    dividers: p = "manual",
+    dividers: f = "manual",
     dividerConfig: h,
     "aria-label": y
   }, b) => {
@@ -4430,7 +4429,7 @@ const Nr = ee(
           {
             ref: b,
             className: l,
-            dividers: p,
+            dividers: f,
             dividerConfig: h,
             "aria-label": y,
             children: e
@@ -4557,7 +4556,7 @@ const vt = ee(
     "aria-label": s,
     allowOverflow: i = !0
   }, l) => {
-    const [p, h] = me(null), y = (x, c) => {
+    const [f, h] = me(null), y = (x, c) => {
       c.preventDefault(), x.disabled || o(x.id);
     }, b = (x, c) => {
       c.preventDefault(), c.stopPropagation(), r && x.closable && r(x.id);
@@ -4579,7 +4578,7 @@ const vt = ee(
         role: "tablist",
         "aria-label": s || "Block tabs",
         children: /* @__PURE__ */ M.jsx("div", { className: "flex items-center min-w-0", children: e.map((x) => {
-          const c = x.id === t, d = p === x.id, m = x.icon;
+          const c = x.id === t, d = f === x.id, m = x.icon;
           return /* @__PURE__ */ M.jsxs(
             "div",
             {
@@ -4689,7 +4688,7 @@ const xt = ee(
     onClick: s,
     className: i,
     "aria-label": l
-  }, p) => {
+  }, f) => {
     const [h, y] = me(!1), b = () => {
       t && !r && y(!0);
     }, w = () => {
@@ -4703,7 +4702,7 @@ const xt = ee(
       /* @__PURE__ */ M.jsxs(
         "button",
         {
-          ref: p,
+          ref: f,
           className: ie(
             "pretty-poly-sidebar-item",
             "w-full h-12",
@@ -4774,7 +4773,7 @@ const wt = ee(
 );
 wt.displayName = "Block.Sidebar.Spacer";
 function Pr(e, t) {
-  const o = e[t] || {}, { id: r, type: n, direction: s, children: i, className: l, divider: p, noDivider: h, "aria-label": y, ...b } = e;
+  const o = e[t] || {}, { id: r, type: n, direction: s, children: i, className: l, divider: f, noDivider: h, "aria-label": y, ...b } = e;
   return {
     ...Object.fromEntries(
       Object.entries(b).filter(
@@ -4811,22 +4810,22 @@ const Le = ee(
     divider: s,
     noDivider: i,
     "aria-label": l,
-    ...p
+    ...f
   }, h) => {
-    const { gridId: y } = Se(), b = dt(), { collapseBlock: w, expandBlock: x } = Sr(), { activeMode: c, currentLayoutType: d, supportsFeature: m } = Ce(), a = b == null ? void 0 : b.blocks[e], g = Pr({ id: e, type: t, direction: o, children: r, className: n, "aria-label": l, ...p }, c), k = J(() => Mr(r), [r]), E = J(() => Or(r), [r]), T = J(() => g.hidden ? !1 : d === "dock" ? !!(g.icon || g.label) : !0, [d, g]), j = J(() => {
-      const f = [
+    const { gridId: y } = Se(), b = dt(), { collapseBlock: w, expandBlock: x } = Sr(), { activeMode: c, currentLayoutType: d, supportsFeature: m } = Ce(), a = b == null ? void 0 : b.blocks[e], g = Pr({ id: e, type: t, direction: o, children: r, className: n, "aria-label": l, ...f }, c), k = J(() => Mr(r), [r]), E = J(() => Or(r), [r]), T = J(() => g.hidden ? !1 : d === "dock" ? !!(g.icon || g.label) : !0, [d, g]), j = J(() => {
+      const p = [
         "pretty-poly-block",
         `pretty-poly-block--${t}`,
         `pretty-poly-block--mode-${c}`
       ];
-      return a && (a.sizeUnit && f.push(`pretty-poly-block--${a.sizeUnit}`), a.collapsible && f.push("pretty-poly-block--collapsible"), a.collapsible && a.collapseAt && (a.size ?? a.defaultSize ?? 0) <= a.collapseAt && f.push("pretty-poly-block--collapsed")), d === "dock" && g.dockOrder !== void 0 && f.push(`pretty-poly-block--dock-order-${g.dockOrder}`), f;
+      return a && (a.sizeUnit && p.push(`pretty-poly-block--${a.sizeUnit}`), a.collapsible && p.push("pretty-poly-block--collapsible"), a.collapsible && a.collapseAt && (a.size ?? a.defaultSize ?? 0) <= a.collapseAt && p.push("pretty-poly-block--collapsed")), d === "dock" && g.dockOrder !== void 0 && p.push(`pretty-poly-block--dock-order-${g.dockOrder}`), p;
     }, [t, c, a, d, g]), P = () => {
       a != null && a.collapsible && a.collapseAt && ((a.size ?? a.defaultSize ?? 0) <= a.collapseAt ? x(e) : w(e));
     };
     if (!T)
       return null;
     if (d === "dock") {
-      const f = g.icon;
+      const p = g.icon;
       return /* @__PURE__ */ M.jsxs(
         "div",
         {
@@ -4847,7 +4846,7 @@ const Le = ee(
           tabIndex: 0,
           style: g.style,
           children: [
-            f && /* @__PURE__ */ M.jsx(f, { className: "pretty-poly-dock-icon w-6 h-6 mb-1" }),
+            p && /* @__PURE__ */ M.jsx(p, { className: "pretty-poly-dock-icon w-6 h-6 mb-1" }),
             g.label && /* @__PURE__ */ M.jsx("span", { className: "pretty-poly-dock-label text-xs font-medium text-center", children: g.label })
           ]
         }
@@ -4938,12 +4937,12 @@ function Br(e, t, o) {
   let n = e;
   const s = t.minSize ?? 0, i = t.maxSize ?? 1 / 0;
   if (e < s && (r.push(`Size ${e} is below minimum ${s}`), n = s), e > i && (r.push(`Size ${e} exceeds maximum ${i}`), n = i), n = pe(n, s, i), t.sizeUnit === "px" && t.collapsible && o !== void 0) {
-    const l = t.collapseAt ?? 0, p = t.collapseTo ?? 0, h = t.defaultSize ?? n;
+    const l = t.collapseAt ?? 0, f = t.collapseTo ?? 0, h = t.defaultSize ?? n;
     n = br(
       n,
       o,
       l,
-      p,
+      f,
       h
     );
   }
@@ -4956,8 +4955,8 @@ function Br(e, t, o) {
 function Wr(e, t, o, r, n = 1) {
   const s = [];
   let i = o, l = r;
-  const p = de(e.minSize ?? 0, e.sizeUnit, n), h = de(e.maxSize ?? 1 / 0, e.sizeUnit, n), y = de(t.minSize ?? 0, t.sizeUnit, n), b = de(t.maxSize ?? 1 / 0, t.sizeUnit, n), w = de(e.defaultSize ?? 0, e.sizeUnit, n), x = de(t.defaultSize ?? 0, t.sizeUnit, n), c = w + o, d = x + r;
-  let m = pe(c, p, h), a = pe(d, y, b);
+  const f = de(e.minSize ?? 0, e.sizeUnit, n), h = de(e.maxSize ?? 1 / 0, e.sizeUnit, n), y = de(t.minSize ?? 0, t.sizeUnit, n), b = de(t.maxSize ?? 1 / 0, t.sizeUnit, n), w = de(e.defaultSize ?? 0, e.sizeUnit, n), x = de(t.defaultSize ?? 0, t.sizeUnit, n), c = w + o, d = x + r;
+  let m = pe(c, f, h), a = pe(d, y, b);
   i = m - w, l = a - x;
   const g = i + l;
   if (Math.abs(g) > 1e-3) {
@@ -4967,7 +4966,7 @@ function Wr(e, t, o, r, n = 1) {
       a = pe(P, y, b), l = a - x;
     } else if (j && !T) {
       const P = w - l;
-      m = pe(P, p, h), i = m - w;
+      m = pe(P, f, h), i = m - w;
     }
     s.push("Zero-sum constraint violated, deltas adjusted");
   }
@@ -4995,8 +4994,8 @@ function de(e, t, o) {
 function Vr(e, t) {
   const o = [], r = e.filter((s) => s.sizeUnit === "px").reduce((s, i) => s + (t[i.id] ?? i.defaultSize ?? 0), 0), n = e.filter((s) => s.sizeUnit === "fr").reduce((s, i) => s + (t[i.id] ?? i.defaultSize ?? 0), 0);
   return r < 0 && o.push("Total fixed size cannot be negative"), n <= 0 && e.some((s) => s.sizeUnit === "fr") && o.push("Total fr units must be positive"), e.forEach((s) => {
-    const i = t[s.id] ?? s.defaultSize ?? 0, l = s.minSize ?? 0, p = s.maxSize ?? 1 / 0;
-    l > p && o.push(`Block ${s.id}: minSize (${l}) > maxSize (${p})`), (i < l || i > p) && o.push(`Block ${s.id}: size ${i} violates constraints [${l}, ${p}]`);
+    const i = t[s.id] ?? s.defaultSize ?? 0, l = s.minSize ?? 0, f = s.maxSize ?? 1 / 0;
+    l > f && o.push(`Block ${s.id}: minSize (${l}) > maxSize (${f})`), (i < l || i > f) && o.push(`Block ${s.id}: size ${i} violates constraints [${l}, ${f}]`);
   }), {
     isValid: o.length === 0,
     violations: o

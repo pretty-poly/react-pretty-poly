@@ -81,15 +81,15 @@ describe('Grid (Simplified Integration)', () => {
       </Grid>
     )
 
-    // Check that CSS variables are generated
+    // Check that CSS variables are generated (scoped by grid ID)
     const allStyles = document.querySelectorAll('style')
     const gridStyles = Array.from(allStyles).find(style =>
-      style.textContent?.includes('--sidebar-size') ||
+      style.textContent?.includes('--root-sidebar-size') ||
       style.textContent?.includes('data-block-id')
     )
 
-    expect(gridStyles?.textContent).toContain('--sidebar-size: 300px')
-    expect(gridStyles?.textContent).toContain('--main-size: 1fr')
+    expect(gridStyles?.textContent).toContain('--root-sidebar-size: 300px')
+    expect(gridStyles?.textContent).toContain('--root-main-size: 1fr')
 
     // Check grid template styles
     expect(gridStyles?.textContent).toContain('display: grid')

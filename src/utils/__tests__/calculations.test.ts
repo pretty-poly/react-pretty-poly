@@ -95,8 +95,9 @@ describe('calculations utilities', () => {
         }
       ]
 
-      const template = generateGridTemplate(blocks)
-      expect(template).toBe('200px 8px var(--block2-size, 1fr)')
+      const template = generateGridTemplate(blocks, 'root')
+      // CSS variables are now scoped by grid ID
+      expect(template).toBe('var(--root-block1-size, 200px) 8px var(--root-block2-size, 1fr)')
     })
 
     it('handles auto sizing', () => {
@@ -110,7 +111,7 @@ describe('calculations utilities', () => {
         }
       ]
 
-      const template = generateGridTemplate(blocks)
+      const template = generateGridTemplate(blocks, 'root')
       expect(template).toBe('4px auto')
     })
   })
