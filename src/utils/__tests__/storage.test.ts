@@ -118,7 +118,7 @@ describe('storage utilities', () => {
     it('falls back to memory adapter when storage unavailable', () => {
       // Mock localStorage as undefined
       const originalLocalStorage = global.localStorage
-      // @ts-ignore
+      // @ts-expect-error - intentionally deleting localStorage to test fallback behavior
       delete global.localStorage
 
       expect(getStorageAdapter('localStorage')).toBe(memoryStorageAdapter)

@@ -74,7 +74,7 @@ export function useGridKeyboard({
     }
 
     // Filter blocks based on direction
-    let candidates = allBlocks.filter(block => {
+    const candidates = allBlocks.filter(block => {
       if (block === currentBlock) return false
 
       const rect = block.getBoundingClientRect()

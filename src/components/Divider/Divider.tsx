@@ -160,15 +160,6 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
 
     // Get target block configuration - don't fail if not found yet, as DOM might not be ready
     const targetBlock = actualTargetId ? state.blocks[actualTargetId] : null
-    if (!targetBlock && actualTargetId) {
-      console.warn(`Divider target block "${actualTargetId}" not found`)
-    }
-
-    // Don't render dividers if current mode doesn't support resizing
-    const supportsResizing = supportsFeature('resizing')
-    if (!supportsResizing) {
-      return null
-    }
 
     // Determine direction from parent group (the group that contains this block)
     const parentBlock = targetBlock?.parentId ? state.blocks[targetBlock.parentId] : null
@@ -181,7 +172,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     // Calculate cursor style
     const cursorStyle = isVertical ? 'row-resize' : 'col-resize'
 
-    // Handle mouse/touch start
+    // Handle mouse/touch start - ALL HOOKS MUST BE BEFORE EARLY RETURNS
     const handlePointerDown = useCallback((event: React.MouseEvent | React.TouchEvent) => {
       if (!actualTargetId) return
 
@@ -190,7 +181,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       startResize(actualTargetId, dividerId, event)
     }, [actualTargetId, detectedPosition, startResize])
 
-    // Handle double-click to reset
+    // Handle double-click to reset - ALL HOOKS MUST BE BEFORE EARLY RETURNS
     const handleDoubleClick = useCallback(() => {
       if (targetBlock?.defaultSize !== undefined) {
         // This would need to be handled through the context
@@ -198,6 +189,16 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       }
     }, [targetBlock])
 
+    // NOW we can do early returns after all hooks are defined
+    if (!targetBlock && actualTargetId) {
+      console.warn(`Divider target block "${actualTargetId}" not found`)
+    }
+
+    // Don't render dividers if current mode doesn't support resizing
+    const supportsResizing = supportsFeature('resizing')
+    if (!supportsResizing) {
+      return null
+    }
 
     // Render the divider
     const HandleComponent = CustomHandle || DefaultHandle
