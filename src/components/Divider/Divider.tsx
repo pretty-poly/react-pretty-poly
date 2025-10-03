@@ -207,14 +207,11 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       <div
         ref={combinedRef}
         className={cn(
-          'pretty-poly-divider',
-          'flex items-center justify-center',
+          'relative flex items-center justify-center bg-transparent',
           'select-none touch-none transition-colors',
           'hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring focus-visible:bg-accent',
           isVertical ? 'cursor-row-resize' : 'cursor-col-resize',
           isActiveDivider && 'pretty-poly-divider--dragging',
-          detectedPosition === 'start' && 'pretty-poly-divider--start',
-          detectedPosition === 'end' && 'pretty-poly-divider--end',
           className
         )}
         data-block-id={actualTargetId ? `${actualTargetId}-${detectedPosition}-divider` : 'loading-divider'}

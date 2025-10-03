@@ -228,8 +228,8 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         <div
           ref={containerRef}
           className={cn(
-            'pretty-poly-grid relative overflow-hidden',
-            isDragging && 'pretty-poly-grid--dragging',
+            'relative overflow-hidden',
+            isDragging && 'select-none cursor-grabbing pretty-poly-grid--dragging',
             className
           )}
           data-grid-id={rootBlock.id}

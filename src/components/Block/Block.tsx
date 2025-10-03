@@ -19,8 +19,8 @@ function getModeConfig(props: BlockProps, activeMode: string): ModeConfig {
   // Extract mode-specific props
   const modeConfig = props[activeMode] || {}
 
-  // Filter out non-mode props
-  const { id, type, direction, children, className, divider, noDivider, 'aria-label': ariaLabel, ...otherProps } = props
+  // Filter out non-mode props (prefix with _ to indicate intentional non-use)
+  const { id: _id, type: _type, direction: _direction, children: _children, className: _className, divider: _divider, noDivider: _noDivider, 'aria-label': _ariaLabel, ...otherProps } = props
 
   // Remove known mode configs from otherProps
   const cleanOtherProps = Object.fromEntries(
@@ -35,6 +35,8 @@ function getModeConfig(props: BlockProps, activeMode: string): ModeConfig {
   }
 }
 
+type ComponentType = { displayName?: string; name?: string }
+
 /**
  * Detect if children contain structured block components
  */
@@ -43,7 +45,7 @@ function hasStructuredChildren(children: React.ReactNode): boolean {
 
   Children.forEach(children, (child) => {
     if (isValidElement(child)) {
-      const displayName = (child.type as any)?.displayName || (child.type as any)?.name
+      const displayName = (child.type as ComponentType)?.displayName || (child.type as ComponentType)?.name
       if (displayName && (
         displayName === 'Block.Header' ||
         displayName === 'Block.Content' ||
@@ -68,7 +70,7 @@ function hasSidebar(children: React.ReactNode): boolean {
 
   Children.forEach(children, (child) => {
     if (isValidElement(child)) {
-      const displayName = (child.type as any)?.displayName || (child.type as any)?.name
+      const displayName = (child.type as ComponentType)?.displayName || (child.type as ComponentType)?.name
       if (displayName === 'Block.Sidebar') {
         hasBlockSidebar = true
       }
@@ -119,40 +121,14 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       return true
     }, [currentLayoutType, modeConfig])
 
-    // Calculate block classes based on mode and state
-    const blockClasses = useMemo(() => {
-      const baseClasses = [
-        'pretty-poly-block',
-        `pretty-poly-block--${type}`,
-        `pretty-poly-block--mode-${activeMode}`
-      ]
-
-      // Add size classes
-      if (blockConfig) {
-        if (blockConfig.sizeUnit) {
-          baseClasses.push(`pretty-poly-block--${blockConfig.sizeUnit}`)
-        }
-
-        if (blockConfig.collapsible) {
-          baseClasses.push('pretty-poly-block--collapsible')
-        }
-
-        // Add collapsed class if applicable
-        if (blockConfig.collapsible && blockConfig.collapseAt) {
-          const currentSize = blockConfig.size ?? blockConfig.defaultSize ?? 0
-          if (currentSize <= blockConfig.collapseAt) {
-            baseClasses.push('pretty-poly-block--collapsed')
-          }
-        }
+    // Calculate collapsed state
+    const isCollapsed = useMemo(() => {
+      if (blockConfig?.collapsible && blockConfig.collapseAt) {
+        const currentSize = blockConfig.size ?? blockConfig.defaultSize ?? 0
+        return currentSize <= blockConfig.collapseAt
       }
-
-      // Add mode-specific classes
-      if (currentLayoutType === 'dock' && modeConfig.dockOrder !== undefined) {
-        baseClasses.push(`pretty-poly-block--dock-order-${modeConfig.dockOrder}`)
-      }
-
-      return baseClasses
-    }, [type, activeMode, blockConfig, currentLayoutType, modeConfig])
+      return false
+    }, [blockConfig])
 
     // Handle double-click for collapse/expand
     const handleDoubleClick = () => {
@@ -178,8 +154,6 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         <div
           ref={ref}
           className={cn(
-            ...blockClasses,
-            'pretty-poly-dock-item',
             'flex flex-col items-center p-2 rounded-md transition-colors cursor-pointer min-w-12',
             'hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2',
             modeConfig.className,
@@ -193,9 +167,9 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
           tabIndex={0}
           style={modeConfig.style}
         >
-          {Icon && <Icon className="pretty-poly-dock-icon w-6 h-6 mb-1" />}
+          {Icon && <Icon className="w-6 h-6 mb-1" />}
           {modeConfig.label && (
-            <span className="pretty-poly-dock-label text-xs font-medium text-center">{modeConfig.label}</span>
+            <span className="text-xs font-medium text-center">{modeConfig.label}</span>
           )}
         </div>
       )
@@ -207,8 +181,6 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         <div
           ref={ref}
           className={cn(
-            ...blockClasses,
-            'pretty-poly-tab-panel',
             'flex-1 overflow-auto',
             modeConfig.className,
             className
@@ -229,13 +201,14 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       <div
         ref={ref}
         className={cn(
-          ...blockClasses,
           'relative overflow-hidden',
           // Apply flex layout for structured content
           isStructured && !hasBlockSidebar && 'flex flex-col h-full',
           // Apply horizontal flex layout when sidebar is present
           isStructured && hasBlockSidebar && 'flex flex-row h-full',
           'transition-opacity duration-150',
+          isCollapsed && 'opacity-70',
+          'focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2',
           modeConfig.className,
           className
         )}
