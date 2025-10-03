@@ -82,7 +82,7 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
 
     // Process children to inject automatic dividers and get template info
     // IMPORTANT: This must come BEFORE gridStyles useMemo because gridStyles depends on templateItems
-    const dividerInjectionResult = useMemo<DividerInjectionResult>(() => {
+    const dividerInjectionResult = useMemo<DividerInjectionResult & { templateItemsByGroup?: Record<string, DividerInjectionResult['templateItems']> }>(() => {
       // Process the root level children first
       const rootResult = injectAutomaticDividers(
         children,
@@ -103,8 +103,9 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         )
 
         return {
-          children: processedChildren,
-          templateItems: rootResult.templateItems
+          children: processedChildren.children,
+          templateItems: rootResult.templateItems,
+          templateItemsByGroup: processedChildren.templateItemsByGroup
         }
       }
 
@@ -167,8 +168,11 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         if (dividers === 'auto' && parentId === rootBlock.id) {
           // For root level in auto mode, use the template items which include dividers
           template = generateGridTemplateFromItems(dividerInjectionResult.templateItems, rootBlock.id)
+        } else if (dividers === 'auto' && dividerInjectionResult.templateItemsByGroup?.[parentId]) {
+          // For nested groups in auto mode, use the stored template items
+          template = generateGridTemplateFromItems(dividerInjectionResult.templateItemsByGroup[parentId], rootBlock.id)
         } else {
-          // For manual/none mode or nested groups, use traditional template generation
+          // For manual/none mode or nested groups without template items, use traditional template generation
           const blocksForTemplate = sortedBlocks.map(block => ({
             id: block.id,
             sizeUnit: block.sizeUnit || 'fr',

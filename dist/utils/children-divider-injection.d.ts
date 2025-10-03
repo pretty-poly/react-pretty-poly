@@ -20,7 +20,15 @@ export interface DividerInjectionResult {
  */
 export declare function injectAutomaticDividers(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<any>): DividerInjectionResult;
 /**
- * Recursively process children including nested Block.Group components
+ * Extended result type that includes nested group template items
  */
-export declare function processChildrenRecursively(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<any>): React.ReactNode;
+export interface RecursiveInjectionResult {
+    children: React.ReactNode;
+    templateItemsByGroup: Record<string, DividerInjectionResult['templateItems']>;
+}
+/**
+ * Recursively process children including nested Block.Group components
+ * Returns both processed children and template items for all groups
+ */
+export declare function processChildrenRecursively(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<any>): RecursiveInjectionResult;
 //# sourceMappingURL=children-divider-injection.d.ts.map

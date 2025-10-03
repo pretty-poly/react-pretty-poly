@@ -198,7 +198,16 @@ export function injectAutomaticDividers(
 }
 
 /**
+ * Extended result type that includes nested group template items
+ */
+export interface RecursiveInjectionResult {
+  children: React.ReactNode
+  templateItemsByGroup: Record<string, DividerInjectionResult['templateItems']>
+}
+
+/**
  * Recursively process children including nested Block.Group components
+ * Returns both processed children and template items for all groups
  */
 export function processChildrenRecursively(
   children: React.ReactNode,
@@ -206,12 +215,17 @@ export function processChildrenRecursively(
   dividerConfig?: GridDividerConfig,
   blocks?: Record<string, BlockConfig>,
   DividerComponent?: React.ComponentType<any>
-): React.ReactNode {
+): RecursiveInjectionResult {
+  const templateItemsByGroup: Record<string, DividerInjectionResult['templateItems']> = {}
+
   if (dividers !== 'auto') {
-    return children
+    return {
+      children,
+      templateItemsByGroup
+    }
   }
 
-  return Children.map(children, (child) => {
+  const processedChildren = Children.map(children, (child) => {
     if (!isValidElement(child)) {
       return child
     }
@@ -231,10 +245,28 @@ export function processChildrenRecursively(
         DividerComponent
       )
 
+      // Store template items for this group
+      const groupId = child.props.id
+      if (groupId) {
+        templateItemsByGroup[groupId] = result.templateItems
+      }
+
+      // Continue recursing to find nested groups
+      const nestedResult = processChildrenRecursively(
+        result.children,
+        dividers,
+        dividerConfig,
+        blocks,
+        DividerComponent
+      )
+
+      // Merge nested template items
+      Object.assign(templateItemsByGroup, nestedResult.templateItemsByGroup)
+
       // Return the group with processed children
       return cloneElement(child, {
         ...child.props,
-        children: result.children
+        children: nestedResult.children
       })
     } else if (isBlock) {
       // For regular blocks, check if they have nested groups in their children
@@ -245,7 +277,7 @@ export function processChildrenRecursively(
       })
 
       if (hasNestedGroups) {
-        const processedChildren = processChildrenRecursively(
+        const nestedResult = processChildrenRecursively(
           child.props.children,
           dividers,
           dividerConfig,
@@ -253,13 +285,21 @@ export function processChildrenRecursively(
           DividerComponent
         )
 
+        // Merge nested template items
+        Object.assign(templateItemsByGroup, nestedResult.templateItemsByGroup)
+
         return cloneElement(child, {
           ...child.props,
-          children: processedChildren
+          children: nestedResult.children
         })
       }
     }
 
     return child
   })
+
+  return {
+    children: processedChildren,
+    templateItemsByGroup
+  }
 }
