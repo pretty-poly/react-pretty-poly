@@ -2,6 +2,11 @@
   "name": "@pretty-poly/react",
   "version": "0.1.0",
   "description": "A shadcn/ui compatible polymorphic React component library for creating resizable, responsive grid layouts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pretty-poly/react-pretty-poly"
+  },
+  "bugs": "https://github.com/pretty-poly/react-pretty-poly/issues",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
