@@ -11,7 +11,7 @@ export const defaultModes: ResponsiveModes = {
     maxWidth: 767
   },
   tablet: {
-    type: 'sidebar',
+    type: 'tabs',
     breakpoint: 768,
     minWidth: 768,
     maxWidth: 1023
@@ -135,15 +135,10 @@ export function useGridMode(modes: ResponsiveModes = defaultModes) {
     switch (currentLayoutType) {
       case 'grid':
         return ['resizing', 'dividers', 'collapse'].includes(feature)
-      case 'sidebar':
-        return ['resizing', 'collapse'].includes(feature)
       case 'tabs':
         return feature === 'tabs'
       case 'dock':
         return feature === 'dock'
-      case 'stack':
-      case 'accordion':
-        return false
       default:
         return false
     }

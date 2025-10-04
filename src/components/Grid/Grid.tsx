@@ -113,9 +113,9 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
     }, [children, dividers, dividerConfig, state.blocks])
 
     // Generate CSS styles for the grid
-    const { gridStyles, cssVariables } = useMemo(() => {
+    const { gridStyles, cssVariables, modeStyles } = useMemo(() => {
       if (!rootBlock) {
-        return { gridStyles: '', cssVariables: '' }
+        return { gridStyles: '', cssVariables: '', modeStyles: '' }
       }
 
       // Get blocks grouped by parent
@@ -139,6 +139,54 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
           return `--${rootBlock.id}-${block.id}-size: ${sizeValue};`
         })
         .join('\n  ')
+
+      // Generate mode-specific layout styles
+      const generateModeStyles = (): string => {
+        let styles = ''
+
+        // Dock mode: transform grid into bottom navigation
+        styles += `
+[data-grid-id="${rootBlock.id}"][data-active-mode="dock"],
+[data-grid-id="${rootBlock.id}"][data-active-mode="mobile"] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
+  z-index: 100;
+}
+`
+
+        // Tabs mode: transform grid into tabbed layout
+        styles += `
+[data-grid-id="${rootBlock.id}"][data-active-mode="tabs"],
+[data-grid-id="${rootBlock.id}"][data-active-mode="tablet"] {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+`
+
+        // Hide dividers in dock and tabs modes
+        styles += `
+[data-grid-id="${rootBlock.id}"][data-active-mode="dock"] .pretty-poly-divider,
+[data-grid-id="${rootBlock.id}"][data-active-mode="tabs"] .pretty-poly-divider,
+[data-grid-id="${rootBlock.id}"][data-active-mode="mobile"] .pretty-poly-divider,
+[data-grid-id="${rootBlock.id}"][data-active-mode="tablet"] .pretty-poly-divider {
+  display: none;
+}
+`
+
+        return styles
+      }
 
       // Generate dynamic grid styles based on block tree structure
       const generateGroupStyles = (parentId: string, visited: Set<string> = new Set()): string => {
@@ -187,8 +235,10 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         const templateProperty = direction === 'column' ? 'grid-template-rows' : 'grid-template-columns'
 
         // Scope selector by grid ID to prevent collisions across multiple grids
+        // Only apply grid styles in grid/desktop mode (not in dock/tabs modes)
         let groupStyle = `
-[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"] {
+[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"][data-active-mode="grid"],
+[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"][data-active-mode="desktop"] {
   display: grid;
   ${templateProperty}: ${template};
   ${direction === 'column' ? 'grid-template-columns: 1fr;' : 'grid-template-rows: 1fr;'}
@@ -205,10 +255,12 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
       }
 
       const dynamicStyles = generateGroupStyles('root')
+      const modeDynamicStyles = generateModeStyles()
 
       return {
         cssVariables: `:root {\n  ${variables}\n}`,
-        gridStyles: dynamicStyles
+        gridStyles: dynamicStyles,
+        modeStyles: modeDynamicStyles
       }
     }, [blocks, rootBlock, dividerInjectionResult, dividers, dividerConfig])
 
@@ -223,12 +275,13 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
         <style type="text/css">
           {cssVariables}
           {gridStyles}
+          {modeStyles}
         </style>
 
         <div
           ref={containerRef}
           className={cn(
-            'relative overflow-hidden',
+            'group relative overflow-hidden',
             isDragging && 'select-none cursor-grabbing pretty-poly-grid--dragging',
             className
           )}

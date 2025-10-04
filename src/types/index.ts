@@ -4,14 +4,14 @@ export type SizeUnit = "px" | "fr" | "auto"
 export type Direction = "row" | "column"
 export type DividerPosition = "start" | "end" | "none" | "auto"
 
-// Layout modes for responsive behavior
+// Layout modes for responsive behavior (grid-level)
 export type LayoutMode =
   | "grid"      // Desktop: resizable grid with dividers
-  | "dock"      // Mobile: bottom navigation with screens
-  | "stack"     // Mobile: full-screen panels with swipe
+  | "dock"      // Mobile: bottom navigation with icon switching
   | "tabs"      // Tablet: tab interface
-  | "sidebar"   // Tablet: collapsible sidebar
-  | "accordion" // Vertical: expandable sections
+
+// Note: stack, sidebar, and accordion are block-level sub-layouts,
+// not grid-level layout modes
 
 // Block configuration
 export interface BlockConfig {
@@ -57,17 +57,13 @@ export interface ModeConfig {
   icon?: React.ComponentType<{ className?: string }>
   label?: string
   dockOrder?: number
-  hidden?: boolean
-
-  // Stack mode (mobile)
-  showBackButton?: boolean
-  swipeable?: boolean
 
   // Tab mode (tablet)
   tabLabel?: string
   closable?: boolean
 
   // Common
+  hidden?: boolean
   className?: string
   style?: React.CSSProperties
 }

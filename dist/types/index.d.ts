@@ -2,7 +2,7 @@ export type BlockType = "block" | "group";
 export type SizeUnit = "px" | "fr" | "auto";
 export type Direction = "row" | "column";
 export type DividerPosition = "start" | "end" | "none" | "auto";
-export type LayoutMode = "grid" | "dock" | "stack" | "tabs" | "sidebar" | "accordion";
+export type LayoutMode = "grid" | "dock" | "tabs";
 export interface BlockConfig {
     id: string;
     type: BlockType;
@@ -33,11 +33,9 @@ export interface ModeConfig {
     }>;
     label?: string;
     dockOrder?: number;
-    hidden?: boolean;
-    showBackButton?: boolean;
-    swipeable?: boolean;
     tabLabel?: string;
     closable?: boolean;
+    hidden?: boolean;
     className?: string;
     style?: React.CSSProperties;
 }

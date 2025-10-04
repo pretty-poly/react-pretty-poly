@@ -147,68 +147,52 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       return null
     }
 
-    // Render for dock mode
-    if (currentLayoutType === 'dock') {
-      const Icon = modeConfig.icon
-      return (
-        <div
-          ref={ref}
-          className={cn(
-            'flex flex-col items-center p-2 rounded-md transition-colors cursor-pointer min-w-12',
-            'hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2',
-            modeConfig.className,
-            className
-          )}
-          data-block-id={id}
-          data-block-type={type}
-          data-dock-order={modeConfig.dockOrder}
-          aria-label={ariaLabel || modeConfig.label}
-          role="button"
-          tabIndex={0}
-          style={modeConfig.style}
-        >
-          {Icon && <Icon className="w-6 h-6 mb-1" />}
-          {modeConfig.label && (
-            <span className="text-xs font-medium text-center">{modeConfig.label}</span>
-          )}
-        </div>
-      )
-    }
+    // Get dock-specific elements for rendering
+    const Icon = modeConfig.icon
 
-    // Render for tab mode
-    if (currentLayoutType === 'tabs') {
-      return (
-        <div
-          ref={ref}
-          className={cn(
-            'flex-1 overflow-auto',
-            modeConfig.className,
-            className
-          )}
-          data-block-id={id}
-          data-block-type={type}
-          aria-label={ariaLabel || modeConfig.tabLabel}
-          role="tabpanel"
-          style={modeConfig.style}
-        >
-          {children}
-        </div>
-      )
-    }
-
-    // Default grid/sidebar rendering
+    // Single unified render path with Tailwind classes that adapt based on mode
     return (
       <div
         ref={ref}
         className={cn(
-          'relative overflow-hidden',
-          // Apply flex layout for structured content
+          // Base styles (always applied)
+          'relative transition-opacity duration-150',
+
+          // Grid mode styles (default)
+          'overflow-hidden',
           isStructured && !hasBlockSidebar && 'flex flex-col h-full',
-          // Apply horizontal flex layout when sidebar is present
           isStructured && hasBlockSidebar && 'flex flex-row h-full',
-          'transition-opacity duration-150',
           isCollapsed && 'opacity-70',
+
+          // Dock mode styles (via group-data selector)
+          // When parent grid has [data-active-mode="dock"], apply these styles
+          'group-data-[active-mode=dock]:flex',
+          'group-data-[active-mode=dock]:flex-col',
+          'group-data-[active-mode=dock]:items-center',
+          'group-data-[active-mode=dock]:p-2',
+          'group-data-[active-mode=dock]:rounded-md',
+          'group-data-[active-mode=dock]:cursor-pointer',
+          'group-data-[active-mode=dock]:min-w-12',
+          'group-data-[active-mode=dock]:hover:bg-accent',
+          'group-data-[active-mode=mobile]:flex',
+          'group-data-[active-mode=mobile]:flex-col',
+          'group-data-[active-mode=mobile]:items-center',
+          'group-data-[active-mode=mobile]:p-2',
+          'group-data-[active-mode=mobile]:rounded-md',
+          'group-data-[active-mode=mobile]:cursor-pointer',
+          'group-data-[active-mode=mobile]:min-w-12',
+          'group-data-[active-mode=mobile]:hover:bg-accent',
+
+          // Tabs mode styles (via group-data selector)
+          'group-data-[active-mode=tabs]:flex-1',
+          'group-data-[active-mode=tabs]:overflow-auto',
+          'group-data-[active-mode=tablet]:flex-1',
+          'group-data-[active-mode=tablet]:overflow-auto',
+
+          // Focus styles
           'focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2',
+
+          // Mode-specific className overrides
           modeConfig.className,
           className
         )}
@@ -228,16 +212,39 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         data-block-no-divider={noDivider}
         data-structured={isStructured}
         data-has-sidebar={hasBlockSidebar}
-        aria-label={ariaLabel}
-        role={type === 'group' ? 'group' : undefined}
-        tabIndex={supportsFeature('resizing') ? 0 : undefined}
+        data-dock-order={modeConfig.dockOrder}
+        aria-label={ariaLabel || (currentLayoutType === 'dock' ? modeConfig.label : currentLayoutType === 'tabs' ? modeConfig.tabLabel : undefined)}
+        role={
+          currentLayoutType === 'dock' ? 'button' :
+          currentLayoutType === 'tabs' ? 'tabpanel' :
+          type === 'group' ? 'group' :
+          undefined
+        }
+        tabIndex={
+          currentLayoutType === 'dock' ? 0 :
+          supportsFeature('resizing') ? 0 :
+          undefined
+        }
         onDoubleClick={supportsFeature('collapse') ? handleDoubleClick : undefined}
         style={{
           ...modeConfig.style,
-          // CSS Grid area assignment handled by parent
+          // CSS Grid area assignment handled by parent in grid mode
+          // Dock order controlled by data attribute and CSS
+          order: currentLayoutType === 'dock' ? modeConfig.dockOrder : undefined,
         }}
       >
-        {children}
+        {/* Dock mode: render icon and label */}
+        {currentLayoutType === 'dock' && (
+          <>
+            {Icon && <Icon className="w-6 h-6 mb-1" />}
+            {modeConfig.label && (
+              <span className="text-xs font-medium text-center">{modeConfig.label}</span>
+            )}
+          </>
+        )}
+
+        {/* Grid and Tabs mode: render children normally */}
+        {currentLayoutType !== 'dock' && children}
       </div>
     )
   }
