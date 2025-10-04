@@ -2,6 +2,8 @@
 
 A **shadcn/ui compatible** polymorphic React component library for creating resizable, responsive grid layouts that adapt to any context.
 
+> ⚠️ **Alpha Release (v0.1.0)** - This is a pre-1.0 release with limited functionality. Currently **only Grid mode (desktop)** is fully implemented and tested. Responsive modes (Dock, Tabs, etc.) are in development. API may change before 1.0. Use at your own risk in production.
+
 ## Features
 
 🎯 **Polymorphic Design** - Handle multiple tasks or contexts within a single view

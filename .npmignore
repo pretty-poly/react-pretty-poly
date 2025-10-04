@@ -1,0 +1,40 @@
+# Source files (dist/ is what we publish)
+src/
+*.ts
+*.tsx
+!*.d.ts
+
+# Tests
+**/__tests__/
+**/*.test.*
+**/*.spec.*
+test/
+coverage/
+
+# Config files
+vite.config.ts
+vitest.config.ts
+tsconfig.json
+tsconfig.node.json
+eslint.config.js
+tailwind.config.js
+components.json
+.size-limit.json
+
+# Documentation (keep README.md)
+docs/
+MODES.md
+*.md
+!README.md
+!LICENSE
+
+# Build artifacts
+dist/stats.html
+*.tgz
+
+# Git
+.git
+.gitignore
+
+# Node
+node_modules/

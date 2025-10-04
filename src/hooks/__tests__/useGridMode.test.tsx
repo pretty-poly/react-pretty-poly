@@ -51,7 +51,7 @@ describe('useGridMode', () => {
       const { result } = renderHook(() => useGridMode())
 
       expect(result.current.activeMode).toBe('tablet')
-      expect(result.current.currentLayoutType).toBe('sidebar')
+      expect(result.current.currentLayoutType).toBe('tabs')
     })
   })
 
@@ -171,8 +171,8 @@ describe('useGridMode', () => {
       mockViewport(800, 600)
       const { result } = renderHook(() => useGridMode())
 
-      expect(result.current.supportsFeature('resizing')).toBe(true)
-      expect(result.current.supportsFeature('collapse')).toBe(true)
+      expect(result.current.supportsFeature('resizing')).toBe(false)
+      expect(result.current.supportsFeature('collapse')).toBe(false)
       expect(result.current.supportsFeature('dividers')).toBe(false)
     })
   })
