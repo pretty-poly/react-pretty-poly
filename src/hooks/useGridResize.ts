@@ -37,7 +37,7 @@ export function useGridResize({
 
     const rect = containerRef.current.getBoundingClientRect()
     return direction === 'column' ? rect.width : rect.height
-  }, [direction])
+  }, [direction, containerRef])
 
   /**
    * Calculate pixels per fr unit for the current container

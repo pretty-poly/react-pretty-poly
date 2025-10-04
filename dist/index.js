@@ -1,4 +1,4 @@
-import Je, { useState as me, useCallback as G, useMemo as Z, useEffect as J, useRef as fe, createContext as zt, useContext as Et, useReducer as It, Children as be, isValidElement as ae, cloneElement as We, forwardRef as X, useImperativeHandle as At } from "react";
+import Je, { useState as me, useCallback as G, useMemo as Z, useEffect as X, useRef as fe, createContext as zt, useContext as Et, useReducer as It, Children as be, isValidElement as ae, cloneElement as We, forwardRef as J, useImperativeHandle as At } from "react";
 var Pe = { exports: {} }, ve = {};
 /**
  * @license React
@@ -3096,7 +3096,7 @@ function Le(e = dr) {
       isLargest: d === c.length - 1
     };
   }, [e, n, l]);
-  return J(() => {
+  return X(() => {
     if (typeof window > "u") return;
     const c = () => i(), d = () => {
       setTimeout(i, 100);
@@ -3286,13 +3286,13 @@ function br({
   saveDelay: i = 500
 }) {
   const n = fe(null), l = fe(), f = fe(""), m = fe(!1);
-  J(() => {
+  X(() => {
     if (!t) {
       n.current = null;
       return;
     }
     typeof t == "function" ? n.current = mr(t) : t === "localStorage" ? n.current = Re("localStorage") : t === "sessionStorage" ? n.current = Re("sessionStorage") : n.current = Re("localStorage");
-  }, [t]), J(() => {
+  }, [t]), X(() => {
     if (!n.current || !t || typeof t == "function" || m.current)
       return;
     const c = fr(e, n.current);
@@ -3322,12 +3322,12 @@ function br({
   }, [e, t]), h = G((c = o) => {
     l.current && clearTimeout(l.current), g(c);
   }, [g, o]);
-  return J(() => {
+  return X(() => {
     if (!(!s || !t))
       return v(o), () => {
         l.current && clearTimeout(l.current);
       };
-  }, [o, s, t, v]), J(() => {
+  }, [o, s, t, v]), X(() => {
     if (!t || typeof t == "function")
       return;
     const c = () => {
@@ -3336,7 +3336,7 @@ function br({
     return window.addEventListener("beforeunload", c), () => {
       window.removeEventListener("beforeunload", c);
     };
-  }, [h, t]), J(() => () => {
+  }, [h, t]), X(() => () => {
     l.current && clearTimeout(l.current);
   }, []), {
     saveState: h,
@@ -3674,12 +3674,12 @@ function Sr({
     wr,
     kr(t, m, f)
   );
-  J(() => {
+  X(() => {
     y({
       type: "UPDATE_VIEWPORT",
       payload: { viewport: m }
     });
-  }, [m]), J(() => {
+  }, [m]), X(() => {
     const x = v.activeMode;
     f !== x && (y({
       type: "SWITCH_MODE",
@@ -3737,7 +3737,7 @@ function Sr({
     }),
     [r, v, f, m, h, c, g, d, p, a]
   );
-  return J(() => {
+  return X(() => {
     if (l) {
       const x = Object.values(v.blocks);
       l(x);
@@ -3800,7 +3800,7 @@ function Er({
     if (!t.current) return 0;
     const p = t.current.getBoundingClientRect();
     return r === "column" ? p.width : p.height;
-  }, [r]), v = G(() => {
+  }, [r, t]), v = G(() => {
     const p = g();
     if (p === 0) return 0;
     const a = e.filter((I) => I.sizeUnit === "px").reduce((I, j) => I + (j.defaultSize || 0), 0), w = e.filter((I) => I.dividerPosition !== "none").reduce((I, j) => I + (j.dividerSize || 8), 0), x = e.filter((I) => I.sizeUnit === "fr").reduce((I, j) => I + (j.defaultSize || 1), 0), E = dt(p, a, w);
@@ -3818,7 +3818,7 @@ function Er({
     const a = e.find((w) => w.id === p);
     return !a || !a.collapseAt ? !1 : (a.defaultSize || 0) <= a.collapseAt;
   }, [e]);
-  return J(() => {
+  return X(() => {
     const p = (E) => {
       E.preventDefault(), i(E);
     }, a = (E) => {
@@ -3992,7 +3992,7 @@ function Ir({
       '[data-block-type="block"][tabindex], [data-block-type="group"][tabindex]'
     )
   ) : [], [n]);
-  return J(() => {
+  return X(() => {
     if (e)
       return document.addEventListener("keydown", y), () => {
         document.removeEventListener("keydown", y);
@@ -4196,7 +4196,7 @@ const Nr = ({
       e
     )
   }
-), De = X(
+), De = J(
   ({
     targetId: e,
     position: t,
@@ -4235,11 +4235,9 @@ const Nr = ({
       }
       _ && _ !== c && d(_), O !== p && a(O);
     }, [e, t, c, p, m.blocks]);
-    J(() => {
+    X(() => {
       w();
-    }, [w]), J(() => {
-      w();
-    }, [m.blocks]);
+    }, [w]);
     const x = c ? m.blocks[c] : null, E = x != null && x.parentId ? m.blocks[x.parentId] : null, I = ((E == null ? void 0 : E.type) === "group" ? E.direction : void 0) || "row", j = I === "column", P = v && c && y === `${c}-${p}-divider`, b = j ? "row-resize" : "col-resize", D = G((R) => {
       if (!c) return;
       R.preventDefault();
@@ -4299,7 +4297,7 @@ const Nr = ({
   }
 );
 De.displayName = "Divider";
-const bt = X(
+const bt = J(
   ({ children: e, className: t, dividers: o = "manual", dividerConfig: r, "aria-label": s }, i) => {
     const n = fe(null), { state: l, resizeBlock: f, collapseBlock: m, expandBlock: g, switchMode: v, persistState: y, resetState: h } = Se(), c = l.resize.isDragging;
     At(i, () => ({
@@ -4433,7 +4431,7 @@ const bt = X(
   }
 );
 bt.displayName = "GridInternal";
-const Pr = X(
+const Pr = J(
   ({
     children: e,
     defaultLayout: t = [],
@@ -4474,7 +4472,7 @@ const Pr = X(
   }
 );
 Pr.displayName = "Grid";
-const ht = X(
+const ht = J(
   ({ scrollMode: e = "vertical", className: t, children: o, "aria-label": r }, s) => {
     const i = {
       vertical: "overflow-y-auto overflow-x-hidden",
@@ -4504,7 +4502,7 @@ const ht = X(
   }
 );
 ht.displayName = "Block.Content";
-const gt = X(
+const gt = J(
   ({ position: e = "top", className: t, children: o, "aria-label": r }, s) => /* @__PURE__ */ N.jsx(
     "div",
     {
@@ -4529,7 +4527,7 @@ const gt = X(
   )
 );
 gt.displayName = "Block.Header";
-const yt = X(
+const yt = J(
   ({ className: e, children: t, "aria-label": o }, r) => /* @__PURE__ */ N.jsx(
     "div",
     {
@@ -4553,7 +4551,7 @@ const yt = X(
   )
 );
 yt.displayName = "Block.Footer";
-const xt = X(
+const xt = J(
   ({ left: e, center: t, right: o, className: r, "aria-label": s }, i) => /* @__PURE__ */ N.jsxs(
     "div",
     {
@@ -4580,7 +4578,7 @@ const xt = X(
   )
 );
 xt.displayName = "Block.Toolbar";
-const vt = X(
+const vt = J(
   ({
     tabs: e,
     activeTab: t,
@@ -4680,7 +4678,7 @@ const vt = X(
   }
 );
 vt.displayName = "Block.Tabs";
-const Ue = X(
+const Ue = J(
   ({ position: e = "left", width: t = 48, className: o, children: r, "aria-label": s }, i) => /* @__PURE__ */ N.jsx(
     "div",
     {
@@ -4712,7 +4710,7 @@ const Ue = X(
   )
 );
 Ue.displayName = "Block.Sidebar";
-const wt = X(
+const wt = J(
   ({
     icon: e,
     tooltip: t,
@@ -4787,7 +4785,7 @@ const wt = X(
   }
 );
 wt.displayName = "Block.Sidebar.Item";
-const kt = X(
+const kt = J(
   ({ className: e }, t) => /* @__PURE__ */ N.jsx(
     "div",
     {
@@ -4834,7 +4832,7 @@ function Or(e) {
     ae(o) && (((r = o.type) == null ? void 0 : r.displayName) || ((s = o.type) == null ? void 0 : s.name)) === "Block.Sidebar" && (t = !0);
   }), t;
 }
-const Be = X(
+const Be = J(
   ({
     id: e,
     type: t = "block",
@@ -4939,7 +4937,7 @@ const Be = X(
   }
 );
 Be.displayName = "Block";
-const St = X(
+const St = J(
   (e, t) => /* @__PURE__ */ N.jsx(Be, { ref: t, ...e, type: "group" })
 );
 St.displayName = "Block.Group";

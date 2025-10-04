@@ -1,8 +1,8 @@
 import { GridState } from '../types';
 
 export interface StorageAdapter {
-    save: (key: string, data: any) => void;
-    load: (key: string) => any | null;
+    save: (key: string, data: unknown) => void;
+    load: (key: string) => unknown | null;
     remove: (key: string) => void;
     clear: () => void;
 }

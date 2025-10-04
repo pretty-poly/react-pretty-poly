@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
-import { useGridMode, defaultModes } from '../useGridMode'
+import { useGridMode } from '../useGridMode'
 import { setViewportSize } from '../../test/test-utils'
 import type { ResponsiveModes } from '../../types'
 

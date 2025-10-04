@@ -153,11 +153,6 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       detectTargetAndPosition()
     }, [detectTargetAndPosition])
 
-    // Also re-detect when blocks change (DOM updates)
-    useEffect(() => {
-      detectTargetAndPosition()
-    }, [state.blocks])
-
     // Get target block configuration - don't fail if not found yet, as DOM might not be ready
     const targetBlock = actualTargetId ? state.blocks[actualTargetId] : null
 

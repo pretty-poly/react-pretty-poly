@@ -7,8 +7,8 @@ import type { GridState } from '../types'
 const STORAGE_KEY_PREFIX = 'pretty-poly-grid-'
 
 export interface StorageAdapter {
-  save: (key: string, data: any) => void
-  load: (key: string) => any | null
+  save: (key: string, data: unknown) => void
+  load: (key: string) => unknown | null
   remove: (key: string) => void
   clear: () => void
 }
@@ -17,7 +17,7 @@ export interface StorageAdapter {
  * localStorage adapter
  */
 export const localStorageAdapter: StorageAdapter = {
-  save: (key: string, data: any) => {
+  save: (key: string, data: unknown) => {
     try {
       localStorage.setItem(key, JSON.stringify(data))
     } catch (error) {
@@ -64,7 +64,7 @@ export const localStorageAdapter: StorageAdapter = {
  * sessionStorage adapter
  */
 export const sessionStorageAdapter: StorageAdapter = {
-  save: (key: string, data: any) => {
+  save: (key: string, data: unknown) => {
     try {
       sessionStorage.setItem(key, JSON.stringify(data))
     } catch (error) {
@@ -110,10 +110,10 @@ export const sessionStorageAdapter: StorageAdapter = {
 /**
  * Memory adapter (for testing or when storage is not available)
  */
-const memoryStorage = new Map<string, any>()
+const memoryStorage = new Map<string, unknown>()
 
 export const memoryStorageAdapter: StorageAdapter = {
-  save: (key: string, data: any) => {
+  save: (key: string, data: unknown) => {
     memoryStorage.set(key, data)
   },
 
@@ -195,7 +195,7 @@ export function loadGridState(
   adapter: StorageAdapter = localStorageAdapter
 ): Partial<GridState> | null {
   const key = getStorageKey(gridId)
-  return adapter.load(key)
+  return adapter.load(key) as Partial<GridState> | null
 }
 
 /**
@@ -270,7 +270,7 @@ export function getAllGridStates(
  */
 export function createCustomAdapter(saveState: (state: GridState) => void): StorageAdapter {
   return {
-    save: (_key: string, data: any) => saveState(data),
+    save: (_key: string, data: unknown) => saveState(data as GridState),
     load: () => null, // Custom adapters typically don't load
     remove: () => {},
     clear: () => {}

@@ -2,6 +2,8 @@ import React, { Children, isValidElement, cloneElement } from 'react'
 import type { BlockConfig, DividerConfig, GridDividerConfig } from '../types'
 import { shouldGenerateDivider, generateDividerConfig } from './divider-auto-detection'
 
+type ComponentType = { displayName?: string; name?: string }
+
 /**
  * Extract block props from a React element
  */
@@ -27,7 +29,7 @@ function extractBlockProps(element: React.ReactElement): {
 function createDividerElement(
   config: ReturnType<typeof generateDividerConfig>,
   key: string,
-  DividerComponent: React.ComponentType<any>
+  DividerComponent: React.ComponentType<Record<string, unknown>>
 ): React.ReactElement {
   return React.createElement(DividerComponent, {
     key: `auto-divider-${key}`,
@@ -63,7 +65,7 @@ export function injectAutomaticDividers(
   dividers: 'auto' | 'manual' | 'none',
   dividerConfig?: GridDividerConfig,
   blocks?: Record<string, BlockConfig>,
-  DividerComponent?: React.ComponentType<any>
+  DividerComponent?: React.ComponentType<Record<string, unknown>>
 ): DividerInjectionResult {
   if (dividers !== 'auto' || !DividerComponent) {
     // For manual/none mode, just return children with block info
@@ -214,7 +216,7 @@ export function processChildrenRecursively(
   dividers: 'auto' | 'manual' | 'none',
   dividerConfig?: GridDividerConfig,
   blocks?: Record<string, BlockConfig>,
-  DividerComponent?: React.ComponentType<any>
+  DividerComponent?: React.ComponentType<Record<string, unknown>>
 ): RecursiveInjectionResult {
   const templateItemsByGroup: Record<string, DividerInjectionResult['templateItems']> = {}
 
@@ -231,7 +233,7 @@ export function processChildrenRecursively(
     }
 
     // Check if this is a Block.Group or Block component
-    const displayName = (child.type as any)?.displayName || (child.type as any)?.name
+    const displayName = (child.type as ComponentType)?.displayName || (child.type as ComponentType)?.name
     const isBlockGroup = displayName === 'Block.Group' || displayName === 'BlockGroup'
     const isBlock = displayName === 'Block'
 
@@ -272,7 +274,7 @@ export function processChildrenRecursively(
       // For regular blocks, check if they have nested groups in their children
       const hasNestedGroups = Children.toArray(child.props.children).some(grandChild => {
         if (!isValidElement(grandChild)) return false
-        const grandChildDisplayName = (grandChild.type as any)?.displayName || (grandChild.type as any)?.name
+        const grandChildDisplayName = (grandChild.type as ComponentType)?.displayName || (grandChild.type as ComponentType)?.name
         return grandChildDisplayName === 'Block.Group' || grandChildDisplayName === 'BlockGroup'
       })
 

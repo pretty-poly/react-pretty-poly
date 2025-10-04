@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Divider } from '../Divider/Divider'
-import { renderWithGrid, mockGetBoundingClientRect, createMouseEvent } from '../../test/test-utils'
+import { renderWithGrid, mockGetBoundingClientRect } from '../../test/test-utils'
 import type { BlockConfig } from '../../types'
 
 // Mock useGridMode hook
@@ -226,8 +226,6 @@ describe('Divider', () => {
 
   describe('double-click behavior', () => {
     it('resets block to default size on double-click', async () => {
-      const mockResizeBlock = vi.fn()
-
       renderWithGrid(
         <Divider targetId="sidebar" />,
         { blocks: mockBlocks }

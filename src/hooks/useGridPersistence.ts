@@ -67,7 +67,8 @@ export function useGridPersistence({
       onStateLoad?.(loadedState)
       hasLoadedRef.current = true
     }
-  }, [gridId, enabled])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gridId, enabled]) // onStateLoad is intentionally stable (not expected to change)
 
   /**
    * Save state to storage

@@ -183,7 +183,8 @@ export interface BlockProps {
   noDivider?: boolean
 
   // Mode-specific configurations
-  [modeName: string]: ModeConfig | any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [modeName: string]: any
 
   // Accessibility
   "aria-label"?: string

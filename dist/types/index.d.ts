@@ -171,7 +171,7 @@ export interface BlockProps {
     className?: string;
     divider?: boolean | DividerConfig;
     noDivider?: boolean;
-    [modeName: string]: ModeConfig | any;
+    [modeName: string]: any;
     "aria-label"?: string;
 }
 export interface DividerConfig {

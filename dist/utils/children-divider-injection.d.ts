@@ -18,7 +18,7 @@ export interface DividerInjectionResult {
  * Process children and inject automatic dividers
  * Returns both processed children and template information
  */
-export declare function injectAutomaticDividers(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<any>): DividerInjectionResult;
+export declare function injectAutomaticDividers(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<Record<string, unknown>>): DividerInjectionResult;
 /**
  * Extended result type that includes nested group template items
  */
@@ -30,5 +30,5 @@ export interface RecursiveInjectionResult {
  * Recursively process children including nested Block.Group components
  * Returns both processed children and template items for all groups
  */
-export declare function processChildrenRecursively(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<any>): RecursiveInjectionResult;
+export declare function processChildrenRecursively(children: React.ReactNode, dividers: 'auto' | 'manual' | 'none', dividerConfig?: GridDividerConfig, blocks?: Record<string, BlockConfig>, DividerComponent?: React.ComponentType<Record<string, unknown>>): RecursiveInjectionResult;
 //# sourceMappingURL=children-divider-injection.d.ts.map

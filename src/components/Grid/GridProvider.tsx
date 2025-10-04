@@ -335,6 +335,7 @@ export function GridProvider({
 /**
  * Hook to access grid context
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useGridContext(): GridContextValue {
   const context = useContext(GridContext);
   if (!context) {
@@ -346,6 +347,7 @@ export function useGridContext(): GridContextValue {
 /**
  * Hook to access grid state
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useGridState() {
   const { state } = useGridContext();
   return state;
@@ -354,6 +356,7 @@ export function useGridState() {
 /**
  * Hook to access grid actions
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useGridActions() {
   const {
     resizeBlock,
@@ -376,6 +379,7 @@ export function useGridActions() {
 /**
  * Hook to access resize operations
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useGridResize() {
   const { startResize, updateResize, endResize, state } = useGridContext();
   return {

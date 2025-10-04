@@ -36,7 +36,7 @@ Object.defineProperty(window, 'sessionStorage', {
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
-  constructor(callback: ResizeObserverCallback) {
+  constructor(_callback: ResizeObserverCallback) {
     // Mock implementation
   }
   observe() {
