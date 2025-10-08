@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { useGridState } from '../Grid/GridProvider'
 import { Divider } from './Divider'
+import { autoDetectDividerPosition } from '../../utils/divider-auto-detection'
 import type { BlockConfig } from '../../types'
 
 interface DividerInfo {
@@ -12,6 +13,7 @@ interface DividerInfo {
 
 /**
  * Auto-generates dividers based on block configuration
+ * Uses smart position detection to determine which block should be resized
  */
 function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
   const dividers: DividerInfo[] = []
@@ -30,14 +32,19 @@ function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
     const isHorizontal = group.direction === 'row'
     const dividerDirection: 'vertical' | 'horizontal' = isHorizontal ? 'vertical' : 'horizontal'
 
-    // Create divider at the start of each child (except the first)
+    // Create divider between each pair of children
     children.forEach((child, index) => {
       if (index === 0) return // No divider before first child
 
+      const previousChild = children[index - 1]
+
+      // Use smart detection to determine which block should be the target
+      const { targetId, position } = autoDetectDividerPosition(previousChild, child)
+
       dividers.push({
-        id: `${child.id}-start-divider`,
-        targetBlockId: child.id,
-        position: 'start',
+        id: `divider-${previousChild.id}-${child.id}`,
+        targetBlockId: targetId,
+        position: position as 'start' | 'end',
         direction: dividerDirection
       })
     })

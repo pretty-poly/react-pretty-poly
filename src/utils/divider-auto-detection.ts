@@ -6,7 +6,7 @@ import type { BlockConfig, DividerPosition, SizeUnit, DividerConfig, Direction }
 export function autoDetectDividerPosition(
   currentBlock: BlockConfig,
   nextBlock: BlockConfig | null
-): { targetId: string; position: DividerPosition } {
+): { targetId: string; position: 'start' | 'end' } {
   if (!nextBlock) {
     // No next block, divider targets current block from end
     return { targetId: currentBlock.id, position: 'end' }

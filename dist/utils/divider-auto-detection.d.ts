@@ -5,7 +5,7 @@ import { BlockConfig, DividerPosition, SizeUnit, Direction } from '../types';
  */
 export declare function autoDetectDividerPosition(currentBlock: BlockConfig, nextBlock: BlockConfig | null): {
     targetId: string;
-    position: DividerPosition;
+    position: 'start' | 'end';
 };
 /**
  * Check if a block should have a divider based on its configuration and siblings

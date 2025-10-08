@@ -1,3 +1,10 @@
 /node_modules/
 /.claude/
 /CLAUDE.md
+examples/**/node_modules/
+examples/**/dist/
+examples/**/.next/
+examples/**/build/
+.playwright-mcp/
+examples/**/playwright-report/
+examples/**/test-results/

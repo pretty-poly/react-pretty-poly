@@ -41,6 +41,10 @@ export function useGridResizeOperations(
 
     const startPosition = getEventPosition(event);
 
+    // Get the divider position from the DOM
+    const dividerEl = document.querySelector(`[data-divider-id="${dividerId}"]`);
+    const dividerPosition = dividerEl?.getAttribute('data-divider-position') as 'start' | 'end' || 'end';
+
     // Find adjacent block for two-way resizing
     const siblingBlocks = Object.values(state.blocks).filter(
       (b) => b.parentId === block.parentId
@@ -51,10 +55,10 @@ export function useGridResizeOperations(
     const blockIndex = sortedSiblings.findIndex((b) => b.id === blockId);
 
     let adjacentBlock = null;
-    if (block.dividerPosition === "start" && blockIndex > 0) {
+    if (dividerPosition === "start" && blockIndex > 0) {
       adjacentBlock = sortedSiblings[blockIndex - 1];
     } else if (
-      block.dividerPosition === "end" &&
+      dividerPosition === "end" &&
       blockIndex < sortedSiblings.length - 1
     ) {
       adjacentBlock = sortedSiblings[blockIndex + 1];
@@ -126,8 +130,8 @@ export function useGridResizeOperations(
     if (block.sizeUnit === "px") {
       // Handle pixel-based resizing
       // Get position from divider's data attribute
-      const dividerEl = document.querySelector(`[data-block-id="${state.resize.activeDividerId}"]`);
-      const dividerPosition = dividerEl?.getAttribute('data-block-divider-position') || 'end';
+      const dividerEl = document.querySelector(`[data-divider-id="${state.resize.activeDividerId}"]`);
+      const dividerPosition = dividerEl?.getAttribute('data-divider-position') || 'end';
 
       // For position="start": divider is BEFORE the block
       // - Dragging left (negative delta) should GROW the block (need inversion)
@@ -209,8 +213,8 @@ export function useGridResizeOperations(
       );
 
       // Get actual position from divider's data attribute first
-      const dividerEl = document.querySelector(`[data-block-id="${state.resize.activeDividerId}"]`);
-      const dividerPosition = dividerEl?.getAttribute('data-block-divider-position') || 'end';
+      const dividerEl = document.querySelector(`[data-divider-id="${state.resize.activeDividerId}"]`);
+      const dividerPosition = dividerEl?.getAttribute('data-divider-position') || 'end';
 
       let adjacentBlock = null;
       if (dividerPosition === "start" && blockIndex > 0) {
