@@ -1,8 +1,17 @@
 import { default as React } from 'react';
-import { DividerProps } from '../../types';
 
+interface DividerProps {
+    targetId: string;
+    position: 'start' | 'end';
+    direction: 'vertical' | 'horizontal';
+    size?: number;
+    className?: string;
+    'aria-label'?: string;
+}
 /**
- * Divider component for resizing between blocks
+ * Absolutely positioned divider overlay component
+ * Positioned using getBoundingClientRect for accuracy
  */
-export declare const Divider: React.ForwardRefExoticComponent<DividerProps & React.RefAttributes<HTMLDivElement>>;
+export declare const Divider: React.FC<DividerProps>;
+export {};
 //# sourceMappingURL=Divider.d.ts.map

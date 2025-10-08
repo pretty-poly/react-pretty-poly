@@ -1,0 +1,84 @@
+import React, { useMemo } from 'react'
+import { useGridState } from '../Grid/GridProvider'
+import { Divider } from './Divider'
+import type { BlockConfig } from '../../types'
+
+interface DividerInfo {
+  id: string
+  targetBlockId: string
+  position: 'start' | 'end'
+  direction: 'vertical' | 'horizontal'
+}
+
+/**
+ * Auto-generates dividers based on block configuration
+ */
+function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
+  const dividers: DividerInfo[] = []
+
+  // Find all group blocks
+  const groups = Object.values(blocks).filter(block => block.type === 'group')
+
+  groups.forEach(group => {
+    // Get children of this group, sorted by order
+    const children = Object.values(blocks)
+      .filter(block => block.parentId === group.id)
+      .sort((a, b) => (a.order || 0) - (b.order || 0))
+
+    if (children.length === 0) return
+
+    const isHorizontal = group.direction === 'row'
+    const dividerDirection: 'vertical' | 'horizontal' = isHorizontal ? 'vertical' : 'horizontal'
+
+    // Create divider at the start of each child (except the first)
+    children.forEach((child, index) => {
+      if (index === 0) return // No divider before first child
+
+      dividers.push({
+        id: `${child.id}-start-divider`,
+        targetBlockId: child.id,
+        position: 'start',
+        direction: dividerDirection
+      })
+    })
+  })
+
+  return dividers
+}
+
+/**
+ * Overlay container that manages all dividers as absolutely positioned elements
+ */
+export const DividerOverlay: React.FC = () => {
+  const state = useGridState()
+
+  // Auto-generate dividers from block configuration
+  const dividers = useMemo(() => {
+    return generateDividers(state.blocks)
+  }, [state.blocks])
+
+  if (dividers.length === 0) {
+    return null
+  }
+
+  return (
+    <div
+      className="pretty-poly-divider-overlay"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        pointerEvents: 'none',
+        zIndex: 10
+      }}
+    >
+      {dividers.map(divider => (
+        <Divider
+          key={divider.id}
+          targetId={divider.targetBlockId}
+          position={divider.position}
+          direction={divider.direction}
+        />
+      ))}
+    </div>
+  )
+}

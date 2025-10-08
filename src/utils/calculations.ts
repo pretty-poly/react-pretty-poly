@@ -110,7 +110,7 @@ export function calculateConstrainedSize(
 }
 
 /**
- * Generate CSS grid template value with dividers
+ * Generate CSS grid template value without dividers (dividers are now overlays)
  * @param blocks Block configurations
  * @param gridId Grid ID for scoping CSS variables
  * @returns CSS grid-template string
@@ -128,12 +128,7 @@ export function generateGridTemplate(
   const parts: string[] = []
 
   blocks.forEach(block => {
-    // Add divider at start if needed
-    if (block.dividerPosition === "start") {
-      parts.push(`${block.dividerSize || 8}px`)
-    }
-
-    // Add the block itself
+    // Add the block itself (no dividers - they're overlays now)
     if (block.sizeUnit === "auto") {
       parts.push("auto")
     } else if (block.sizeUnit === "px") {
@@ -143,11 +138,6 @@ export function generateGridTemplate(
       const varName = gridId ? `--${gridId}-${block.id}-size` : `--${block.id}-size`
       parts.push(`var(${varName}, ${block.size}fr)`)
     }
-
-    // Add divider at end if needed
-    if (block.dividerPosition === "end") {
-      parts.push(`${block.dividerSize || 8}px`)
-    }
   })
 
   return parts.join(" ")
@@ -155,6 +145,7 @@ export function generateGridTemplate(
 
 /**
  * Generate CSS grid template from template items (for auto divider mode)
+ * Note: Dividers are now overlays, so they're excluded from grid template
  * @param items Template items including blocks and dividers
  * @param gridId Grid ID for scoping CSS variables
  * @returns CSS grid-template string
@@ -172,20 +163,20 @@ export function generateGridTemplateFromItems(
   const parts: string[] = []
 
   items.forEach(item => {
+    // Skip dividers - they're overlays now
     if (item.type === 'divider') {
-      // Divider is a fixed-size grid item
-      parts.push(`${item.dividerSize || 8}px`)
+      return
+    }
+
+    // Block with CSS variable support
+    if (item.sizeUnit === 'auto') {
+      parts.push('auto')
+    } else if (item.sizeUnit === 'px') {
+      const varName = gridId ? `--${gridId}-${item.id}-size` : `--${item.id}-size`
+      parts.push(`var(${varName}, ${item.size || 1}px)`)
     } else {
-      // Block with CSS variable support
-      if (item.sizeUnit === 'auto') {
-        parts.push('auto')
-      } else if (item.sizeUnit === 'px') {
-        const varName = gridId ? `--${gridId}-${item.id}-size` : `--${item.id}-size`
-        parts.push(`var(${varName}, ${item.size || 1}px)`)
-      } else {
-        const varName = gridId ? `--${gridId}-${item.id}-size` : `--${item.id}-size`
-        parts.push(`var(${varName}, ${item.size || 1}fr)`)
-      }
+      const varName = gridId ? `--${gridId}-${item.id}-size` : `--${item.id}-size`
+      parts.push(`var(${varName}, ${item.size || 1}fr)`)
     }
   })
 

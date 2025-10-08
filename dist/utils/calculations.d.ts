@@ -52,7 +52,7 @@ export declare function applyCollapseLogic(newSize: number, currentSize: number,
  */
 export declare function calculateConstrainedSize(deltaPx: number, initialSize: number, minSize?: number, maxSize?: number, invertDelta?: boolean): number;
 /**
- * Generate CSS grid template value with dividers
+ * Generate CSS grid template value without dividers (dividers are now overlays)
  * @param blocks Block configurations
  * @param gridId Grid ID for scoping CSS variables
  * @returns CSS grid-template string
@@ -66,6 +66,7 @@ export declare function generateGridTemplate(blocks: Array<{
 }>, gridId?: string): string;
 /**
  * Generate CSS grid template from template items (for auto divider mode)
+ * Note: Dividers are now overlays, so they're excluded from grid template
  * @param items Template items including blocks and dividers
  * @param gridId Grid ID for scoping CSS variables
  * @returns CSS grid-template string

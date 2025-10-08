@@ -41,20 +41,19 @@ export function useGridResize({
 
   /**
    * Calculate pixels per fr unit for the current container
+   * Note: Dividers are now overlays and don't take up grid space
    */
   const calculatePixelsPerFr = useCallback((): number => {
     const containerSize = getContainerSize()
     if (containerSize === 0) return 0
 
-    // Calculate fixed space (px blocks + dividers)
+    // Calculate fixed space (px blocks only - dividers are overlays now)
     const fixedSpace = blocks
       .filter(block => block.sizeUnit === 'px')
       .reduce((sum, block) => sum + (block.defaultSize || 0), 0)
 
-    // Calculate gaps (dividers)
-    const gapSpace = blocks
-      .filter(block => block.dividerPosition !== 'none')
-      .reduce((sum, block) => sum + (block.dividerSize || 8), 0)
+    // No gap space - dividers are overlays
+    const gapSpace = 0
 
     // Calculate total fr units
     const totalFr = blocks

@@ -5,9 +5,8 @@ import { GridProvider, useGridContext } from './GridProvider'
 import { useGridResize } from '../../hooks/useGridResize'
 import { useGridKeyboard } from '../../hooks/useGridKeyboard'
 import { generateGridTemplate, generateGridTemplateFromItems } from '../../utils/calculations'
-// Note: These imports are used in the children processing, not CSS grid template generation
-import { injectAutomaticDividers, processChildrenRecursively, type DividerInjectionResult } from '../../utils/children-divider-injection'
-import { Divider } from '../Divider/Divider'
+import type { DividerInjectionResult } from '../../utils/children-divider-injection'
+import { DividerOverlay } from '../Divider/DividerOverlay'
 
 /**
  * Grid API for imperative control
@@ -80,37 +79,17 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
       onExpandBlock: expandBlock
     })
 
-    // Process children to inject automatic dividers and get template info
-    // IMPORTANT: This must come BEFORE gridStyles useMemo because gridStyles depends on templateItems
+    // Note: Dividers are now handled by DividerOverlay, not injected into children
+    // This is kept for backward compatibility with template generation
     const dividerInjectionResult = useMemo<DividerInjectionResult & { templateItemsByGroup?: Record<string, DividerInjectionResult['templateItems']> }>(() => {
-      // Process the root level children first
-      const rootResult = injectAutomaticDividers(
+      // For overlay mode, we don't inject dividers into children
+      // Just return the children as-is with empty template items
+      return {
         children,
-        dividers,
-        dividerConfig,
-        state.blocks,
-        Divider
-      )
-
-      if (dividers === 'auto') {
-        // Then recursively process any nested groups
-        const processedChildren = processChildrenRecursively(
-          rootResult.children,
-          dividers,
-          dividerConfig,
-          state.blocks,
-          Divider
-        )
-
-        return {
-          children: processedChildren.children,
-          templateItems: rootResult.templateItems,
-          templateItemsByGroup: processedChildren.templateItemsByGroup
-        }
+        templateItems: [],
+        templateItemsByGroup: {}
       }
-
-      return rootResult
-    }, [children, dividers, dividerConfig, state.blocks])
+    }, [children])
 
     // Generate CSS styles for the grid
     const { gridStyles, cssVariables, modeStyles } = useMemo(() => {
@@ -290,8 +269,17 @@ const GridInternal = forwardRef<GridAPI, Omit<GridProps, 'defaultLayout' | 'mode
           data-active-mode={state.activeMode}
           aria-label={ariaLabel || 'Resizable grid layout'}
           role="application"
+          style={{ isolation: 'isolate' }}
         >
-          {dividerInjectionResult.children}
+          {/* Grid content container */}
+          <div className="pretty-poly-grid-content">
+            {dividerInjectionResult.children}
+          </div>
+
+          {/* Divider overlay - only in grid/desktop mode */}
+          {(state.activeMode === 'grid' || state.activeMode === 'desktop') && (
+            <DividerOverlay />
+          )}
         </div>
       </>
     )
