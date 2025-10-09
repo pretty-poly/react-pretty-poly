@@ -1,4 +1,5 @@
 export { Block, BlockGroup } from './Block';
+export { BlockLayout } from './BlockLayout';
 export { BlockContent } from './BlockContent';
 export { BlockHeader } from './BlockHeader';
 export { BlockFooter } from './BlockFooter';

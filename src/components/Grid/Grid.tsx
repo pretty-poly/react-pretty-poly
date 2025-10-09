@@ -139,52 +139,9 @@ const GridInternal = forwardRef<
       })
       .join("\n  ");
 
-    // Generate mode-specific layout styles
+    // Mode-specific styles removed - will be re-added when modes are properly designed
     const generateModeStyles = (): string => {
-      let styles = "";
-
-      // Dock mode: transform grid into bottom navigation
-      styles += `
-[data-grid-id="${rootBlock.id}"][data-active-mode="dock"],
-[data-grid-id="${rootBlock.id}"][data-active-mode="mobile"] {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: hsl(var(--background));
-  border-top: 1px solid hsl(var(--border));
-  z-index: 100;
-}
-`;
-
-      // Tabs mode: transform grid into tabbed layout
-      styles += `
-[data-grid-id="${rootBlock.id}"][data-active-mode="tabs"],
-[data-grid-id="${rootBlock.id}"][data-active-mode="tablet"] {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-`;
-
-      // Hide dividers in dock and tabs modes
-      styles += `
-[data-grid-id="${rootBlock.id}"][data-active-mode="dock"] .pretty-poly-divider,
-[data-grid-id="${rootBlock.id}"][data-active-mode="tabs"] .pretty-poly-divider,
-[data-grid-id="${rootBlock.id}"][data-active-mode="mobile"] .pretty-poly-divider,
-[data-grid-id="${rootBlock.id}"][data-active-mode="tablet"] .pretty-poly-divider {
-  display: none;
-}
-`;
-
-      return styles;
+      return "";
     };
 
     // Generate dynamic grid styles based on block tree structure
@@ -228,14 +185,9 @@ const GridInternal = forwardRef<
       const templateProperty =
         direction === "column" ? "grid-template-rows" : "grid-template-columns";
 
-      // Scope selector by grid ID to prevent collisions across multiple grids
-      // Only apply grid styles in grid/desktop mode (not in dock/tabs modes)
-      // For nested blocks, use descendant selector since data-active-mode is only on root
-      const selector = parentId === rootBlock.id
-        ? `[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"][data-active-mode="grid"],
-[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"][data-active-mode="desktop"]`
-        : `[data-grid-id="${rootBlock.id}"][data-active-mode="grid"] [data-block-id="${parentId}"],
-[data-grid-id="${rootBlock.id}"][data-active-mode="desktop"] [data-block-id="${parentId}"]`;
+      // Simple selector - just target the block group by ID and type
+      // Grid-scoped to prevent collisions across multiple grids
+      const selector = `[data-grid-id="${rootBlock.id}"] [data-block-id="${parentId}"][data-block-type="group"]`;
 
       let groupStyle = `
 ${selector} {
@@ -292,6 +244,7 @@ ${selector} {
         )}
         data-grid-id={rootBlock.id}
         data-block-id={rootBlock.id}
+        data-block-type={rootBlock.type}
         data-active-mode={state.activeMode}
         aria-label={ariaLabel || "Resizable grid layout"}
         role="application"

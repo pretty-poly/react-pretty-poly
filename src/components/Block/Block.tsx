@@ -1,5 +1,5 @@
-import { forwardRef, useMemo, Children, isValidElement } from 'react'
-import type { BlockProps, ModeConfig } from '../../types'
+import { forwardRef, useMemo } from 'react'
+import type { BlockProps } from '../../types'
 import { cn } from '../../utils/cn'
 import { useGridContext, useGridState, useGridActions } from '../Grid/GridProvider'
 import { useGridMode } from '../../hooks/useGridMode'
@@ -11,74 +11,7 @@ import { BlockTabs } from './BlockTabs'
 import { BlockSidebar } from './BlockSidebar'
 import { BlockSidebarItem } from './BlockSidebarItem'
 import { BlockSidebarSpacer } from './BlockSidebarSpacer'
-
-/**
- * Get mode-specific configuration for a block
- */
-function getModeConfig(props: BlockProps, activeMode: string): ModeConfig {
-  // Extract mode-specific props
-  const modeConfig = props[activeMode] || {}
-
-  // Filter out non-mode props (prefix with _ to indicate intentional non-use)
-  const { id: _id, type: _type, direction: _direction, children: _children, className: _className, divider: _divider, noDivider: _noDivider, 'aria-label': _ariaLabel, ...otherProps } = props
-
-  // Remove known mode configs from otherProps
-  const cleanOtherProps = Object.fromEntries(
-    Object.entries(otherProps).filter(([key]) =>
-      !['mobile', 'tablet', 'desktop', 'dock', 'grid', 'stack', 'tabs', 'sidebar', 'accordion', 'divider', 'noDivider'].includes(key)
-    )
-  )
-
-  return {
-    ...cleanOtherProps,
-    ...modeConfig
-  }
-}
-
-type ComponentType = { displayName?: string; name?: string }
-
-/**
- * Detect if children contain structured block components
- */
-function hasStructuredChildren(children: React.ReactNode): boolean {
-  let hasStructured = false
-
-  Children.forEach(children, (child) => {
-    if (isValidElement(child)) {
-      const displayName = (child.type as ComponentType)?.displayName || (child.type as ComponentType)?.name
-      if (displayName && (
-        displayName === 'Block.Header' ||
-        displayName === 'Block.Content' ||
-        displayName === 'Block.Footer' ||
-        displayName === 'Block.Toolbar' ||
-        displayName === 'Block.Tabs' ||
-        displayName === 'Block.Sidebar'
-      )) {
-        hasStructured = true
-      }
-    }
-  })
-
-  return hasStructured
-}
-
-/**
- * Detect if children contain a sidebar component
- */
-function hasSidebar(children: React.ReactNode): boolean {
-  let hasBlockSidebar = false
-
-  Children.forEach(children, (child) => {
-    if (isValidElement(child)) {
-      const displayName = (child.type as ComponentType)?.displayName || (child.type as ComponentType)?.name
-      if (displayName === 'Block.Sidebar') {
-        hasBlockSidebar = true
-      }
-    }
-  })
-
-  return hasBlockSidebar
-}
+import { BlockLayout } from './BlockLayout'
 
 /**
  * Block component for grid layouts
@@ -92,34 +25,15 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
     className,
     divider,
     noDivider,
-    'aria-label': ariaLabel,
-    ...props
+    'aria-label': ariaLabel
   }, ref) => {
     const { gridId } = useGridContext()
     const state = useGridState()
     const { collapseBlock, expandBlock } = useGridActions()
-    const { activeMode, currentLayoutType, supportsFeature } = useGridMode()
+    const { supportsFeature } = useGridMode()
 
     // Get block configuration from state
     const blockConfig = state?.blocks[id]
-    const modeConfig = getModeConfig({ id, type, direction, children, className, 'aria-label': ariaLabel, ...props }, activeMode)
-
-    // Check if this block uses structured content layout
-    const isStructured = useMemo(() => hasStructuredChildren(children), [children])
-    const hasBlockSidebar = useMemo(() => hasSidebar(children), [children])
-
-    // Determine if this block should be rendered in current mode
-    const shouldRender = useMemo(() => {
-      // Check if block is hidden in current mode
-      if (modeConfig.hidden) return false
-
-      // For dock mode, only render if it has dock configuration
-      if (currentLayoutType === 'dock') {
-        return !!(modeConfig.icon || modeConfig.label)
-      }
-
-      return true
-    }, [currentLayoutType, modeConfig])
 
     // Calculate collapsed state
     const isCollapsed = useMemo(() => {
@@ -143,57 +57,16 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       }
     }
 
-    if (!shouldRender) {
-      return null
-    }
-
-    // Get dock-specific elements for rendering
-    const Icon = modeConfig.icon
-
-    // Single unified render path with Tailwind classes that adapt based on mode
     return (
       <div
         ref={ref}
         className={cn(
-          // Base styles (always applied)
-          'relative transition-opacity duration-150',
-
-          // Grid mode styles (default)
+          // Base styles - simple grid item that fills its space
+          'relative',
+          'w-full h-full',
           'overflow-hidden',
-          isStructured && !hasBlockSidebar && 'flex flex-col h-full',
-          isStructured && hasBlockSidebar && 'flex flex-row h-full',
+          'transition-opacity duration-150',
           isCollapsed && 'opacity-70',
-
-          // Dock mode styles (via group-data selector)
-          // When parent grid has [data-active-mode="dock"], apply these styles
-          'group-data-[active-mode=dock]:flex',
-          'group-data-[active-mode=dock]:flex-col',
-          'group-data-[active-mode=dock]:items-center',
-          'group-data-[active-mode=dock]:p-2',
-          'group-data-[active-mode=dock]:rounded-md',
-          'group-data-[active-mode=dock]:cursor-pointer',
-          'group-data-[active-mode=dock]:min-w-12',
-          'group-data-[active-mode=dock]:hover:bg-accent',
-          'group-data-[active-mode=mobile]:flex',
-          'group-data-[active-mode=mobile]:flex-col',
-          'group-data-[active-mode=mobile]:items-center',
-          'group-data-[active-mode=mobile]:p-2',
-          'group-data-[active-mode=mobile]:rounded-md',
-          'group-data-[active-mode=mobile]:cursor-pointer',
-          'group-data-[active-mode=mobile]:min-w-12',
-          'group-data-[active-mode=mobile]:hover:bg-accent',
-
-          // Tabs mode styles (via group-data selector)
-          'group-data-[active-mode=tabs]:flex-1',
-          'group-data-[active-mode=tabs]:overflow-auto',
-          'group-data-[active-mode=tablet]:flex-1',
-          'group-data-[active-mode=tablet]:overflow-auto',
-
-          // Focus styles
-          'focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2',
-
-          // Mode-specific className overrides
-          modeConfig.className,
           className
         )}
         data-grid-id={gridId}
@@ -210,41 +83,12 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         data-block-divider-size={blockConfig?.dividerSize}
         data-block-divider={divider !== undefined ? JSON.stringify(divider) : undefined}
         data-block-no-divider={noDivider}
-        data-structured={isStructured}
-        data-has-sidebar={hasBlockSidebar}
-        data-dock-order={modeConfig.dockOrder}
-        aria-label={ariaLabel || (currentLayoutType === 'dock' ? modeConfig.label : currentLayoutType === 'tabs' ? modeConfig.tabLabel : undefined)}
-        role={
-          currentLayoutType === 'dock' ? 'button' :
-          currentLayoutType === 'tabs' ? 'tabpanel' :
-          type === 'group' ? 'group' :
-          undefined
-        }
-        tabIndex={
-          currentLayoutType === 'dock' ? 0 :
-          supportsFeature('resizing') ? 0 :
-          undefined
-        }
+        aria-label={ariaLabel}
+        role={type === 'group' ? 'group' : undefined}
+        tabIndex={supportsFeature('resizing') ? 0 : undefined}
         onDoubleClick={supportsFeature('collapse') ? handleDoubleClick : undefined}
-        style={{
-          ...modeConfig.style,
-          // CSS Grid area assignment handled by parent in grid mode
-          // Dock order controlled by data attribute and CSS
-          order: currentLayoutType === 'dock' ? modeConfig.dockOrder : undefined,
-        }}
       >
-        {/* Dock mode: render icon and label */}
-        {currentLayoutType === 'dock' && (
-          <>
-            {Icon && <Icon className="w-6 h-6 mb-1" />}
-            {modeConfig.label && (
-              <span className="text-xs font-medium text-center">{modeConfig.label}</span>
-            )}
-          </>
-        )}
-
-        {/* Grid and Tabs mode: render children normally */}
-        {currentLayoutType !== 'dock' && children}
+        {children}
       </div>
     )
   }
@@ -266,6 +110,7 @@ BlockGroup.displayName = 'Block.Group'
 // Add all sub-components as properties of Block
 Object.assign(Block, {
   Group: BlockGroup,
+  Layout: BlockLayout,
   Header: BlockHeader,
   Content: BlockContent,
   Footer: BlockFooter,

@@ -14,6 +14,7 @@ export type { GridProviderProps } from './components/Grid'
 export {
   Block,
   BlockGroup,
+  BlockLayout,
   BlockContent,
   BlockHeader,
   BlockFooter,
@@ -72,6 +73,7 @@ export type {
   BlockSidebarItemProps,
   BlockSidebarSpacerProps
 } from './types'
+export type { BlockLayoutProps } from './components/Block/BlockLayout'
 
 // Utilities
 export {

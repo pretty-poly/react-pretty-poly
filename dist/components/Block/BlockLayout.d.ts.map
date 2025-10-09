@@ -1,0 +1,1 @@
+{"version":3,"file":"BlockLayout.d.ts","sourceRoot":"","sources":["../../../src/components/Block/BlockLayout.tsx"],"names":[],"mappings":"AAGA,MAAM,WAAW,gBAAgB;IAC/B,SAAS,CAAC,EAAE,KAAK,GAAG,QAAQ,CAAA;IAC5B,SAAS,CAAC,EAAE,MAAM,CAAA;IAClB,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAA;IACzB,YAAY,CAAC,EAAE,MAAM,CAAA;CACtB;AAED;;;GAGG;AACH,eAAO,MAAM,WAAW,6GAwBvB,CAAA"}
