@@ -1,12 +1,9 @@
-import {
-  Grid,
-  Block,
-  BlockGroup,
-  BlockLayout,
-  BlockHeader,
-  BlockContent,
-  type BlockConfig,
-} from "@pretty-poly/react";
+import { Grid } from "@/components/grid/grid";
+import { Block, BlockGroup } from "@/components/grid/block";
+import { BlockLayout } from "@/components/grid/block-layout";
+import { BlockHeader } from "@/components/grid/block-header";
+import { BlockContent } from "@/components/grid/block-content";
+import type { BlockConfig } from "@/lib/grid-types";
 import {
   Music,
   Piano,
@@ -104,11 +101,14 @@ export default function MusicDAW() {
     <Grid defaultLayout={musicDAWLayout} dividers="auto" className="h-screen">
       <BlockGroup id="root">
         <BlockGroup id="main-area">
-          <BlockGroup id="left-panel">
+          <BlockGroup id="left-panel" className="border-r border-muted">
             <Block id="track-list">
               <BlockLayout>
                 <BlockHeader className="flex items-center gap-2 p-2 border-b border-border">
-                  <button className="p-1 hover:bg-muted rounded" title="Add Track">
+                  <button
+                    className="p-1 hover:bg-muted rounded"
+                    title="Add Track"
+                  >
                     <Music className="h-4 w-4" />
                   </button>
                   <button
@@ -210,10 +210,13 @@ export default function MusicDAW() {
                   </span>
                 </BlockHeader>
                 <BlockContent>
-                  <div className="relative h-full overflow-auto">
+                  <div className="relative h-full overflow-x-auto">
                     {/* Timeline Grid */}
                     <div className="absolute inset-0 bg-gradient-to-r from-background via-muted/10 to-background">
-                      <svg className="w-full h-full" style={{ minWidth: "2000px" }}>
+                      <svg
+                        className="w-full h-full"
+                        style={{ minWidth: "2000px" }}
+                      >
                         {/* Measure lines */}
                         {Array.from({ length: 32 }, (_, i) => (
                           <line
@@ -249,10 +252,12 @@ export default function MusicDAW() {
               </BlockLayout>
             </Block>
 
-            <Block id="editor">
+            <Block id="editor" className="border-t border-muted">
               <BlockLayout>
-                <BlockHeader>
-                  <h3 className="text-sm font-semibold p-2">Piano Roll Editor</h3>
+                <BlockHeader className="border-b border-muted">
+                  <h3 className="text-sm font-semibold p-2">
+                    Piano Roll Editor
+                  </h3>
                 </BlockHeader>
                 <BlockContent>
                   <div className="h-full bg-gradient-to-b from-background to-muted/20 p-4">
@@ -275,7 +280,7 @@ export default function MusicDAW() {
           </BlockGroup>
         </BlockGroup>
 
-        <Block id="mixer">
+        <Block id="mixer" className="border-t border-muted">
           <BlockLayout>
             <BlockHeader className="flex items-center gap-2 p-2 border-b border-border">
               <button className="p-1 hover:bg-muted rounded">
@@ -287,43 +292,49 @@ export default function MusicDAW() {
             </BlockHeader>
             <BlockContent>
               <div className="flex gap-2 p-4 overflow-x-auto">
-                {["Master", "Drums", "Bass", "Lead", "Pads", "Vocals", "FX"].map(
-                  (channel) => (
-                    <div key={channel} className="flex-shrink-0 w-20">
-                      <div className="bg-muted/50 rounded p-2 space-y-2">
-                        <div className="text-xs text-center font-medium">
-                          {channel}
-                        </div>
+                {[
+                  "Master",
+                  "Drums",
+                  "Bass",
+                  "Lead",
+                  "Pads",
+                  "Vocals",
+                  "FX",
+                ].map((channel) => (
+                  <div key={channel} className="flex-shrink-0 w-20">
+                    <div className="bg-muted/50 rounded p-2 space-y-2">
+                      <div className="text-xs text-center font-medium">
+                        {channel}
+                      </div>
 
-                        {/* Volume meter */}
-                        <div className="h-24 bg-background rounded relative overflow-hidden">
-                          <div
-                            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500 via-yellow-500 to-red-500"
-                            style={{ height: `${Math.random() * 80 + 20}%` }}
-                          />
-                        </div>
+                      {/* Volume meter */}
+                      <div className="h-24 bg-background rounded relative overflow-hidden">
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500 via-yellow-500 to-red-500"
+                          style={{ height: `${Math.random() * 80 + 20}%` }}
+                        />
+                      </div>
 
-                        {/* Fader */}
-                        <div className="h-16 bg-background rounded relative">
-                          <div
-                            className="absolute left-1/2 -translate-x-1/2 w-8 h-3 bg-primary rounded"
-                            style={{ top: `${Math.random() * 70}%` }}
-                          />
-                        </div>
+                      {/* Fader */}
+                      <div className="h-16 bg-background rounded relative">
+                        <div
+                          className="absolute left-1/2 -translate-x-1/2 w-8 h-3 bg-primary rounded"
+                          style={{ top: `${Math.random() * 70}%` }}
+                        />
+                      </div>
 
-                        {/* Buttons */}
-                        <div className="flex justify-center gap-1">
-                          <button className="p-1 bg-background hover:bg-muted rounded">
-                            <Volume2 className="h-3 w-3" />
-                          </button>
-                          <button className="p-1 bg-background hover:bg-muted rounded">
-                            <Headphones className="h-3 w-3" />
-                          </button>
-                        </div>
+                      {/* Buttons */}
+                      <div className="flex justify-center gap-1">
+                        <button className="p-1 bg-background hover:bg-muted rounded">
+                          <Volume2 className="h-3 w-3" />
+                        </button>
+                        <button className="p-1 bg-background hover:bg-muted rounded">
+                          <Headphones className="h-3 w-3" />
+                        </button>
                       </div>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
               </div>
             </BlockContent>
           </BlockLayout>

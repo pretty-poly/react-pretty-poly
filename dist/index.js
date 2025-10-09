@@ -4212,7 +4212,7 @@ const zr = () => {
         // Not used since dividers are overlays
       })), W = pr(U, i.id), H = C === "column" ? "grid-template-rows" : "grid-template-columns";
       let Q = `
-${`[data-grid-id="${i.id}"] [data-block-id="${b}"][data-block-type="group"]`} {
+${`[data-block-id="${b}"]`} {
   display: grid;
   ${H}: ${W};
   ${C === "column" ? "grid-template-columns: 1fr;" : "grid-template-rows: 1fr;"}

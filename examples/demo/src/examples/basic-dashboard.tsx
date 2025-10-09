@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Block,
-  BlockGroup,
-  BlockContent,
-  BlockHeader,
-} from "@pretty-poly/react";
-import type { BlockConfig } from "@pretty-poly/react";
+import { Grid } from "@/components/grid/grid";
+import { Block } from "@/components/grid/block";
+import { BlockLayout } from "@/components/grid/block-layout";
+import { BlockContent } from "@/components/grid/block-content";
+import { BlockHeader } from "@/components/grid/block-header";
+import type { BlockConfig } from "@/lib/grid-types";
 import {
   Home,
   Users,
@@ -320,11 +318,12 @@ const BasicDashboard: React.FC = () => {
     <Grid defaultLayout={dashboardLayout} dividers="auto" className="h-dvh">
       {/* Sidebar */}
       <Block id="sidebar" className="bg-slate-900 text-white">
-        <BlockHeader className="p-6 border-b border-slate-800">
-          <h1 className="text-xl font-bold">Dashboard</h1>
-        </BlockHeader>
+        <BlockLayout>
+          <BlockHeader className="p-6 border-b border-slate-800">
+            <h1 className="text-xl font-bold">Dashboard</h1>
+          </BlockHeader>
 
-        <BlockContent className="p-4">
+          <BlockContent className="p-4">
           <nav className="space-y-2">
             <button
               onClick={() => setActiveNav("home")}
@@ -372,11 +371,13 @@ const BasicDashboard: React.FC = () => {
             </button>
           </nav>
         </BlockContent>
+        </BlockLayout>
       </Block>
 
       {/* Main Content */}
       <Block id="main" className="bg-slate-50">
-        <BlockHeader className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <BlockLayout>
+          <BlockHeader className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-semibold">{currentContent.title}</h2>
           <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
             <Bell className="w-5 h-5" />
@@ -457,11 +458,13 @@ const BasicDashboard: React.FC = () => {
             </div>
           </div>
         </BlockContent>
+        </BlockLayout>
       </Block>
 
       {/* Activity Panel */}
       <Block id="activity" className="bg-white border-l border-slate-200">
-        <BlockHeader className="p-6 border-b border-slate-200">
+        <BlockLayout>
+          <BlockHeader className="p-6 border-b border-slate-200">
           <h3 className="text-lg font-semibold">Live Activity</h3>
         </BlockHeader>
 
@@ -482,6 +485,7 @@ const BasicDashboard: React.FC = () => {
             ))}
           </div>
         </BlockContent>
+        </BlockLayout>
       </Block>
     </Grid>
   );

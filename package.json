@@ -16,9 +16,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    },
-    "./styles": "./dist/style.css",
-    "./dist/style.css": "./dist/style.css"
+    }
   },
   "files": [
     "dist"
@@ -26,6 +24,7 @@
   "scripts": {
     "build": "tsc && vite build",
     "build:watch": "vite build --watch",
+    "build:registry": "tsx scripts/build-registry.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
@@ -86,6 +85,7 @@
     "size-limit": "^11.2.0",
     "tailwindcss": "^4.1.13",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.20.6",
     "typescript": "^5.0.2",
     "typescript-eslint": "^8.45.0",
     "vite": "^5.4.20",

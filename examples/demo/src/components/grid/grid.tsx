@@ -1,11 +1,11 @@
 import { forwardRef, useRef, useImperativeHandle, useMemo } from "react";
-import type { GridProps, BlockConfig, GridState } from "../../types";
-import { cn } from "../../utils/cn";
-import { GridProvider, useGridContext } from "./GridProvider";
-import { useGridResize } from "../../hooks/useGridResize";
-import { useGridKeyboard } from "../../hooks/useGridKeyboard";
-import { generateGridTemplate } from "../../utils/calculations";
-import { DividerOverlay } from "../Divider/DividerOverlay";
+import type { GridProps, BlockConfig, GridState } from "@/lib/grid-types";
+import { cn } from "@/lib/utils";
+import { GridProvider, useGridContext } from "@/components/grid/grid-provider";
+import { useGridResize } from "@/hooks/use-grid-resize";
+import { useGridKeyboard } from "@/hooks/use-grid-keyboard";
+import { generateGridTemplate } from "@/lib/grid-calculations";
+import { DividerOverlay } from "@/components/divider/divider-overlay";
 
 /**
  * Grid API for imperative control

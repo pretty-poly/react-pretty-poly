@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import {
-  Grid,
-  Block,
-  BlockContent,
-  BlockHeader,
-  type BlockConfig
-} from '@pretty-poly/react';
+import { Grid } from '@/components/grid/grid';
+import { Block } from '@/components/grid/block';
+import { BlockLayout } from '@/components/grid/block-layout';
+import { BlockContent } from '@/components/grid/block-content';
+import { BlockHeader } from '@/components/grid/block-header';
+import type { BlockConfig } from '@/lib/grid-types';
 import {
   Folder,
   FolderOpen,
@@ -96,117 +95,121 @@ export default function FileManager() {
   return (
     <Grid defaultLayout={fileManagerLayout} dividers="auto" className="h-screen bg-slate-50">
       <Block id="sidebar" className="bg-white border-r border-slate-200">
-        <BlockHeader className="p-4 border-b border-slate-200">
-          <div className="flex items-center gap-2">
-            <Home className="h-5 w-5 text-slate-600" />
-            <h2 className="font-semibold text-slate-900">My Files</h2>
-          </div>
-        </BlockHeader>
-
-        <BlockContent className="p-3">
-          <div className="mb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search files..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+        <BlockLayout>
+          <BlockHeader className="p-4 border-b border-slate-200">
+            <div className="flex items-center gap-2">
+              <Home className="h-5 w-5 text-slate-600" />
+              <h2 className="font-semibold text-slate-900">My Files</h2>
             </div>
-          </div>
+          </BlockHeader>
 
-          <div className="space-y-1">
-            <div className="text-xs font-semibold text-slate-500 px-2 py-1">FOLDERS</div>
-            {folders.map((folder) => {
-              const Icon = folder.icon;
-              return (
-                <button
-                  key={folder.id}
-                  className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm transition-colors ${
-                    folder.active
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  <Icon className="h-4 w-4 flex-shrink-0" />
-                  <span className="flex-1 text-left truncate">{folder.name}</span>
-                  <span className="text-xs text-slate-400">{folder.count}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="mt-6 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-lg">
-            <div className="text-sm font-medium text-slate-900 mb-1">Storage</div>
-            <div className="text-xs text-slate-600 mb-2">23.4 GB of 50 GB used</div>
-            <div className="w-full bg-slate-200 rounded-full h-2">
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full" style={{ width: '47%' }} />
-            </div>
-          </div>
-        </BlockContent>
-      </Block>
-
-      <Block id="main" className="bg-white">
-        <BlockHeader className="px-6 py-3 border-b border-slate-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <Home className="h-4 w-4" />
-              <ChevronRight className="h-4 w-4" />
-              <span>Projects</span>
-            </div>
-            <button className="p-1 hover:bg-slate-100 rounded">
-              <MoreVertical className="h-5 w-5 text-slate-600" />
-            </button>
-          </div>
-        </BlockHeader>
-
-        <BlockContent>
-          <div className="p-6">
-            <div className="grid grid-cols-1 gap-1">
-              {/* Header */}
-              <div className="grid grid-cols-[1fr_100px_120px] gap-4 px-4 py-2 text-xs font-semibold text-slate-500 border-b border-slate-200">
-                <div>Name</div>
-                <div>Size</div>
-                <div>Modified</div>
+          <BlockContent className="p-3">
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search files..."
+                  className="w-full pl-9 pr-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
+            </div>
 
-              {/* Files */}
-              {files.map((item) => {
-                const Icon = getFileIcon(item);
-                const isSelected = selectedFile === item.id;
-
+            <div className="space-y-1">
+              <div className="text-xs font-semibold text-slate-500 px-2 py-1">FOLDERS</div>
+              {folders.map((folder) => {
+                const Icon = folder.icon;
                 return (
                   <button
-                    key={item.id}
-                    onClick={() => setSelectedFile(item.id)}
-                    className={`grid grid-cols-[1fr_100px_120px] gap-4 px-4 py-3 rounded-lg text-sm transition-colors ${
-                      isSelected
-                        ? 'bg-blue-50 border border-blue-200'
-                        : 'hover:bg-slate-50 border border-transparent'
+                    key={folder.id}
+                    className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm transition-colors ${
+                      folder.active
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'text-slate-700 hover:bg-slate-100'
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <Icon className={`h-5 w-5 flex-shrink-0 ${
-                        item.type === 'folder' ? 'text-blue-500' : 'text-slate-400'
-                      }`} />
-                      <span className={`truncate ${
-                        item.type === 'folder' ? 'font-medium text-slate-900' : 'text-slate-700'
-                      }`}>
-                        {item.name}
-                      </span>
-                    </div>
-                    <div className="text-slate-500 text-left">
-                      {item.size || '—'}
-                    </div>
-                    <div className="text-slate-500 text-left">
-                      {item.modified}
-                    </div>
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="flex-1 text-left truncate">{folder.name}</span>
+                    <span className="text-xs text-slate-400">{folder.count}</span>
                   </button>
                 );
               })}
             </div>
-          </div>
-        </BlockContent>
+
+            <div className="mt-6 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-lg">
+              <div className="text-sm font-medium text-slate-900 mb-1">Storage</div>
+              <div className="text-xs text-slate-600 mb-2">23.4 GB of 50 GB used</div>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full" style={{ width: '47%' }} />
+              </div>
+            </div>
+          </BlockContent>
+        </BlockLayout>
+      </Block>
+
+      <Block id="main" className="bg-white">
+        <BlockLayout>
+          <BlockHeader className="px-6 py-3 border-b border-slate-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <Home className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4" />
+                <span>Projects</span>
+              </div>
+              <button className="p-1 hover:bg-slate-100 rounded">
+                <MoreVertical className="h-5 w-5 text-slate-600" />
+              </button>
+            </div>
+          </BlockHeader>
+
+          <BlockContent>
+            <div className="p-6">
+              <div className="grid grid-cols-1 gap-1">
+                {/* Header */}
+                <div className="grid grid-cols-[1fr_100px_120px] gap-4 px-4 py-2 text-xs font-semibold text-slate-500 border-b border-slate-200">
+                  <div>Name</div>
+                  <div>Size</div>
+                  <div>Modified</div>
+                </div>
+
+                {/* Files */}
+                {files.map((item) => {
+                  const Icon = getFileIcon(item);
+                  const isSelected = selectedFile === item.id;
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setSelectedFile(item.id)}
+                      className={`grid grid-cols-[1fr_100px_120px] gap-4 px-4 py-3 rounded-lg text-sm transition-colors ${
+                        isSelected
+                          ? 'bg-blue-50 border border-blue-200'
+                          : 'hover:bg-slate-50 border border-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Icon className={`h-5 w-5 flex-shrink-0 ${
+                          item.type === 'folder' ? 'text-blue-500' : 'text-slate-400'
+                        }`} />
+                        <span className={`truncate ${
+                          item.type === 'folder' ? 'font-medium text-slate-900' : 'text-slate-700'
+                        }`}>
+                          {item.name}
+                        </span>
+                      </div>
+                      <div className="text-slate-500 text-left">
+                        {item.size || '—'}
+                      </div>
+                      <div className="text-slate-500 text-left">
+                        {item.modified}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </BlockContent>
+        </BlockLayout>
       </Block>
     </Grid>
   );

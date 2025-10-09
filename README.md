@@ -16,17 +16,41 @@ A **shadcn/ui compatible** polymorphic React component library for creating resi
 
 ## Installation
 
-### For New Projects
+PrettyPoly offers two installation methods:
+
+### Method 1: Copy Components (Recommended)
+
+Like shadcn/ui, copy components directly into your project for full control and proper Tailwind class generation:
 
 ```bash
-npm install @pretty-poly/react tailwindcss
+# Initialize shadcn (if you haven't already)
+npx shadcn@latest init
+
+# Add PrettyPoly components
+npx shadcn@latest add https://pretty-poly.github.io/react/r/grid-system
 ```
 
-### For Shadcn/UI Projects
+**Why copy?** When you import from npm, Tailwind can't scan the component files in `node_modules`, so CSS classes won't be generated. Copying ensures:
+- ✅ All Tailwind classes are generated
+- ✅ Full control to customize components
+- ✅ No version conflicts
+- ✅ TypeScript types included
+
+See [docs/INSTALLATION.md](./docs/INSTALLATION.md) for detailed installation instructions.
+
+### Method 2: NPM Package
+
+For quick prototyping or if you prefer traditional npm packages:
 
 ```bash
+# New projects
+npm install @pretty-poly/react tailwindcss
+
+# Existing shadcn/ui projects
 npm install @pretty-poly/react
 ```
+
+**Note:** With npm installation, you may need to configure Tailwind's `safelist` to ensure all component classes are included.
 
 The library is fully compatible with existing shadcn/ui setups and will inherit your theme configuration automatically.
 

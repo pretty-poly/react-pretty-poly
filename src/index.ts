@@ -2,14 +2,16 @@
  * @pretty-poly/react - A polymorphic React component library for resizable, responsive grid layouts
  */
 
-// Import styles
-import './styles.css'
-
 // Components
-export { Grid } from './components/Grid'
-export type { GridAPI } from './components/Grid'
-export { GridProvider, useGridContext, useGridState, useGridActions } from './components/Grid'
-export type { GridProviderProps } from './components/Grid'
+export { Grid } from "./components/Grid";
+export type { GridAPI } from "./components/Grid";
+export {
+  GridProvider,
+  useGridContext,
+  useGridState,
+  useGridActions,
+} from "./components/Grid";
+export type { GridProviderProps } from "./components/Grid";
 
 export {
   Block,
@@ -22,9 +24,9 @@ export {
   BlockTabs,
   BlockSidebar,
   BlockSidebarItem,
-  BlockSidebarSpacer
-} from './components/Block'
-export { Divider } from './components/Divider'
+  BlockSidebarSpacer,
+} from "./components/Block";
+export { Divider } from "./components/Divider";
 
 // Hooks
 export {
@@ -32,13 +34,13 @@ export {
   useGridPersistence,
   useGridMode,
   useGridKeyboard,
-  defaultModes
-} from './hooks'
+  defaultModes,
+} from "./hooks";
 export type {
   UseGridResizeOptions,
   UseGridPersistenceOptions,
-  UseGridKeyboardOptions
-} from './hooks'
+  UseGridKeyboardOptions,
+} from "./hooks";
 
 // Types
 export type {
@@ -71,9 +73,9 @@ export type {
   SidebarPosition,
   BlockSidebarProps,
   BlockSidebarItemProps,
-  BlockSidebarSpacerProps
-} from './types'
-export type { BlockLayoutProps } from './components/Block/BlockLayout'
+  BlockSidebarSpacerProps,
+} from "./types";
+export type { BlockLayoutProps } from "./components/Block/BlockLayout";
 
 // Utilities
 export {
@@ -87,16 +89,16 @@ export {
   frToPx,
   pxToFr,
   findAdjacentBlock,
-  isZeroSum
-} from './utils/calculations'
+  isZeroSum,
+} from "./utils/calculations";
 
-export { cn } from './utils/cn'
+export { cn } from "./utils/cn";
 
 export {
   validateBlockSize,
   validateTwoWayResize,
-  validateLayoutIntegrity
-} from './utils/constraints'
+  validateLayoutIntegrity,
+} from "./utils/constraints";
 
 export {
   getStorageAdapter,
@@ -107,6 +109,6 @@ export {
   createCustomAdapter,
   localStorageAdapter,
   sessionStorageAdapter,
-  memoryStorageAdapter
-} from './utils/storage'
-export type { StorageAdapter } from './utils/storage'
+  memoryStorageAdapter,
+} from "./utils/storage";
+export type { StorageAdapter } from "./utils/storage";

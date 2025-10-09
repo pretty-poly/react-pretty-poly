@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import { Grid, Block, BlockGroup, BlockContent, BlockHeader } from '@pretty-poly/react'
-import type { BlockConfig } from '@pretty-poly/react'
-import { Folder, File, Code, Terminal as TerminalIcon, Settings, FileText } from 'lucide-react'
+import { Grid } from '@/components/grid/grid'
+import { Block, BlockGroup } from '@/components/grid/block'
+import { BlockLayout } from '@/components/grid/block-layout'
+import { BlockContent } from '@/components/grid/block-content'
+import { BlockHeader } from '@/components/grid/block-header'
+import type { BlockConfig } from '@/lib/grid-types'
+import { Folder, File, Code, Terminal as TerminalIcon, Settings } from 'lucide-react'
 
 const ideLayout: BlockConfig[] = [
   {
@@ -174,7 +178,8 @@ const IDELayout: React.FC = () => {
     >
       {/* File Tree */}
       <Block id="file-tree" className="bg-slate-900 text-slate-300 border-r border-slate-800">
-        <BlockHeader className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+        <BlockLayout>
+          <BlockHeader className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
           <span className="text-sm font-semibold text-slate-200">Explorer</span>
           <Folder className="w-4 h-4 text-slate-400" />
         </BlockHeader>
@@ -209,13 +214,15 @@ const IDELayout: React.FC = () => {
             </div>
           </div>
         </BlockContent>
+        </BlockLayout>
       </Block>
 
       {/* Editor Area Group */}
       <BlockGroup id="editor-area">
         {/* Code Editor */}
         <Block id="editor" className="bg-slate-950">
-          <BlockHeader className="px-4 py-2 border-b border-slate-800 flex items-center gap-2">
+          <BlockLayout>
+            <BlockHeader className="px-4 py-2 border-b border-slate-800 flex items-center gap-2">
             <Code className="w-4 h-4 text-slate-400" />
             <span className="text-sm text-slate-300">{selectedFile.name}</span>
             {selectedFile.modified && (
@@ -237,11 +244,13 @@ const IDELayout: React.FC = () => {
               ))}
             </div>
           </BlockContent>
+          </BlockLayout>
         </Block>
 
         {/* Terminal */}
         <Block id="terminal" className="bg-slate-950 border-t border-slate-800">
-          <BlockHeader className="px-4 py-2 border-b border-slate-800 flex items-center gap-2">
+          <BlockLayout>
+            <BlockHeader className="px-4 py-2 border-b border-slate-800 flex items-center gap-2">
             <TerminalIcon className="w-4 h-4 text-slate-400" />
             <span className="text-sm text-slate-300">Terminal</span>
           </BlockHeader>
@@ -271,12 +280,14 @@ const IDELayout: React.FC = () => {
               </div>
             </div>
           </BlockContent>
+          </BlockLayout>
         </Block>
       </BlockGroup>
 
       {/* Properties Panel */}
       <Block id="properties" className="bg-slate-900 text-slate-300 border-l border-slate-800">
-        <BlockHeader className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+        <BlockLayout>
+          <BlockHeader className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
           <span className="text-sm font-semibold text-slate-200">Properties</span>
           <Settings className="w-4 h-4 text-slate-400" />
         </BlockHeader>
@@ -338,6 +349,7 @@ const IDELayout: React.FC = () => {
             </div>
           </div>
         </BlockContent>
+        </BlockLayout>
       </Block>
     </Grid>
   )

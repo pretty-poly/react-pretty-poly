@@ -1,0 +1,160 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "name": "@pretty-poly/react",
+  "type": "registry:ui",
+  "homepage": "https://github.com/pretty-poly/react",
+  "description": "Polymorphic grid layout components for React",
+  "items": [
+    {
+      "name": "grid-system",
+      "type": "registry:ui",
+      "title": "Grid System",
+      "description": "Complete polymorphic grid layout system with resizable panels",
+      "files": [
+        {
+          "path": "components/grid/grid.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/grid-provider.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-header.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-footer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-layout.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/divider/divider.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/divider/divider-overlay.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/use-grid-resize.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-grid-resize-operations.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-grid-mode.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-grid-persistence.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-grid-keyboard.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "lib/grid-calculations.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/grid-constraints.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/grid-storage.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/grid-types.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/grid-divider-auto-detection.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "dependencies": [],
+      "devDependencies": [],
+      "registryDependencies": [],
+      "tailwind": {
+        "config": {
+          "theme": {
+            "extend": {
+              "animation": {
+                "grid-divider-fade": "grid-divider-fade 200ms ease-out",
+                "grid-divider-slide": "grid-divider-slide 150ms cubic-bezier(0.4, 0, 0.2, 1)"
+              },
+              "keyframes": {
+                "grid-divider-fade": {
+                  "0%": { "opacity": "0" },
+                  "100%": { "opacity": "1" }
+                },
+                "grid-divider-slide": {
+                  "0%": { "transform": "translateY(-4px)", "opacity": "0" },
+                  "100%": { "transform": "translateY(0)", "opacity": "1" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "grid-sidebar",
+      "type": "registry:ui",
+      "title": "Grid Sidebar Components",
+      "description": "Sidebar components for Grid blocks",
+      "files": [
+        {
+          "path": "components/grid/block-sidebar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-sidebar-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-sidebar-spacer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [],
+      "devDependencies": [],
+      "registryDependencies": ["grid-system"]
+    },
+    {
+      "name": "grid-tabs",
+      "type": "registry:ui",
+      "title": "Grid Tab Components",
+      "description": "Tab interface components for Grid blocks",
+      "files": [
+        {
+          "path": "components/grid/block-tabs.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [],
+      "devDependencies": [],
+      "registryDependencies": ["grid-system"]
+    }
+  ]
+}

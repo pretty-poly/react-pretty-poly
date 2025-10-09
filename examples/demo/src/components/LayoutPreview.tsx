@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface LayoutPreviewProps {
   layout: 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager'
 }
