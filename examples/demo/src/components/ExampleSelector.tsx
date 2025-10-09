@@ -5,6 +5,8 @@ import { LayoutPreview } from "./LayoutPreview";
 import BasicDashboard from "../examples/basic-dashboard";
 import IDELayout from "../examples/ide-layout";
 import EmailClient from "../examples/email-client";
+import MusicDAW from "../examples/music-daw";
+import FileManager from "../examples/file-manager";
 
 interface ExampleInfo {
   name: string;
@@ -31,6 +33,18 @@ const examples: ExampleInfo[] = [
     description: "Email interface with folder list, message list, and preview pane",
     component: EmailClient,
     key: "email-client",
+  },
+  {
+    name: "Music DAW",
+    description: "Digital audio workstation with track list, timeline, editor, and mixer panel",
+    component: MusicDAW,
+    key: "music-daw",
+  },
+  {
+    name: "File Manager",
+    description: "Clean file browser with folder tree, file list, and metadata display",
+    component: FileManager,
+    key: "file-manager",
   },
 ];
 
@@ -129,7 +143,7 @@ export default function ExampleSelector() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <LayoutPreview layout={example.key as 'basic-dashboard' | 'ide-layout' | 'email-client'} />
+                <LayoutPreview layout={example.key as 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager'} />
                 <Button variant="outline" className="w-full">
                   View Example →
                 </Button>

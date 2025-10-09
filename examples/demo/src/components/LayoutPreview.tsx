@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface LayoutPreviewProps {
-  layout: 'basic-dashboard' | 'ide-layout' | 'email-client'
+  layout: 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager'
 }
 
 export function LayoutPreview({ layout }: LayoutPreviewProps) {
@@ -129,6 +129,111 @@ export function LayoutPreview({ layout }: LayoutPreviewProps) {
             <div className="h-1 bg-slate-200 rounded w-5/6"></div>
             <div className="h-1 bg-slate-200 rounded"></div>
             <div className="h-1 bg-slate-200 rounded w-4/5"></div>
+          </div>
+        </div>
+      </div>
+    ),
+
+    'music-daw': (
+      <div className="grid grid-rows-[1fr_40px] gap-1 h-32 w-full bg-slate-900 p-2 rounded-lg border border-slate-800">
+        {/* Main area: Track list + Timeline + Editor */}
+        <div className="grid grid-cols-[50px_1fr] gap-1">
+          {/* Left: Track list + Instruments */}
+          <div className="grid grid-rows-2 gap-1">
+            <div className="bg-slate-800 rounded p-1.5 flex flex-col gap-0.5">
+              <div className="h-1 bg-slate-700 rounded"></div>
+              <div className="h-1 bg-slate-700 rounded"></div>
+              <div className="h-1 bg-slate-700 rounded"></div>
+            </div>
+            <div className="bg-slate-800 rounded p-1.5 flex flex-col gap-0.5">
+              <div className="h-1 bg-purple-600/50 rounded w-3/4"></div>
+              <div className="h-1 bg-blue-600/50 rounded w-2/3"></div>
+            </div>
+          </div>
+
+          {/* Right: Timeline + Editor */}
+          <div className="grid grid-rows-[1fr_1fr] gap-1">
+            {/* Timeline */}
+            <div className="bg-slate-950 rounded p-1.5 relative overflow-hidden">
+              <div className="absolute inset-0 flex gap-1 p-1">
+                <div className="w-0.5 bg-slate-700"></div>
+                <div className="w-0.5 bg-slate-700"></div>
+                <div className="w-0.5 bg-slate-700"></div>
+                <div className="w-0.5 bg-slate-800"></div>
+                <div className="w-8 h-2 bg-purple-600/40 rounded-sm mt-1"></div>
+                <div className="w-6 h-2 bg-blue-600/40 rounded-sm mt-3"></div>
+              </div>
+            </div>
+
+            {/* Editor (Piano roll) */}
+            <div className="bg-slate-950 rounded p-1.5">
+              <div className="grid grid-cols-8 gap-px h-full">
+                <div className="bg-slate-700/30 rounded-sm"></div>
+                <div className="bg-purple-600/40 rounded-sm"></div>
+                <div className="bg-slate-700/30 rounded-sm"></div>
+                <div className="bg-slate-700/30 rounded-sm"></div>
+                <div className="bg-blue-600/40 rounded-sm"></div>
+                <div className="bg-slate-700/30 rounded-sm"></div>
+                <div className="bg-slate-700/30 rounded-sm"></div>
+                <div className="bg-slate-700/30 rounded-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mixer panel (bottom) */}
+        <div className="bg-slate-800 rounded p-1.5 flex gap-1 overflow-hidden">
+          {[...Array(7)].map((_, i) => (
+            <div key={i} className="flex flex-col gap-0.5 w-6">
+              <div className="h-full bg-gradient-to-t from-green-500/50 via-yellow-500/30 to-transparent rounded-sm"></div>
+              <div className="h-1 bg-slate-600 rounded-sm"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+
+    'file-manager': (
+      <div className="grid grid-cols-[70px_1fr] gap-1 h-32 w-full bg-slate-50 p-2 rounded-lg border border-slate-200">
+        {/* Sidebar */}
+        <div className="bg-white rounded border border-slate-200 p-2 flex flex-col gap-1">
+          <div className="h-2 bg-slate-200 rounded w-3/4 mb-1"></div>
+          <div className="flex items-center gap-1 bg-blue-50 rounded p-1">
+            <div className="w-2 h-2 bg-blue-500 rounded"></div>
+            <div className="h-1 bg-blue-600 rounded flex-1"></div>
+          </div>
+          <div className="flex items-center gap-1 rounded p-1">
+            <div className="w-2 h-2 bg-slate-400 rounded"></div>
+            <div className="h-1 bg-slate-300 rounded flex-1"></div>
+          </div>
+          <div className="flex items-center gap-1 rounded p-1">
+            <div className="w-2 h-2 bg-slate-400 rounded"></div>
+            <div className="h-1 bg-slate-300 rounded flex-1"></div>
+          </div>
+          <div className="flex items-center gap-1 rounded p-1">
+            <div className="w-2 h-2 bg-slate-400 rounded"></div>
+            <div className="h-1 bg-slate-300 rounded flex-1"></div>
+          </div>
+        </div>
+
+        {/* File list */}
+        <div className="bg-white rounded border border-slate-200 p-2 flex flex-col gap-0.5">
+          <div className="h-1.5 bg-slate-200 rounded w-1/4 mb-1"></div>
+          <div className="flex items-center gap-2 p-1 bg-blue-50 border border-blue-200 rounded">
+            <div className="w-2 h-2 bg-blue-500 rounded"></div>
+            <div className="h-1 bg-slate-600 rounded flex-1"></div>
+          </div>
+          <div className="flex items-center gap-2 p-1">
+            <div className="w-2 h-2 bg-slate-400 rounded"></div>
+            <div className="h-1 bg-slate-400 rounded flex-1"></div>
+          </div>
+          <div className="flex items-center gap-2 p-1">
+            <div className="w-2 h-2 bg-slate-400 rounded"></div>
+            <div className="h-1 bg-slate-400 rounded flex-1"></div>
+          </div>
+          <div className="flex items-center gap-2 p-1">
+            <div className="w-2 h-2 bg-slate-400 rounded"></div>
+            <div className="h-1 bg-slate-400 rounded flex-1"></div>
           </div>
         </div>
       </div>

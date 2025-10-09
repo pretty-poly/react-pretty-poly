@@ -230,13 +230,15 @@ const GridInternal = forwardRef<
 
       // Scope selector by grid ID to prevent collisions across multiple grids
       // Only apply grid styles in grid/desktop mode (not in dock/tabs modes)
+      // For nested blocks, use descendant selector since data-active-mode is only on root
+      const selector = parentId === rootBlock.id
+        ? `[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"][data-active-mode="grid"],
+[data-grid-id="${rootBlock.id}"][data-block-id="${parentId}"][data-active-mode="desktop"]`
+        : `[data-grid-id="${rootBlock.id}"][data-active-mode="grid"] [data-block-id="${parentId}"],
+[data-grid-id="${rootBlock.id}"][data-active-mode="desktop"] [data-block-id="${parentId}"]`;
+
       let groupStyle = `
-[data-grid-id="${
-        rootBlock.id
-      }"][data-block-id="${parentId}"][data-active-mode="grid"],
-[data-grid-id="${
-        rootBlock.id
-      }"][data-block-id="${parentId}"][data-active-mode="desktop"] {
+${selector} {
   display: grid;
   ${templateProperty}: ${template};
   ${

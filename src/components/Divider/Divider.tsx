@@ -52,6 +52,16 @@ export const Divider: React.FC<DividerProps> = ({
     const containerRect = gridContainer.getBoundingClientRect()
     const blockRect = targetElement.getBoundingClientRect()
 
+    // Find parent block to constrain divider dimensions for nested blocks
+    const parentId = targetBlock?.parentId
+    const parentElement = parentId
+      ? document.querySelector(`[data-block-id="${parentId}"]`) as HTMLElement
+      : gridContainer
+
+    if (!parentElement) return
+
+    const parentRect = parentElement.getBoundingClientRect()
+
     if (isVertical) {
       // Vertical divider - positioned on left or right edge of block
       const edgePosition = position === 'start'
@@ -60,9 +70,9 @@ export const Divider: React.FC<DividerProps> = ({
 
       setDividerPosition({
         left: edgePosition - (size / 2), // Center on edge
-        top: 0,
+        top: parentRect.top - containerRect.top, // Position relative to parent
         width: size,
-        height: containerRect.height // Use container height, not scrollHeight
+        height: parentRect.height // Use parent height to constrain divider
       })
     } else {
       // Horizontal divider - positioned on top or bottom edge of block
@@ -71,13 +81,13 @@ export const Divider: React.FC<DividerProps> = ({
         : blockRect.bottom - containerRect.top
 
       setDividerPosition({
-        left: 0,
+        left: parentRect.left - containerRect.left, // Position relative to parent
         top: edgePosition - (size / 2), // Center on edge
-        width: containerRect.width, // Use container width
+        width: parentRect.width, // Use parent width to constrain divider
         height: size
       })
     }
-  }, [targetId, position, isVertical, size])
+  }, [targetId, position, isVertical, size, targetBlock?.parentId])
 
   /**
    * Set up ResizeObserver to track block and container size changes
@@ -99,10 +109,20 @@ export const Divider: React.FC<DividerProps> = ({
     resizeObserver.observe(gridContainer)
     resizeObserver.observe(targetElement)
 
+    // Also observe parent element if it exists (for nested blocks)
+    const parentId = targetBlock?.parentId
+    const parentElement = parentId
+      ? document.querySelector(`[data-block-id="${parentId}"]`) as HTMLElement
+      : null
+
+    if (parentElement) {
+      resizeObserver.observe(parentElement)
+    }
+
     return () => {
       resizeObserver.disconnect()
     }
-  }, [targetId, updatePosition])
+  }, [targetId, updatePosition, targetBlock?.parentId])
 
   /**
    * Also update position when blocks change (resize operations)
