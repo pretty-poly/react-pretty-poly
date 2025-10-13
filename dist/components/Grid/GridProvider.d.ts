@@ -45,4 +45,54 @@ export declare function useGridResize(): {
     activeBlockId: string | undefined;
     activeDividerId: string | undefined;
 };
+/**
+ * Hook to access a specific block's state
+ * @param blockId - The ID of the block to access
+ * @returns Block state with calculated isCollapsed property
+ */
+export declare function useBlockState(blockId: string): {
+    size: number;
+    isCollapsed: boolean;
+    id: string;
+    type: import('../..').BlockType;
+    direction?: import('../..').Direction;
+    defaultSize?: number;
+    minSize?: number;
+    maxSize?: number;
+    sizeUnit?: import('../..').SizeUnit;
+    originalDefaultSize?: number;
+    collapsible?: boolean;
+    collapseAt?: number;
+    collapseTo?: number;
+    dividerPosition?: import('../..').DividerPosition;
+    dividerSize?: number;
+    parentId?: string;
+    order?: number;
+    children?: string[];
+} | null;
+/**
+ * Hook to access the parent block's state
+ * @param blockId - The ID of the child block whose parent you want to access
+ * @returns Parent block state with calculated isCollapsed property, or null if no parent
+ */
+export declare function useParentBlockState(blockId: string): {
+    size: number;
+    isCollapsed: boolean;
+    id: string;
+    type: import('../..').BlockType;
+    direction?: import('../..').Direction;
+    defaultSize?: number;
+    minSize?: number;
+    maxSize?: number;
+    sizeUnit?: import('../..').SizeUnit;
+    originalDefaultSize?: number;
+    collapsible?: boolean;
+    collapseAt?: number;
+    collapseTo?: number;
+    dividerPosition?: import('../..').DividerPosition;
+    dividerSize?: number;
+    parentId?: string;
+    order?: number;
+    children?: string[];
+} | null;
 //# sourceMappingURL=GridProvider.d.ts.map

@@ -42,7 +42,11 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
       const collapseBlock = state.blocks[action.payload.blockId];
       if (!collapseBlock) return state;
 
-      const collapseSize = collapseBlock.collapseTo || 0;
+      // Respect minSize to prevent CSS Grid breakage (negative sizes)
+      const targetCollapseSize = collapseBlock.collapseTo ?? 0;
+      const minSizeConstraint = collapseBlock.minSize ?? 0;
+      const collapseSize = Math.max(targetCollapseSize, minSizeConstraint);
+
       return {
         ...state,
         blocks: {
@@ -389,5 +393,62 @@ export function useGridResize() {
     isDragging: state.resize.isDragging,
     activeBlockId: state.resize.activeBlockId,
     activeDividerId: state.resize.activeDividerId,
+  };
+}
+
+/**
+ * Hook to access a specific block's state
+ * @param blockId - The ID of the block to access
+ * @returns Block state with calculated isCollapsed property
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useBlockState(blockId: string) {
+  const { state } = useGridContext();
+  const block = state.blocks[blockId];
+
+  if (!block) {
+    console.warn(`Block with id "${blockId}" not found in grid state`);
+    return null;
+  }
+
+  const currentSize = block.size ?? block.defaultSize ?? 0;
+  const collapseTo = block.collapseTo ?? 0;
+  const isCollapsed = currentSize <= collapseTo;
+
+  return {
+    ...block,
+    size: currentSize,
+    isCollapsed,
+  };
+}
+
+/**
+ * Hook to access the parent block's state
+ * @param blockId - The ID of the child block whose parent you want to access
+ * @returns Parent block state with calculated isCollapsed property, or null if no parent
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useParentBlockState(blockId: string) {
+  const { state } = useGridContext();
+  const block = state.blocks[blockId];
+
+  if (!block || !block.parentId) {
+    return null;
+  }
+
+  const parentBlock = state.blocks[block.parentId];
+  if (!parentBlock) {
+    console.warn(`Parent block "${block.parentId}" not found for block "${blockId}"`);
+    return null;
+  }
+
+  const currentSize = parentBlock.size ?? parentBlock.defaultSize ?? 0;
+  const collapseTo = parentBlock.collapseTo ?? 0;
+  const isCollapsed = currentSize <= collapseTo;
+
+  return {
+    ...parentBlock,
+    size: currentSize,
+    isCollapsed,
   };
 }

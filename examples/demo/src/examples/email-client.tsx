@@ -4,8 +4,9 @@ import { Block } from '@/components/grid/block'
 import { BlockLayout } from '@/components/grid/block-layout'
 import { BlockContent } from '@/components/grid/block-content'
 import { BlockHeader } from '@/components/grid/block-header'
+import { useBlockState, useGridActions } from '@/components/grid/grid-provider'
 import type { BlockConfig } from '@/lib/grid-types'
-import { Inbox, Send, Archive, Trash2, Star, Mail, Search, Paperclip, Reply, Forward } from 'lucide-react'
+import { Inbox, Send, Archive, Trash2, Star, Mail, Search, Paperclip, Reply, Forward, PanelLeftClose, PanelLeft } from 'lucide-react'
 
 const emailLayout: BlockConfig[] = [
   {
@@ -18,9 +19,10 @@ const emailLayout: BlockConfig[] = [
     id: 'folders',
     type: 'block',
     defaultSize: 200,
-    minSize: 180,
+    minSize: 60,
     maxSize: 300,
     sizeUnit: 'px',
+    collapseTo: 60,
     parentId: 'root',
     order: 0
   },
@@ -157,37 +159,49 @@ Documentation and Storybook examples are available. Migration guide attached for
   }
 ]
 
-const EmailClient: React.FC = () => {
-  const [selectedFolder, setSelectedFolder] = useState<Folder>('inbox')
-  const [selectedEmail, setSelectedEmail] = useState<Email>(emailDatabase[0])
+const folders = [
+  { id: 'inbox' as Folder, name: 'Inbox', icon: Inbox, count: emailDatabase.filter(e => e.folder === 'inbox').length },
+  { id: 'sent' as Folder, name: 'Sent', icon: Send, count: emailDatabase.filter(e => e.folder === 'sent').length },
+  { id: 'starred' as Folder, name: 'Starred', icon: Star, count: emailDatabase.filter(e => e.folder === 'starred' || e.isStarred).length },
+  { id: 'archive' as Folder, name: 'Archive', icon: Archive, count: emailDatabase.filter(e => e.folder === 'archive').length },
+  { id: 'trash' as Folder, name: 'Trash', icon: Trash2, count: emailDatabase.filter(e => e.folder === 'trash').length },
+]
+
+// Inner component that uses grid hooks (must be inside Grid context)
+const EmailClientContent: React.FC<{
+  selectedFolder: Folder
+  setSelectedFolder: (folder: Folder) => void
+  selectedEmail: Email
+  setSelectedEmail: (email: Email) => void
+}> = ({ selectedFolder, setSelectedFolder, selectedEmail, setSelectedEmail }) => {
+  // Access folders block state and grid actions (inside Grid context)
+  const foldersBlock = useBlockState('folders')
+  const { collapseBlock, expandBlock } = useGridActions()
 
   const filteredEmails = emailDatabase.filter(email => email.folder === selectedFolder)
 
-  const folders = [
-    { id: 'inbox' as Folder, name: 'Inbox', icon: Inbox, count: emailDatabase.filter(e => e.folder === 'inbox').length },
-    { id: 'sent' as Folder, name: 'Sent', icon: Send, count: emailDatabase.filter(e => e.folder === 'sent').length },
-    { id: 'starred' as Folder, name: 'Starred', icon: Star, count: emailDatabase.filter(e => e.folder === 'starred' || e.isStarred).length },
-    { id: 'archive' as Folder, name: 'Archive', icon: Archive, count: emailDatabase.filter(e => e.folder === 'archive').length },
-    { id: 'trash' as Folder, name: 'Trash', icon: Trash2, count: emailDatabase.filter(e => e.folder === 'trash').length },
-  ]
-
   return (
-    <Grid
-      defaultLayout={emailLayout}
-      dividers="auto"
-      className="h-dvh bg-slate-50"
-    >
+    <>
       {/* Folder List */}
       <Block id="folders" className="bg-white border-r border-slate-200">
         <BlockLayout>
           <BlockHeader className="p-4 border-b border-slate-200">
-            <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
-              Compose
-            </button>
+            {foldersBlock?.isCollapsed ? (
+              <button
+                className="w-full p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center justify-center"
+                title="Compose"
+              >
+                <Mail className="w-4 h-4" />
+              </button>
+            ) : (
+              <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
+                Compose
+              </button>
+            )}
           </BlockHeader>
 
           <BlockContent className="p-2">
-            <nav className="space-y-1">
+            <nav className={foldersBlock?.isCollapsed ? 'space-y-2' : 'space-y-1'}>
               {folders.map((folder) => {
                 const Icon = folder.icon
                 const isActive = selectedFolder === folder.id
@@ -201,16 +215,34 @@ const EmailClient: React.FC = () => {
                       )
                       if (firstEmail) setSelectedEmail(firstEmail)
                     }}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full transition-colors ${
+                    className={`flex items-center rounded-lg w-full transition-colors relative ${
+                      foldersBlock?.isCollapsed
+                        ? 'justify-center p-2'
+                        : 'gap-3 px-3 py-2'
+                    } ${
                       isActive
                         ? 'bg-blue-50 text-blue-600'
                         : 'hover:bg-slate-50 text-slate-700'
                     }`}
+                    title={foldersBlock?.isCollapsed ? folder.name : undefined}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span className="text-sm font-medium">{folder.name}</span>
-                    {folder.count > 0 && (
-                      <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
+                    <Icon className="w-5 h-5 flex-shrink-0" />
+                    {!foldersBlock?.isCollapsed && (
+                      <>
+                        <span className="text-sm font-medium">{folder.name}</span>
+                        {folder.count > 0 && (
+                          <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
+                            isActive
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-slate-200 text-slate-600'
+                          }`}>
+                            {folder.count}
+                          </span>
+                        )}
+                      </>
+                    )}
+                    {foldersBlock?.isCollapsed && folder.count > 0 && (
+                      <span className={`absolute -top-1 -right-1 text-xs px-1.5 py-0.5 rounded-full ${
                         isActive
                           ? 'bg-blue-600 text-white'
                           : 'bg-slate-200 text-slate-600'
@@ -230,13 +262,32 @@ const EmailClient: React.FC = () => {
       <Block id="email-list" className="bg-white border-r border-slate-200">
         <BlockLayout>
           <BlockHeader className="p-4 border-b border-slate-200">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search emails..."
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (foldersBlock?.isCollapsed) {
+                    expandBlock('folders')
+                  } else {
+                    collapseBlock('folders')
+                  }
+                }}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                title={foldersBlock?.isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              >
+                {foldersBlock?.isCollapsed ? (
+                  <PanelLeft className="w-4 h-4 text-slate-600" />
+                ) : (
+                  <PanelLeftClose className="w-4 h-4 text-slate-600" />
+                )}
+              </button>
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search emails..."
+                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
           </BlockHeader>
 
@@ -364,6 +415,26 @@ const EmailClient: React.FC = () => {
           </BlockContent>
         </BlockLayout>
       </Block>
+    </>
+  )
+}
+
+const EmailClient: React.FC = () => {
+  const [selectedFolder, setSelectedFolder] = useState<Folder>('inbox')
+  const [selectedEmail, setSelectedEmail] = useState<Email>(emailDatabase[0])
+
+  return (
+    <Grid
+      defaultLayout={emailLayout}
+      dividers="auto"
+      className="h-dvh bg-slate-50"
+    >
+      <EmailClientContent
+        selectedFolder={selectedFolder}
+        setSelectedFolder={setSelectedFolder}
+        selectedEmail={selectedEmail}
+        setSelectedEmail={setSelectedEmail}
+      />
     </Grid>
   )
 }
