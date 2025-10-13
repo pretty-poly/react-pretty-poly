@@ -13,6 +13,7 @@ export interface BlockConfig {
     sizeUnit?: SizeUnit;
     size?: number;
     originalDefaultSize?: number;
+    resizable?: boolean;
     collapsible?: boolean;
     collapseAt?: number;
     collapseTo?: number;
@@ -167,6 +168,7 @@ export interface BlockProps {
     direction?: Direction;
     children?: React.ReactNode;
     className?: string;
+    resizable?: boolean;
     divider?: boolean | DividerConfig;
     noDivider?: boolean;
     [modeName: string]: any;

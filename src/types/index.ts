@@ -29,6 +29,9 @@ export interface BlockConfig {
   size?: number
   originalDefaultSize?: number
 
+  // Resize behavior
+  resizable?: boolean  // Defaults to true, set to false to prevent resizing
+
   // Collapse behavior
   collapsible?: boolean
   collapseAt?: number
@@ -173,6 +176,9 @@ export interface BlockProps {
   direction?: Direction
   children?: React.ReactNode
   className?: string
+
+  // Resize behavior
+  resizable?: boolean  // Set to false to prevent resizing and hide dividers
 
   // Divider configuration (new automatic system)
   divider?: boolean | DividerConfig

@@ -61,6 +61,7 @@ export declare function useBlockState(blockId: string): {
     maxSize?: number;
     sizeUnit?: import('../..').SizeUnit;
     originalDefaultSize?: number;
+    resizable?: boolean;
     collapsible?: boolean;
     collapseAt?: number;
     collapseTo?: number;
@@ -86,6 +87,7 @@ export declare function useParentBlockState(blockId: string): {
     maxSize?: number;
     sizeUnit?: import('../..').SizeUnit;
     originalDefaultSize?: number;
+    resizable?: boolean;
     collapsible?: boolean;
     collapseAt?: number;
     collapseTo?: number;

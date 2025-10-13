@@ -39,6 +39,12 @@ export function useGridResizeOperations(
     const block = state.blocks[blockId];
     if (!block) return;
 
+    // Prevent resizing if block is explicitly marked as non-resizable
+    if (block.resizable === false) {
+      console.warn(`Cannot resize block "${blockId}" - block is marked as non-resizable.`);
+      return;
+    }
+
     const startPosition = getEventPosition(event);
 
     // Get the divider position from the DOM
@@ -62,6 +68,14 @@ export function useGridResizeOperations(
       blockIndex < sortedSiblings.length - 1
     ) {
       adjacentBlock = sortedSiblings[blockIndex + 1];
+    }
+
+    // Validation: Check if adjacent block is resizable
+    if (adjacentBlock && adjacentBlock.resizable === false) {
+      console.warn(
+        `Cannot resize block "${blockId}" - adjacent block "${adjacentBlock.id}" is marked as non-resizable.`
+      );
+      return;
     }
 
     // Validation: Prevent resizing fr blocks when adjacent to px blocks
