@@ -7,6 +7,7 @@ import IDELayout from "../examples/ide-layout";
 import EmailClient from "../examples/email-client";
 import MusicDAW from "../examples/music-daw";
 import FileManager from "../examples/file-manager";
+import FixedSidebar from "../examples/fixed-sidebar";
 
 interface ExampleInfo {
   name: string;
@@ -45,6 +46,12 @@ const examples: ExampleInfo[] = [
     description: "Clean file browser with folder tree, file list, and metadata display",
     component: FileManager,
     key: "file-manager",
+  },
+  {
+    name: "Fixed Sidebar",
+    description: "Demonstrates non-resizable blocks with fixed sidebar and adjustable properties panel",
+    component: FixedSidebar,
+    key: "fixed-sidebar",
   },
 ];
 
@@ -143,7 +150,7 @@ export default function ExampleSelector() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <LayoutPreview layout={example.key as 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager'} />
+                <LayoutPreview layout={example.key as 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager' | 'fixed-sidebar'} />
                 <Button variant="outline" className="w-full">
                   View Example →
                 </Button>

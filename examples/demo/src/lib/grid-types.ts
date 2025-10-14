@@ -28,6 +28,9 @@ export interface BlockConfig {
   size?: number
   originalDefaultSize?: number
 
+  // Resize behavior
+  resizable?: boolean  // Defaults to true, set to false to prevent resizing
+
   // Collapse behavior
   collapsible?: boolean
   collapseAt?: number

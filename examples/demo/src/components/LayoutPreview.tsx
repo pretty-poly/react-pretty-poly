@@ -1,5 +1,5 @@
 interface LayoutPreviewProps {
-  layout: 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager'
+  layout: 'basic-dashboard' | 'ide-layout' | 'email-client' | 'music-daw' | 'file-manager' | 'fixed-sidebar'
 }
 
 export function LayoutPreview({ layout }: LayoutPreviewProps) {
@@ -233,6 +233,55 @@ export function LayoutPreview({ layout }: LayoutPreviewProps) {
             <div className="w-2 h-2 bg-slate-400 rounded"></div>
             <div className="h-1 bg-slate-400 rounded flex-1"></div>
           </div>
+        </div>
+      </div>
+    ),
+
+    'fixed-sidebar': (
+      <div className="grid grid-cols-[55px_1fr_70px] gap-1 h-32 w-full bg-slate-50 p-2 rounded-lg border border-slate-200">
+        {/* Fixed sidebar with lock indicator */}
+        <div className="bg-slate-900 rounded p-2 flex flex-col gap-1 relative">
+          {/* Lock icon indicator */}
+          <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full flex items-center justify-center">
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+          </div>
+          <div className="h-2 bg-slate-800 rounded w-3/4"></div>
+          <div className="h-1.5 bg-slate-800 rounded opacity-70"></div>
+          <div className="h-1.5 bg-slate-800 rounded opacity-70"></div>
+          <div className="h-1.5 bg-slate-800 rounded opacity-70"></div>
+          <div className="flex-1"></div>
+          <div className="h-1 bg-red-600/30 rounded text-center text-[6px] text-red-300"></div>
+        </div>
+
+        {/* Main content */}
+        <div className="bg-white rounded border border-slate-200 p-2 flex flex-col gap-1">
+          <div className="h-2 bg-slate-200 rounded w-1/3"></div>
+          <div className="bg-blue-50 rounded border border-blue-200 p-1.5 flex-1">
+            <div className="space-y-1">
+              <div className="h-1 bg-slate-300 rounded w-full"></div>
+              <div className="h-1 bg-slate-300 rounded w-5/6"></div>
+              <div className="h-1 bg-slate-300 rounded w-4/6"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Resizable properties panel with unlock indicator */}
+        <div className="bg-white rounded border border-slate-200 p-2 flex flex-col gap-1 relative">
+          {/* Unlock icon indicator */}
+          <div className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full flex items-center justify-center">
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+          </div>
+          <div className="h-2 bg-slate-200 rounded"></div>
+          <div className="bg-slate-50 rounded p-1 space-y-0.5">
+            <div className="h-1 bg-slate-300 rounded w-2/3"></div>
+            <div className="h-1 bg-slate-200 rounded"></div>
+          </div>
+          <div className="bg-slate-50 rounded p-1 space-y-0.5">
+            <div className="h-1 bg-slate-300 rounded w-3/4"></div>
+            <div className="h-1 bg-slate-200 rounded"></div>
+          </div>
+          <div className="flex-1"></div>
+          <div className="h-1 bg-green-600/30 rounded"></div>
         </div>
       </div>
     ),

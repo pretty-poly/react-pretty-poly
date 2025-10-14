@@ -38,8 +38,24 @@ function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
 
       const previousChild = children[index - 1]
 
+      // Skip divider if either block is explicitly marked as non-resizable
+      const previousResizable = previousChild.resizable !== false
+      const currentResizable = child.resizable !== false
+
+      if (!previousResizable && !currentResizable) {
+        // Neither block is resizable, skip divider entirely
+        return
+      }
+
       // Use smart detection to determine which block should be the target
       const { targetId, position } = autoDetectDividerPosition(previousChild, child)
+
+      // Verify the target block is resizable
+      const targetBlock = blocks[targetId]
+      if (targetBlock && targetBlock.resizable === false) {
+        // Target block is not resizable, skip divider
+        return
+      }
 
       dividers.push({
         id: `divider-${previousChild.id}-${child.id}`,
