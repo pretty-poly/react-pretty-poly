@@ -30,3 +30,17 @@ export {
   type CommandExecutionResult,
   type CommandServiceProviderProps,
 } from './CommandService'
+
+export {
+  LayoutService,
+  LayoutServiceProvider,
+  useLayoutService,
+  useBlockViewType,
+  useViewTypes,
+  useSetBlockViewType,
+  useLayouts,
+  useSaveLayout,
+  useApplyLayout,
+  type LayoutConfiguration,
+  type LayoutServiceProviderProps,
+} from './LayoutService'

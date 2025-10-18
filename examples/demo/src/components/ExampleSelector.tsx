@@ -10,6 +10,7 @@ import FileManager from "../examples/file-manager";
 import FixedSidebar from "../examples/fixed-sidebar";
 import { ViewRegistryDemoWrapper } from "../examples/view-registry-demo";
 import { CommandServiceDemoWrapper } from "../examples/command-service-demo";
+import PrimitivesDemo from "../examples/primitives-demo";
 
 interface ExampleInfo {
   name: string;
@@ -19,6 +20,12 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "🚀 Primitives Integration (NEW!)",
+    description: "✨ Pretty Poly 2.0: All three primitives working together - ViewRegistry + CommandService + LayoutService!",
+    component: PrimitivesDemo,
+    key: "primitives-demo",
+  },
   {
     name: "Command Service Demo (NEW!)",
     description: "⌨️ Pretty Poly 2.0: Declarative commands with keyboard shortcuts and command palette!",

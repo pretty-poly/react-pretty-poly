@@ -118,6 +118,15 @@ export {
   useRegisterCommands,
   useRegisterCommand,
   useCommandKeyboardShortcuts,
+  LayoutService,
+  LayoutServiceProvider,
+  useLayoutService,
+  useBlockViewType,
+  useViewTypes,
+  useSetBlockViewType,
+  useLayouts,
+  useSaveLayout,
+  useApplyLayout,
 } from "./services";
 export type {
   ViewDescriptor,
@@ -126,6 +135,8 @@ export type {
   Command,
   CommandExecutionResult,
   CommandServiceProviderProps,
+  LayoutConfiguration,
+  LayoutServiceProviderProps,
 } from "./services";
 
 export {
