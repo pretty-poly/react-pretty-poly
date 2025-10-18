@@ -8,6 +8,7 @@ import EmailClient from "../examples/email-client";
 import MusicDAW from "../examples/music-daw";
 import FileManager from "../examples/file-manager";
 import FixedSidebar from "../examples/fixed-sidebar";
+import { ViewRegistryDemoWrapper } from "../examples/view-registry-demo";
 
 interface ExampleInfo {
   name: string;
@@ -17,6 +18,12 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "View Registry Demo (NEW!)",
+    description: "🚀 Pretty Poly 2.0: Demonstrates ViewRegistry primitive - blocks can display any registered view type!",
+    component: ViewRegistryDemoWrapper,
+    key: "view-registry-demo",
+  },
   {
     name: "Basic Dashboard",
     description: "Clean three-column dashboard with sidebar, main content, and activity panel",

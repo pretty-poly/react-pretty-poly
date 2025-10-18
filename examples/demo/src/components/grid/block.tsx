@@ -77,6 +77,7 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         data-block-size-unit={blockConfig?.sizeUnit}
         data-block-size-min={blockConfig?.minSize}
         data-block-size-max={blockConfig?.maxSize}
+        data-block-resizable={blockConfig?.resizable !== false}
         data-block-collapse-at={blockConfig?.collapseAt}
         data-block-collapse-to={blockConfig?.collapseTo}
         data-block-divider-position={blockConfig?.dividerPosition}

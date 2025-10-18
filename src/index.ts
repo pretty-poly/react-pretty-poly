@@ -100,6 +100,22 @@ export {
   validateLayoutIntegrity,
 } from "./utils/constraints";
 
+// Services (Pretty Poly 2.0 primitives)
+export {
+  ViewRegistry,
+  ViewRegistryProvider,
+  useViewRegistry,
+  useViewDescriptor,
+  useViews,
+  useRegisterViews,
+  useRegisterView,
+} from "./services";
+export type {
+  ViewDescriptor,
+  ViewProps,
+  ViewRegistryProviderProps,
+} from "./services";
+
 export {
   getStorageAdapter,
   saveGridState,

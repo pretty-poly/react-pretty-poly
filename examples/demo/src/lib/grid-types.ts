@@ -176,6 +176,9 @@ export interface BlockProps {
   children?: React.ReactNode
   className?: string
 
+  // Resize behavior
+  resizable?: boolean  // Set to false to prevent resizing and hide dividers
+
   // Divider configuration (new automatic system)
   divider?: boolean | DividerConfig
   noDivider?: boolean

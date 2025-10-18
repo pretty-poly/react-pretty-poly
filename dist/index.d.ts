@@ -14,6 +14,8 @@ export type { BlockLayoutProps } from './components/Block/BlockLayout';
 export { getFlexSpacePx, pxPerFr, clamp, isCollapsed, applyCollapseLogic, calculateConstrainedSize, generateGridTemplate, frToPx, pxToFr, findAdjacentBlock, isZeroSum, } from './utils/calculations';
 export { cn } from './utils/cn';
 export { validateBlockSize, validateTwoWayResize, validateLayoutIntegrity, } from './utils/constraints';
+export { ViewRegistry, ViewRegistryProvider, useViewRegistry, useViewDescriptor, useViews, useRegisterViews, useRegisterView, } from './services';
+export type { ViewDescriptor, ViewProps, ViewRegistryProviderProps, } from './services';
 export { getStorageAdapter, saveGridState, loadGridState, removeGridState, getAllGridStates, createCustomAdapter, localStorageAdapter, sessionStorageAdapter, memoryStorageAdapter, } from './utils/storage';
 export type { StorageAdapter } from './utils/storage';
 //# sourceMappingURL=index.d.ts.map
