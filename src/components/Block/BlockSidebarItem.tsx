@@ -62,11 +62,11 @@ export const BlockSidebarItem = forwardRef<HTMLButtonElement, BlockSidebarItemPr
             'flex items-center justify-center',
             'relative',
             'transition-colors duration-150',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset',
+            'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset',
             // Active state
-            active && 'bg-gray-700 border-r-2 border-blue-500',
+            active && 'bg-accent border-r-2 border-primary',
             // Hover state (when not disabled)
-            !disabled && 'hover:bg-gray-700',
+            !disabled && 'hover:bg-accent',
             // Disabled state
             disabled && 'opacity-50 cursor-not-allowed',
             // Default cursor
@@ -86,31 +86,31 @@ export const BlockSidebarItem = forwardRef<HTMLButtonElement, BlockSidebarItemPr
           <Icon
             className={clsx(
               'w-5 h-5',
-              active ? 'text-white' : 'text-gray-400',
-              !disabled && 'group-hover:text-white'
+              active ? 'text-primary' : 'text-muted-foreground',
+              !disabled && 'group-hover:text-foreground'
             )}
           />
 
           {/* Badge */}
           {badge && (
-            <div className="absolute -top-1 -right-1 min-w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center px-1">
+            <div className="absolute -top-1 -right-1 min-w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center px-1">
               {typeof badge === 'number' && badge > 99 ? '99+' : badge}
             </div>
           )}
 
           {/* Active indicator */}
           {active && (
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-blue-500" />
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-primary" />
           )}
         </button>
 
         {/* Tooltip */}
         {showTooltip && tooltip && (
           <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50">
-            <div className="bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
+            <div className="bg-popover text-popover-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-border">
               {tooltip}
               {/* Tooltip arrow */}
-              <div className="absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-gray-900" />
+              <div className="absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-popover" />
             </div>
           </div>
         )}

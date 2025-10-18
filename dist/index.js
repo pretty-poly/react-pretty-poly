@@ -4444,8 +4444,8 @@ const ft = K(
         className: ne(
           "pretty-poly-block-tabs",
           "flex items-center",
-          "border-b border-gray-200",
-          "bg-white",
+          "border-b border-border",
+          "bg-card",
           s ? "overflow-x-auto" : "overflow-x-hidden",
           i
         ),
@@ -4461,7 +4461,7 @@ const ft = K(
                 "border-b-2 transition-colors duration-150",
                 "min-w-0 flex-shrink-0",
                 // Prevent shrinking
-                n ? "border-blue-500 text-blue-600 bg-blue-50" : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50",
+                n ? "border-primary text-primary bg-accent" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent",
                 u.disabled && "opacity-50 cursor-not-allowed",
                 !s && "flex-1"
                 // Equal width tabs when overflow disabled
@@ -4482,7 +4482,7 @@ const ft = K(
                   "button",
                   {
                     className: ne(
-                      "flex-shrink-0 w-4 h-4 rounded-sm hover:bg-gray-200",
+                      "flex-shrink-0 w-4 h-4 rounded-sm hover:bg-muted",
                       "flex items-center justify-center",
                       "transition-colors duration-150",
                       d || n ? "opacity-100" : "opacity-0"
@@ -4532,9 +4532,9 @@ const De = K(
         // Don't shrink
         "h-full",
         // Full height
-        "bg-gray-800",
-        // VS Code-style dark background
-        "border-gray-700",
+        "bg-sidebar",
+        // VS Code-style sidebar background (adapts to theme)
+        "border-sidebar-border",
         // Border color
         e === "left" ? "border-r" : "border-l",
         // Border on appropriate side
@@ -4584,11 +4584,11 @@ const pt = K(
             "flex items-center justify-center",
             "relative",
             "transition-colors duration-150",
-            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset",
+            "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset",
             // Active state
-            r && "bg-gray-700 border-r-2 border-blue-500",
+            r && "bg-accent border-r-2 border-primary",
             // Hover state (when not disabled)
-            !o && "hover:bg-gray-700",
+            !o && "hover:bg-accent",
             // Disabled state
             o && "opacity-50 cursor-not-allowed",
             // Default cursor
@@ -4609,19 +4609,19 @@ const pt = K(
               {
                 className: ne(
                   "w-5 h-5",
-                  r ? "text-white" : "text-gray-400",
-                  !o && "group-hover:text-white"
+                  r ? "text-primary" : "text-muted-foreground",
+                  !o && "group-hover:text-foreground"
                 )
               }
             ),
-            i && /* @__PURE__ */ j.jsx("div", { className: "absolute -top-1 -right-1 min-w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center px-1", children: typeof i == "number" && i > 99 ? "99+" : i }),
-            r && /* @__PURE__ */ j.jsx("div", { className: "absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-blue-500" })
+            i && /* @__PURE__ */ j.jsx("div", { className: "absolute -top-1 -right-1 min-w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center px-1", children: typeof i == "number" && i > 99 ? "99+" : i }),
+            r && /* @__PURE__ */ j.jsx("div", { className: "absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-primary" })
           ]
         }
       ),
-      h && t && /* @__PURE__ */ j.jsx("div", { className: "absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50", children: /* @__PURE__ */ j.jsxs("div", { className: "bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap", children: [
+      h && t && /* @__PURE__ */ j.jsx("div", { className: "absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50", children: /* @__PURE__ */ j.jsxs("div", { className: "bg-popover text-popover-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-border", children: [
         t,
-        /* @__PURE__ */ j.jsx("div", { className: "absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-gray-900" })
+        /* @__PURE__ */ j.jsx("div", { className: "absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-popover" })
       ] }) })
     ] });
   }

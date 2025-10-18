@@ -65,8 +65,8 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
         className={clsx(
           'pretty-poly-block-tabs',
           'flex items-center',
-          'border-b border-gray-200',
-          'bg-white',
+          'border-b border-border',
+          'bg-card',
           allowOverflow ? 'overflow-x-auto' : 'overflow-x-hidden',
           className
         )}
@@ -87,8 +87,8 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
                   'border-b-2 transition-colors duration-150',
                   'min-w-0 flex-shrink-0', // Prevent shrinking
                   isActive
-                    ? 'border-blue-500 text-blue-600 bg-blue-50'
-                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50',
+                    ? 'border-primary text-primary bg-accent'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-accent',
                   tab.disabled && 'opacity-50 cursor-not-allowed',
                   !allowOverflow && 'flex-1' // Equal width tabs when overflow disabled
                 )}
@@ -116,7 +116,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
                 {tab.closable && onTabClose && (
                   <button
                     className={clsx(
-                      'flex-shrink-0 w-4 h-4 rounded-sm hover:bg-gray-200',
+                      'flex-shrink-0 w-4 h-4 rounded-sm hover:bg-muted',
                       'flex items-center justify-center',
                       'transition-colors duration-150',
                       isHovered || isActive ? 'opacity-100' : 'opacity-0'
