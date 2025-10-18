@@ -109,11 +109,23 @@ export {
   useViews,
   useRegisterViews,
   useRegisterView,
+  CommandService,
+  CommandServiceProvider,
+  useCommandService,
+  useCommand,
+  useCommands,
+  useExecuteCommand,
+  useRegisterCommands,
+  useRegisterCommand,
+  useCommandKeyboardShortcuts,
 } from "./services";
 export type {
   ViewDescriptor,
   ViewProps,
   ViewRegistryProviderProps,
+  Command,
+  CommandExecutionResult,
+  CommandServiceProviderProps,
 } from "./services";
 
 export {

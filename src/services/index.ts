@@ -15,3 +15,18 @@ export {
   type ViewProps,
   type ViewRegistryProviderProps,
 } from './ViewRegistry'
+
+export {
+  CommandService,
+  CommandServiceProvider,
+  useCommandService,
+  useCommand,
+  useCommands,
+  useExecuteCommand,
+  useRegisterCommands,
+  useRegisterCommand,
+  useCommandKeyboardShortcuts,
+  type Command,
+  type CommandExecutionResult,
+  type CommandServiceProviderProps,
+} from './CommandService'

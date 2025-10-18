@@ -9,6 +9,7 @@ import MusicDAW from "../examples/music-daw";
 import FileManager from "../examples/file-manager";
 import FixedSidebar from "../examples/fixed-sidebar";
 import { ViewRegistryDemoWrapper } from "../examples/view-registry-demo";
+import { CommandServiceDemoWrapper } from "../examples/command-service-demo";
 
 interface ExampleInfo {
   name: string;
@@ -18,6 +19,12 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "Command Service Demo (NEW!)",
+    description: "⌨️ Pretty Poly 2.0: Declarative commands with keyboard shortcuts and command palette!",
+    component: CommandServiceDemoWrapper,
+    key: "command-service-demo",
+  },
   {
     name: "View Registry Demo (NEW!)",
     description: "🚀 Pretty Poly 2.0: Demonstrates ViewRegistry primitive - blocks can display any registered view type!",
