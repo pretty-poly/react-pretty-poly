@@ -7,6 +7,7 @@ export interface UseGridKeyboardOptions {
     onFocusBlock?: (blockId: string) => void;
     onCollapseBlock?: (blockId: string) => void;
     onExpandBlock?: (blockId: string) => void;
+    onSplitBlock?: (blockId: string, direction: 'horizontal' | 'vertical') => void;
     containerRef?: React.RefObject<HTMLElement>;
     stepSize?: number;
     largeStepSize?: number;
@@ -14,7 +15,7 @@ export interface UseGridKeyboardOptions {
 /**
  * Hook for keyboard navigation and control of grid layouts
  */
-export declare function useGridKeyboard({ enabled, blocks, onResizeBlock, onFocusBlock, onCollapseBlock, onExpandBlock, containerRef, stepSize, largeStepSize }: UseGridKeyboardOptions): {
+export declare function useGridKeyboard({ enabled, blocks, onResizeBlock, onFocusBlock, onCollapseBlock, onExpandBlock, onSplitBlock, containerRef, stepSize, largeStepSize }: UseGridKeyboardOptions): {
     focusBlock: (blockId: string) => void;
     getFocusableBlocks: () => HTMLElement[];
     getFocusedBlock: () => HTMLElement | null;

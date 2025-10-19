@@ -73,6 +73,14 @@ export declare function useBlockState(blockId: string): {
     parentId?: string;
     order?: number;
     children?: string[];
+    viewType?: string;
+    viewState?: any;
+    canSplit?: boolean;
+    splitConfig?: {
+        horizontal?: boolean;
+        vertical?: boolean;
+        minSplitSize?: number;
+    };
 } | null;
 /**
  * Hook to access the parent block's state
@@ -99,6 +107,14 @@ export declare function useParentBlockState(blockId: string): {
     parentId?: string;
     order?: number;
     children?: string[];
+    viewType?: string;
+    viewState?: any;
+    canSplit?: boolean;
+    splitConfig?: {
+        horizontal?: boolean;
+        vertical?: boolean;
+        minSplitSize?: number;
+    };
 } | null;
 /**
  * Hook to check if a block is hidden
@@ -121,4 +137,37 @@ export declare function useShowBlock(): (blockId: string) => void;
  * Returns a memoized callback
  */
 export declare function useToggleBlockVisibility(): (blockId: string) => void;
+/**
+ * Hook to access split operations
+ */
+export declare function useSplitBlock(): {
+    splitBlock: (blockId: string, direction: "horizontal" | "vertical", options?: {
+        initialSize?: number;
+        viewType?: string;
+        position?: "before" | "after";
+    }) => string;
+    unsplitBlock: (blockId: string) => void;
+    canSplit: (blockId: string) => boolean;
+};
+/**
+ * Hook to split a block
+ * Returns a memoized callback
+ */
+export declare function useSplit(): (blockId: string, direction: 'horizontal' | 'vertical', options?: {
+    initialSize?: number;
+    viewType?: string;
+    position?: 'before' | 'after';
+}) => string;
+/**
+ * Hook to check if a block can be split
+ * Returns a memoized callback
+ */
+export declare function useCanSplit(): (blockId: string) => boolean;
+/**
+ * Hook to access view type operations
+ */
+export declare function useBlockViewType(blockId: string): {
+    viewType: string | undefined;
+    setViewType: (viewType: string) => void;
+};
 //# sourceMappingURL=GridProvider.d.ts.map

@@ -190,6 +190,154 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
         },
       };
 
+    case "SPLIT_BLOCK": {
+      const { targetBlockId, direction, firstChildId, secondChildId, initialSize = 1 } = action.payload;
+      const targetBlock = state.blocks[targetBlockId];
+      if (!targetBlock) return state;
+
+      // Transform target block into a group
+      const groupBlock: BlockConfig = {
+        ...targetBlock,
+        type: "group",
+        direction: direction === "horizontal" ? "column" : "row",
+        children: [firstChildId, secondChildId],
+        viewType: undefined, // Groups don't have view types
+      };
+
+      // Create first child (inherits original view type)
+      const firstChild: BlockConfig = {
+        id: firstChildId,
+        type: "block",
+        parentId: targetBlockId,
+        order: 0,
+        defaultSize: initialSize,
+        sizeUnit: "fr",
+        viewType: targetBlock.viewType,
+        viewState: targetBlock.viewState,
+      };
+
+      // Create second child (empty, user will assign content)
+      const secondChild: BlockConfig = {
+        id: secondChildId,
+        type: "block",
+        parentId: targetBlockId,
+        order: 1,
+        defaultSize: initialSize,
+        sizeUnit: "fr",
+        viewType: action.payload.newViewType,
+      };
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [targetBlockId]: groupBlock,
+          [firstChildId]: firstChild,
+          [secondChildId]: secondChild,
+        },
+      };
+    }
+
+    case "UNSPLIT_BLOCK": {
+      const { blockId } = action.payload;
+      const targetBlock = state.blocks[blockId];
+      if (!targetBlock || targetBlock.type !== "group" || !targetBlock.children) {
+        return state;
+      }
+
+      // Remove child blocks
+      const newBlocks = { ...state.blocks };
+      targetBlock.children.forEach(childId => {
+        delete newBlocks[childId];
+      });
+
+      // Convert group back to block
+      const restoredBlock: BlockConfig = {
+        ...targetBlock,
+        type: "block",
+        children: undefined,
+        viewType: undefined, // User will need to set content
+      };
+      newBlocks[blockId] = restoredBlock;
+
+      return {
+        ...state,
+        blocks: newBlocks,
+      };
+    }
+
+    case "ADD_BLOCK": {
+      const { parentId, block } = action.payload;
+      const parentBlock = state.blocks[parentId];
+      if (!parentBlock) return state;
+
+      // Add block to parent's children if parent is a group
+      const updatedParent = parentBlock.type === "group" && parentBlock.children
+        ? {
+            ...parentBlock,
+            children: [...parentBlock.children, block.id],
+          }
+        : parentBlock;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [parentId]: updatedParent,
+          [block.id]: block,
+        },
+      };
+    }
+
+    case "REMOVE_BLOCK": {
+      const { blockId } = action.payload;
+      const blockToRemove = state.blocks[blockId];
+      if (!blockToRemove) return state;
+
+      const newBlocks = { ...state.blocks };
+
+      // Remove from parent's children array
+      if (blockToRemove.parentId) {
+        const parentBlock = newBlocks[blockToRemove.parentId];
+        if (parentBlock && parentBlock.type === "group" && parentBlock.children) {
+          newBlocks[blockToRemove.parentId] = {
+            ...parentBlock,
+            children: parentBlock.children.filter(id => id !== blockId),
+          };
+        }
+      }
+
+      // Remove the block itself
+      delete newBlocks[blockId];
+
+      // Also remove from hidden blocks if present
+      const newHiddenBlocks = new Set(state.hiddenBlocks);
+      newHiddenBlocks.delete(blockId);
+
+      return {
+        ...state,
+        blocks: newBlocks,
+        hiddenBlocks: newHiddenBlocks,
+      };
+    }
+
+    case "SET_BLOCK_VIEW_TYPE": {
+      const { blockId, viewType } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            viewType,
+          },
+        },
+      };
+    }
+
     default:
       return state;
   }
@@ -356,6 +504,91 @@ export function GridProvider({
           type: "TOGGLE_BLOCK_VISIBILITY",
           payload: { blockId },
         });
+      },
+
+      // Split operations (LayoutService primitives)
+      splitBlock: (blockId: string, direction: 'horizontal' | 'vertical', options = {}) => {
+        const { initialSize = 1, viewType, position = 'after' } = options;
+        const firstChildId = `${blockId}-1`;
+        const secondChildId = `${blockId}-2`;
+
+        dispatch({
+          type: "SPLIT_BLOCK",
+          payload: {
+            targetBlockId: blockId,
+            direction,
+            newBlockId: position === 'before' ? firstChildId : secondChildId,
+            firstChildId,
+            secondChildId,
+            initialSize,
+            newViewType: viewType,
+            position,
+          },
+        });
+
+        // Return the new block ID
+        return position === 'before' ? firstChildId : secondChildId;
+      },
+
+      unsplitBlock: (blockId: string) => {
+        dispatch({
+          type: "UNSPLIT_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      canSplit: (blockId: string) => {
+        const block = state.blocks[blockId];
+        if (!block || block.type !== "block") return false;
+
+        // Check if block has canSplit flag
+        if (block.canSplit === false) return false;
+
+        // Check minimum size constraints
+        const minSplitSize = block.splitConfig?.minSplitSize || 200;
+        if (block.sizeUnit === "px" && (block.defaultSize || 0) < minSplitSize * 2) {
+          return false;
+        }
+
+        return true;
+      },
+
+      addBlock: (parentId: string, blockConfig: Partial<BlockConfig>) => {
+        const newBlockId = blockConfig.id || `block-${Date.now()}`;
+        const block: BlockConfig = {
+          id: newBlockId,
+          type: "block",
+          parentId,
+          defaultSize: 1,
+          sizeUnit: "fr",
+          ...blockConfig,
+        };
+
+        dispatch({
+          type: "ADD_BLOCK",
+          payload: { parentId, block },
+        });
+
+        return newBlockId;
+      },
+
+      removeBlock: (blockId: string) => {
+        dispatch({
+          type: "REMOVE_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      // View type operations (future ViewRegistry support)
+      setBlockViewType: (blockId: string, viewType: string) => {
+        dispatch({
+          type: "SET_BLOCK_VIEW_TYPE",
+          payload: { blockId, viewType },
+        });
+      },
+
+      getBlockViewType: (blockId: string) => {
+        return state.blocks[blockId]?.viewType;
       },
 
       // Resize operations (using extracted hook)
@@ -548,4 +781,53 @@ export function useShowBlock(): (blockId: string) => void {
 export function useToggleBlockVisibility(): (blockId: string) => void {
   const { toggleBlockVisibility } = useGridContext();
   return toggleBlockVisibility;
+}
+
+/**
+ * Hook to access split operations
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useSplitBlock() {
+  const { splitBlock, unsplitBlock, canSplit } = useGridContext();
+  return {
+    splitBlock,
+    unsplitBlock,
+    canSplit,
+  };
+}
+
+/**
+ * Hook to split a block
+ * Returns a memoized callback
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useSplit(): (blockId: string, direction: 'horizontal' | 'vertical', options?: {
+  initialSize?: number;
+  viewType?: string;
+  position?: 'before' | 'after';
+}) => string {
+  const { splitBlock } = useGridContext();
+  return splitBlock;
+}
+
+/**
+ * Hook to check if a block can be split
+ * Returns a memoized callback
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useCanSplit(): (blockId: string) => boolean {
+  const { canSplit } = useGridContext();
+  return canSplit;
+}
+
+/**
+ * Hook to access view type operations
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useBlockViewType(blockId: string) {
+  const { getBlockViewType, setBlockViewType } = useGridContext();
+  return {
+    viewType: getBlockViewType(blockId),
+    setViewType: (viewType: string) => setBlockViewType(blockId, viewType),
+  };
 }

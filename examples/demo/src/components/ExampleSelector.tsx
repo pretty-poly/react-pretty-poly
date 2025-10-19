@@ -12,6 +12,7 @@ import { ViewRegistryDemoWrapper } from "../examples/view-registry-demo";
 import { CommandServiceDemoWrapper } from "../examples/command-service-demo";
 import PrimitivesDemo from "../examples/primitives-demo";
 import BlockVisibilityDemo from "../examples/block-visibility-demo";
+import BlockSplitDemo from "../examples/block-split-demo";
 
 interface ExampleInfo {
   name: string;
@@ -21,6 +22,12 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "✂️ Block Splitting (NEW!)",
+    description: "⚡ VS Code-style splits: Create editor layouts dynamically with keyboard shortcuts (Ctrl+\\)!",
+    component: BlockSplitDemo,
+    key: "block-split-demo",
+  },
   {
     name: "🎯 Block Visibility (NEW!)",
     description: "✨ Dynamic grid templates: Toggle sidebar & properties panel - grid automatically reflows!",

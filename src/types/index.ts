@@ -45,6 +45,18 @@ export interface BlockConfig {
   parentId?: string
   order?: number
   children?: string[]
+
+  // View type (for ViewRegistry - future support)
+  viewType?: string
+  viewState?: any  // View-specific state
+
+  // Split configuration
+  canSplit?: boolean
+  splitConfig?: {
+    horizontal?: boolean  // Can split horizontally
+    vertical?: boolean    // Can split vertically
+    minSplitSize?: number // Minimum size to allow splitting
+  }
 }
 
 // Mode-specific block configuration
@@ -127,6 +139,21 @@ export interface GridContextValue {
   showBlock: (blockId: string) => void
   toggleBlockVisibility: (blockId: string) => void
 
+  // Split operations (LayoutService primitives)
+  splitBlock: (blockId: string, direction: 'horizontal' | 'vertical', options?: {
+    initialSize?: number
+    viewType?: string
+    position?: 'before' | 'after'
+  }) => string  // Returns new block ID
+  unsplitBlock: (blockId: string) => void
+  canSplit: (blockId: string) => boolean
+  addBlock: (parentId: string, block: Partial<BlockConfig>) => string
+  removeBlock: (blockId: string) => void
+
+  // View type operations (future ViewRegistry support)
+  setBlockViewType: (blockId: string, viewType: string) => void
+  getBlockViewType: (blockId: string) => string | undefined
+
   // Resize operations
   startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void
   updateResize: (event: MouseEvent | TouchEvent) => void
@@ -153,6 +180,28 @@ export type GridAction =
   | { type: "START_RESIZE"; payload: { blockId: string; dividerId: string; startPosition: { x: number; y: number }; initialSize: number; initialAdjacentBlockId?: string; initialAdjacentSize?: number } }
   | { type: "UPDATE_RESIZE"; payload: { currentPosition: { x: number; y: number } } }
   | { type: "END_RESIZE" }
+  // Split operations
+  | { type: "SPLIT_BLOCK"; payload: {
+      targetBlockId: string
+      direction: 'horizontal' | 'vertical'
+      newBlockId: string
+      firstChildId: string
+      secondChildId: string
+      initialSize?: number
+      newViewType?: string
+      position?: 'before' | 'after'
+    }}
+  | { type: "UNSPLIT_BLOCK"; payload: { blockId: string } }
+  | { type: "ADD_BLOCK"; payload: {
+      parentId: string
+      block: BlockConfig
+    }}
+  | { type: "REMOVE_BLOCK"; payload: { blockId: string } }
+  // View type operations
+  | { type: "SET_BLOCK_VIEW_TYPE"; payload: {
+      blockId: string
+      viewType: string
+    }}
 
 // Component props
 export interface GridProps {

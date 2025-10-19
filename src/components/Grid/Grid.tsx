@@ -91,6 +91,9 @@ const GridInternal = forwardRef<
     direction: rootBlock?.direction || "row",
   });
 
+  // Get split operations
+  const { splitBlock: splitBlockFn } = useGridContext();
+
   // Set up keyboard navigation
   useGridKeyboard({
     enabled: true,
@@ -106,6 +109,9 @@ const GridInternal = forwardRef<
     },
     onCollapseBlock: collapseBlock,
     onExpandBlock: expandBlock,
+    onSplitBlock: (blockId, direction) => {
+      splitBlockFn(blockId, direction);
+    },
   });
 
   // Note: Dividers are now handled by DividerOverlay as absolutely positioned overlays

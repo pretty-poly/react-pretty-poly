@@ -22,6 +22,14 @@ export interface BlockConfig {
     parentId?: string;
     order?: number;
     children?: string[];
+    viewType?: string;
+    viewState?: any;
+    canSplit?: boolean;
+    splitConfig?: {
+        horizontal?: boolean;
+        vertical?: boolean;
+        minSplitSize?: number;
+    };
 }
 export interface ModeConfig {
     defaultSize?: number;
@@ -85,6 +93,17 @@ export interface GridContextValue {
     hideBlock: (blockId: string) => void;
     showBlock: (blockId: string) => void;
     toggleBlockVisibility: (blockId: string) => void;
+    splitBlock: (blockId: string, direction: 'horizontal' | 'vertical', options?: {
+        initialSize?: number;
+        viewType?: string;
+        position?: 'before' | 'after';
+    }) => string;
+    unsplitBlock: (blockId: string) => void;
+    canSplit: (blockId: string) => boolean;
+    addBlock: (parentId: string, block: Partial<BlockConfig>) => string;
+    removeBlock: (blockId: string) => void;
+    setBlockViewType: (blockId: string, viewType: string) => void;
+    getBlockViewType: (blockId: string) => string | undefined;
     startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void;
     updateResize: (event: MouseEvent | TouchEvent) => void;
     endResize: () => void;
@@ -167,6 +186,40 @@ export type GridAction = {
     };
 } | {
     type: "END_RESIZE";
+} | {
+    type: "SPLIT_BLOCK";
+    payload: {
+        targetBlockId: string;
+        direction: 'horizontal' | 'vertical';
+        newBlockId: string;
+        firstChildId: string;
+        secondChildId: string;
+        initialSize?: number;
+        newViewType?: string;
+        position?: 'before' | 'after';
+    };
+} | {
+    type: "UNSPLIT_BLOCK";
+    payload: {
+        blockId: string;
+    };
+} | {
+    type: "ADD_BLOCK";
+    payload: {
+        parentId: string;
+        block: BlockConfig;
+    };
+} | {
+    type: "REMOVE_BLOCK";
+    payload: {
+        blockId: string;
+    };
+} | {
+    type: "SET_BLOCK_VIEW_TYPE";
+    payload: {
+        blockId: string;
+        viewType: string;
+    };
 };
 export interface GridProps {
     children: React.ReactNode;

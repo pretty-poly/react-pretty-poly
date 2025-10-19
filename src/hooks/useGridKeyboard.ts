@@ -8,6 +8,7 @@ export interface UseGridKeyboardOptions {
   onFocusBlock?: (blockId: string) => void
   onCollapseBlock?: (blockId: string) => void
   onExpandBlock?: (blockId: string) => void
+  onSplitBlock?: (blockId: string, direction: 'horizontal' | 'vertical') => void
   containerRef?: React.RefObject<HTMLElement>
   stepSize?: number
   largeStepSize?: number
@@ -23,6 +24,7 @@ export function useGridKeyboard({
   onFocusBlock,
   onCollapseBlock,
   onExpandBlock,
+  onSplitBlock,
   containerRef,
   stepSize = 10,
   largeStepSize = 50
@@ -241,6 +243,18 @@ export function useGridKeyboard({
           event.preventDefault()
           onExpandBlock?.(blockConfig.id)
           break
+
+        // Split operations (VS Code-style)
+        case '\\':
+          event.preventDefault()
+          if (isShift) {
+            // Ctrl+Shift+\ = Split horizontally (down)
+            onSplitBlock?.(blockConfig.id, 'horizontal')
+          } else {
+            // Ctrl+\ = Split vertically (right)
+            onSplitBlock?.(blockConfig.id, 'vertical')
+          }
+          break
       }
     }
   }, [
@@ -252,6 +266,7 @@ export function useGridKeyboard({
     onFocusBlock,
     onCollapseBlock,
     onExpandBlock,
+    onSplitBlock,
     stepSize,
     largeStepSize
   ])
