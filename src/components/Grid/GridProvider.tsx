@@ -22,6 +22,33 @@ import { useGridResizeOperations } from "../../hooks/useGridResizeOperations";
  */
 function gridStateReducer(state: GridState, action: GridAction): GridState {
   switch (action.type) {
+    case "HIDE_BLOCK":
+      return {
+        ...state,
+        hiddenBlocks: new Set([...state.hiddenBlocks, action.payload.blockId]),
+      };
+
+    case "SHOW_BLOCK":
+      const newHiddenBlocks = new Set(state.hiddenBlocks);
+      newHiddenBlocks.delete(action.payload.blockId);
+      return {
+        ...state,
+        hiddenBlocks: newHiddenBlocks,
+      };
+
+    case "TOGGLE_BLOCK_VISIBILITY":
+      const isHidden = state.hiddenBlocks.has(action.payload.blockId);
+      const toggledHiddenBlocks = new Set(state.hiddenBlocks);
+      if (isHidden) {
+        toggledHiddenBlocks.delete(action.payload.blockId);
+      } else {
+        toggledHiddenBlocks.add(action.payload.blockId);
+      }
+      return {
+        ...state,
+        hiddenBlocks: toggledHiddenBlocks,
+      };
+
     case "RESIZE_BLOCK":
       const block = state.blocks[action.payload.blockId];
       if (!block) return state;
@@ -187,6 +214,7 @@ function createInitialState(
 
   return {
     blocks: blocksMap,
+    hiddenBlocks: new Set<string>(),  // Initialize with no hidden blocks
     activeMode,
     viewport,
     resize: {
@@ -308,6 +336,28 @@ export function GridProvider({
         setModeInternal(mode);
       },
 
+      // Block visibility operations
+      hideBlock: (blockId: string) => {
+        dispatch({
+          type: "HIDE_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      showBlock: (blockId: string) => {
+        dispatch({
+          type: "SHOW_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      toggleBlockVisibility: (blockId: string) => {
+        dispatch({
+          type: "TOGGLE_BLOCK_VISIBILITY",
+          payload: { blockId },
+        });
+      },
+
       // Resize operations (using extracted hook)
       startResize,
       updateResize,
@@ -366,6 +416,9 @@ export function useGridActions() {
     resizeBlock,
     collapseBlock,
     expandBlock,
+    hideBlock,
+    showBlock,
+    toggleBlockVisibility,
     switchMode,
     persistState,
     resetState,
@@ -374,6 +427,9 @@ export function useGridActions() {
     resizeBlock,
     collapseBlock,
     expandBlock,
+    hideBlock,
+    showBlock,
+    toggleBlockVisibility,
     switchMode,
     persistState,
     resetState,
@@ -451,4 +507,45 @@ export function useParentBlockState(blockId: string) {
     size: currentSize,
     isCollapsed,
   };
+}
+
+/**
+ * Hook to check if a block is hidden
+ * @param blockId - The ID of the block to check
+ * @returns True if the block is hidden
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useIsBlockHidden(blockId: string): boolean {
+  const { state } = useGridContext();
+  return state.hiddenBlocks.has(blockId);
+}
+
+/**
+ * Hook to hide a block
+ * Returns a memoized callback
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useHideBlock(): (blockId: string) => void {
+  const { hideBlock } = useGridContext();
+  return hideBlock;
+}
+
+/**
+ * Hook to show a block
+ * Returns a memoized callback
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useShowBlock(): (blockId: string) => void {
+  const { showBlock } = useGridContext();
+  return showBlock;
+}
+
+/**
+ * Hook to toggle block visibility
+ * Returns a memoized callback
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useToggleBlockVisibility(): (blockId: string) => void {
+  const { toggleBlockVisibility } = useGridContext();
+  return toggleBlockVisibility;
 }

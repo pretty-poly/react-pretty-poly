@@ -21,6 +21,7 @@ const mockGridState: GridState = {
       sizeUnit: 'px'
     }
   },
+  hiddenBlocks: new Set<string>(),
   activeMode: 'desktop',
   viewport: {
     width: 1024,

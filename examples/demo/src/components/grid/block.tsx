@@ -35,6 +35,9 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
     // Get block configuration from state
     const blockConfig = state?.blocks[id]
 
+    // Check if block is hidden
+    const isHidden = state?.hiddenBlocks?.has(id) || false
+
     // Calculate collapsed state
     const isCollapsed = useMemo(() => {
       if (blockConfig?.collapsible && blockConfig.collapseAt) {
@@ -69,6 +72,11 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
           isCollapsed && 'opacity-70',
           className
         )}
+        style={{
+          // Hide block with display: none - removes from grid flow
+          // The grid template will be dynamically updated to exclude this block
+          display: isHidden ? 'none' : undefined,
+        }}
         data-grid-id={gridId}
         data-block-id={id}
         data-block-type={type}
@@ -84,9 +92,11 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         data-block-divider-size={blockConfig?.dividerSize}
         data-block-divider={divider !== undefined ? JSON.stringify(divider) : undefined}
         data-block-no-divider={noDivider}
+        data-block-hidden={isHidden}
         aria-label={ariaLabel}
+        aria-hidden={isHidden}
         role={type === 'group' ? 'group' : undefined}
-        tabIndex={supportsFeature('resizing') ? 0 : undefined}
+        tabIndex={supportsFeature('resizing') && !isHidden ? 0 : undefined}
         onDoubleClick={supportsFeature('collapse') ? handleDoubleClick : undefined}
       >
         {children}

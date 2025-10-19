@@ -180,7 +180,7 @@ const GridInternal = forwardRef<
         dividerSize: 0, // Not used since dividers are overlays
       }));
 
-      const template = generateGridTemplate(blocksForTemplate, rootBlock.id);
+      const template = generateGridTemplate(blocksForTemplate, rootBlock.id, state.hiddenBlocks);
 
       const templateProperty =
         direction === "column" ? "grid-template-rows" : "grid-template-columns";
@@ -218,7 +218,7 @@ ${selector} {
       gridStyles: dynamicStyles,
       modeStyles: modeDynamicStyles,
     };
-  }, [blocks, rootBlock]);
+  }, [blocks, rootBlock, state.hiddenBlocks]);
 
   if (!rootBlock) {
     console.warn("No root block found in grid configuration");

@@ -11,6 +11,7 @@ import FixedSidebar from "../examples/fixed-sidebar";
 import { ViewRegistryDemoWrapper } from "../examples/view-registry-demo";
 import { CommandServiceDemoWrapper } from "../examples/command-service-demo";
 import PrimitivesDemo from "../examples/primitives-demo";
+import BlockVisibilityDemo from "../examples/block-visibility-demo";
 
 interface ExampleInfo {
   name: string;
@@ -20,6 +21,12 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "🎯 Block Visibility (NEW!)",
+    description: "✨ Dynamic grid templates: Toggle sidebar & properties panel - grid automatically reflows!",
+    component: BlockVisibilityDemo,
+    key: "block-visibility-demo",
+  },
   {
     name: "🚀 Primitives Integration (NEW!)",
     description: "✨ Pretty Poly 2.0: All three primitives working together - ViewRegistry + CommandService + LayoutService!",

@@ -63,7 +63,7 @@ export declare function generateGridTemplate(blocks: Array<{
     size: number | "auto";
     dividerPosition?: "start" | "end" | "none";
     dividerSize?: number;
-}>, gridId?: string): string;
+}>, gridId?: string, hiddenBlocks?: Set<string>): string;
 /**
  * Generate CSS grid template from template items (for auto divider mode)
  * Note: Dividers are now overlays, so they're excluded from grid template
@@ -77,7 +77,7 @@ export declare function generateGridTemplateFromItems(items: Array<{
     sizeUnit?: 'px' | 'fr' | 'auto';
     size?: number;
     dividerSize?: number;
-}>, gridId?: string): string;
+}>, gridId?: string, hiddenBlocks?: Set<string>): string;
 /**
  * Convert fractional resize delta to pixels
  * @param deltaFr Change in fr units

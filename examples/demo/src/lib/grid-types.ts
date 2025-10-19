@@ -102,6 +102,7 @@ export interface ResizeState {
 // Grid state
 export interface GridState {
   blocks: Record<string, BlockConfig>
+  hiddenBlocks: Set<string>  // Track which blocks are hidden
   activeMode: string
   activeDivider?: string
   viewport: ViewportInfo
@@ -120,6 +121,11 @@ export interface GridContextValue {
   expandBlock: (blockId: string) => void
   switchMode: (mode: string) => void
 
+  // Block visibility operations
+  hideBlock: (blockId: string) => void
+  showBlock: (blockId: string) => void
+  toggleBlockVisibility: (blockId: string) => void
+
   // Resize operations
   startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void
   updateResize: (event: MouseEvent | TouchEvent) => void
@@ -135,6 +141,9 @@ export type GridAction =
   | { type: "RESIZE_BLOCK"; payload: { blockId: string; size: number } }
   | { type: "COLLAPSE_BLOCK"; payload: { blockId: string } }
   | { type: "EXPAND_BLOCK"; payload: { blockId: string } }
+  | { type: "HIDE_BLOCK"; payload: { blockId: string } }
+  | { type: "SHOW_BLOCK"; payload: { blockId: string } }
+  | { type: "TOGGLE_BLOCK_VISIBILITY"; payload: { blockId: string } }
   | { type: "SET_ACTIVE_DIVIDER"; payload: { dividerId?: string } }
   | { type: "SWITCH_MODE"; payload: { mode: string } }
   | { type: "UPDATE_VIEWPORT"; payload: { viewport: ViewportInfo } }

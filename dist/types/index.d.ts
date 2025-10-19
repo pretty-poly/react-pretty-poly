@@ -68,6 +68,7 @@ export interface ResizeState {
 }
 export interface GridState {
     blocks: Record<string, BlockConfig>;
+    hiddenBlocks: Set<string>;
     activeMode: string;
     activeDivider?: string;
     viewport: ViewportInfo;
@@ -81,6 +82,9 @@ export interface GridContextValue {
     collapseBlock: (blockId: string) => void;
     expandBlock: (blockId: string) => void;
     switchMode: (mode: string) => void;
+    hideBlock: (blockId: string) => void;
+    showBlock: (blockId: string) => void;
+    toggleBlockVisibility: (blockId: string) => void;
     startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void;
     updateResize: (event: MouseEvent | TouchEvent) => void;
     endResize: () => void;
@@ -100,6 +104,21 @@ export type GridAction = {
     };
 } | {
     type: "EXPAND_BLOCK";
+    payload: {
+        blockId: string;
+    };
+} | {
+    type: "HIDE_BLOCK";
+    payload: {
+        blockId: string;
+    };
+} | {
+    type: "SHOW_BLOCK";
+    payload: {
+        blockId: string;
+    };
+} | {
+    type: "TOGGLE_BLOCK_VISIBILITY";
     payload: {
         blockId: string;
     };

@@ -10,6 +10,10 @@ export {
   useGridContext,
   useGridState,
   useGridActions,
+  useIsBlockHidden,
+  useHideBlock,
+  useShowBlock,
+  useToggleBlockVisibility,
 } from "./components/Grid";
 export type { GridProviderProps } from "./components/Grid";
 

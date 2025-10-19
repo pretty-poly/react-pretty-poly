@@ -3,7 +3,7 @@
  */
 export { Grid } from './components/Grid';
 export type { GridAPI } from './components/Grid';
-export { GridProvider, useGridContext, useGridState, useGridActions, } from './components/Grid';
+export { GridProvider, useGridContext, useGridState, useGridActions, useIsBlockHidden, useHideBlock, useShowBlock, useToggleBlockVisibility, } from './components/Grid';
 export type { GridProviderProps } from './components/Grid';
 export { Block, BlockGroup, BlockLayout, BlockContent, BlockHeader, BlockFooter, BlockToolbar, BlockTabs, BlockSidebar, BlockSidebarItem, BlockSidebarSpacer, } from './components/Block';
 export { Divider } from './components/Divider';

@@ -123,11 +123,17 @@ export function generateGridTemplate(
     dividerPosition?: "start" | "end" | "none"
     dividerSize?: number
   }>,
-  gridId?: string
+  gridId?: string,
+  hiddenBlocks?: Set<string>
 ): string {
   const parts: string[] = []
 
-  blocks.forEach(block => {
+  // Filter out hidden blocks
+  const visibleBlocks = hiddenBlocks
+    ? blocks.filter(block => !hiddenBlocks.has(block.id))
+    : blocks
+
+  visibleBlocks.forEach(block => {
     // Add the block itself (no dividers - they're overlays now)
     if (block.sizeUnit === "auto") {
       parts.push("auto")
@@ -158,13 +164,19 @@ export function generateGridTemplateFromItems(
     size?: number
     dividerSize?: number
   }>,
-  gridId?: string
+  gridId?: string,
+  hiddenBlocks?: Set<string>
 ): string {
   const parts: string[] = []
 
   items.forEach(item => {
     // Skip dividers - they're overlays now
     if (item.type === 'divider') {
+      return
+    }
+
+    // Skip hidden blocks
+    if (hiddenBlocks && hiddenBlocks.has(item.id)) {
       return
     }
 

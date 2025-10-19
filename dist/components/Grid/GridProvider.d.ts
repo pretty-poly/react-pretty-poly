@@ -30,6 +30,9 @@ export declare function useGridActions(): {
     resizeBlock: (blockId: string, size: number) => void;
     collapseBlock: (blockId: string) => void;
     expandBlock: (blockId: string) => void;
+    hideBlock: (blockId: string) => void;
+    showBlock: (blockId: string) => void;
+    toggleBlockVisibility: (blockId: string) => void;
     switchMode: (mode: string) => void;
     persistState: () => void;
     resetState: () => void;
@@ -97,4 +100,25 @@ export declare function useParentBlockState(blockId: string): {
     order?: number;
     children?: string[];
 } | null;
+/**
+ * Hook to check if a block is hidden
+ * @param blockId - The ID of the block to check
+ * @returns True if the block is hidden
+ */
+export declare function useIsBlockHidden(blockId: string): boolean;
+/**
+ * Hook to hide a block
+ * Returns a memoized callback
+ */
+export declare function useHideBlock(): (blockId: string) => void;
+/**
+ * Hook to show a block
+ * Returns a memoized callback
+ */
+export declare function useShowBlock(): (blockId: string) => void;
+/**
+ * Hook to toggle block visibility
+ * Returns a memoized callback
+ */
+export declare function useToggleBlockVisibility(): (blockId: string) => void;
 //# sourceMappingURL=GridProvider.d.ts.map
