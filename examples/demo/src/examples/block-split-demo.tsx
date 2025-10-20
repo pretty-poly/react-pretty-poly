@@ -95,6 +95,11 @@ function SplitContainer({ blockId, children }: SplitContainerProps) {
   const isEditorArea = blockId === "editor-area";
   const isTerminalArea = blockId === "terminal-area";
 
+  // Determine which split buttons to show based on current direction
+  const hasDirection = containerBlock.direction !== undefined;
+  const canSplitVertical = !hasDirection || containerBlock.direction === "row";
+  const canSplitHorizontal = !hasDirection || containerBlock.direction === "column";
+
   const handleSplitVertical = () => {
     splitBlock(blockId, "vertical");
   };
@@ -128,22 +133,26 @@ function SplitContainer({ blockId, children }: SplitContainerProps) {
             )}
           </div>
           <div className="flex gap-1">
-            <button
-              onClick={handleSplitVertical}
-              className="px-2 py-1 rounded text-xs border border-border hover:bg-accent transition-colors flex items-center gap-1"
-              title="Split Right (Ctrl+\)"
-            >
-              <SplitSquareVertical className="w-3 h-3" />
-              <span className="hidden sm:inline">Split Right</span>
-            </button>
-            <button
-              onClick={handleSplitHorizontal}
-              className="px-2 py-1 rounded text-xs border border-border hover:bg-accent transition-colors flex items-center gap-1"
-              title="Split Down (Ctrl+Shift+\)"
-            >
-              <SplitSquareHorizontal className="w-3 h-3" />
-              <span className="hidden sm:inline">Split Down</span>
-            </button>
+            {canSplitVertical && (
+              <button
+                onClick={handleSplitVertical}
+                className="px-2 py-1 rounded text-xs border border-border hover:bg-accent transition-colors flex items-center gap-1"
+                title="Split Right (Ctrl+\)"
+              >
+                <SplitSquareVertical className="w-3 h-3" />
+                <span className="hidden sm:inline">Split Right</span>
+              </button>
+            )}
+            {canSplitHorizontal && (
+              <button
+                onClick={handleSplitHorizontal}
+                className="px-2 py-1 rounded text-xs border border-border hover:bg-accent transition-colors flex items-center gap-1"
+                title="Split Down (Ctrl+Shift+\)"
+              >
+                <SplitSquareHorizontal className="w-3 h-3" />
+                <span className="hidden sm:inline">Split Down</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

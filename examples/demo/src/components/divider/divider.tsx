@@ -60,7 +60,14 @@ export const Divider: React.FC<DividerProps> = ({
 
     if (!parentElement) return
 
-    const parentRect = parentElement.getBoundingClientRect()
+    // Check if parent has a toolbar - if so, constrain divider to content area only
+    const hasToolbar = parentElement.hasAttribute('data-has-toolbar')
+    const contentWrapper = hasToolbar
+      ? parentElement.querySelector('[data-split-content]') as HTMLElement
+      : null
+
+    // Use content wrapper rect if parent has toolbar, otherwise use parent rect
+    const constraintRect = (contentWrapper || parentElement).getBoundingClientRect()
 
     if (isVertical) {
       // Vertical divider - positioned on left or right edge of block
@@ -70,9 +77,9 @@ export const Divider: React.FC<DividerProps> = ({
 
       setDividerPosition({
         left: edgePosition - (size / 2), // Center on edge
-        top: parentRect.top - containerRect.top, // Position relative to parent
+        top: constraintRect.top - containerRect.top, // Position relative to constraint area
         width: size,
-        height: parentRect.height // Use parent height to constrain divider
+        height: constraintRect.height // Use constraint height (content area if toolbar present)
       })
     } else {
       // Horizontal divider - positioned on top or bottom edge of block
@@ -81,9 +88,9 @@ export const Divider: React.FC<DividerProps> = ({
         : blockRect.bottom - containerRect.top
 
       setDividerPosition({
-        left: parentRect.left - containerRect.left, // Position relative to parent
+        left: constraintRect.left - containerRect.left, // Position relative to constraint area
         top: edgePosition - (size / 2), // Center on edge
-        width: parentRect.width, // Use parent width to constrain divider
+        width: constraintRect.width, // Use constraint width (content area if toolbar present)
         height: size
       })
     }
@@ -117,6 +124,15 @@ export const Divider: React.FC<DividerProps> = ({
 
     if (parentElement) {
       resizeObserver.observe(parentElement)
+
+      // If parent has toolbar, also observe the content wrapper
+      const hasToolbar = parentElement.hasAttribute('data-has-toolbar')
+      if (hasToolbar) {
+        const contentWrapper = parentElement.querySelector('[data-split-content]') as HTMLElement
+        if (contentWrapper) {
+          resizeObserver.observe(contentWrapper)
+        }
+      }
     }
 
     return () => {

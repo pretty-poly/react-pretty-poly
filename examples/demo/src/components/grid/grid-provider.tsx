@@ -861,11 +861,12 @@ export function useToggleBlockVisibility(): (blockId: string) => void {
  */
 // eslint-disable-next-line react-refresh/only-export-components
 export function useSplitBlock() {
-  const { splitBlock, unsplitBlock, canSplit } = useGridContext();
+  const { splitBlock, unsplitBlock, canSplit, state } = useGridContext();
   return {
     splitBlock,
     unsplitBlock,
     canSplit,
+    state,
   };
 }
 
