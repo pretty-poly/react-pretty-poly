@@ -8,4 +8,5 @@ export type { UseGridPersistenceOptions } from './useGridPersistence';
 export { useGridMode, defaultModes } from './useGridMode';
 export { useGridKeyboard } from './useGridKeyboard';
 export type { UseGridKeyboardOptions } from './useGridKeyboard';
+export { useBlockSplitDirection } from './useBlockSplitDirection';
 //# sourceMappingURL=index.d.ts.map

@@ -227,6 +227,14 @@ const FILE_MAPPINGS: Record<string, { src: string; target: string }> = {
     src: "src/components/Block/BlockTabs.tsx",
     target: "components/grid/block-tabs.tsx",
   },
+  "components/grid/block-split-container.tsx": {
+    src: "src/components/Block/BlockSplitContainer.tsx",
+    target: "components/grid/block-split-container.tsx",
+  },
+  "components/grid/block-tree-renderer.tsx": {
+    src: "src/components/Block/BlockTreeRenderer.tsx",
+    target: "components/grid/block-tree-renderer.tsx",
+  },
 
   // Divider components
   "components/divider/divider.tsx": {
@@ -258,6 +266,10 @@ const FILE_MAPPINGS: Record<string, { src: string; target: string }> = {
   "hooks/use-grid-keyboard.ts": {
     src: "src/hooks/useGridKeyboard.ts",
     target: "hooks/use-grid-keyboard.ts",
+  },
+  "hooks/use-block-split-direction.ts": {
+    src: "src/hooks/useBlockSplitDirection.ts",
+    target: "hooks/use-block-split-direction.ts",
   },
 
   // Utilities

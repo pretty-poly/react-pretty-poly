@@ -25,6 +25,7 @@
     "build": "tsc && vite build",
     "build:watch": "vite build --watch",
     "build:registry": "tsx scripts/build-registry.ts",
+    "update:demo": "npm run build:registry && cd examples/demo && npm run update:grid",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",

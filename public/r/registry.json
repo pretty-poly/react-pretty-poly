@@ -44,6 +44,14 @@
           "type": "registry:component"
         },
         {
+          "path": "components/grid/block-split-container.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/grid/block-tree-renderer.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "components/divider/divider.tsx",
           "type": "registry:component"
         },
@@ -69,6 +77,10 @@
         },
         {
           "path": "hooks/use-grid-keyboard.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-block-split-direction.ts",
           "type": "registry:hook"
         },
         {

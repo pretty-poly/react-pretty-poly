@@ -29,7 +29,10 @@ export {
   BlockSidebar,
   BlockSidebarItem,
   BlockSidebarSpacer,
+  BlockSplitContainer,
+  BlockTreeRenderer,
 } from "./components/Block";
+export type { BlockSplitContainerProps, ToolbarRenderProps, BlockTreeRendererProps } from "./components/Block";
 export { Divider } from "./components/Divider";
 
 // Hooks
@@ -38,6 +41,7 @@ export {
   useGridPersistence,
   useGridMode,
   useGridKeyboard,
+  useBlockSplitDirection,
   defaultModes,
 } from "./hooks";
 export type {
