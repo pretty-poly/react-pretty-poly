@@ -25,6 +25,9 @@ export interface BlockConfig {
     viewType?: string;
     viewState?: any;
     canSplit?: boolean;
+    hasToolbar?: boolean;
+    defaultViewType?: string;
+    toolbarSize?: number;
     splitConfig?: {
         horizontal?: boolean;
         vertical?: boolean;

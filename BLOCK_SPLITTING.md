@@ -451,9 +451,66 @@ Tested on `http://localhost:5173/?example=block-split-demo`:
    - Production build succeeds
    - Bundle size: 157.81 kB (gzipped: 34.16 kB)
 
+### Fixed Issues ✅
+
+1. **Group container rendering**: Initially, split groups were rendering children in a React fragment without a container div, causing grid templates to not apply. Fixed by rendering groups as `<div>` elements with `data-block-id`, `data-block-type`, and `display: grid`.
+
+2. **Splittable block architecture**: Originally tried to start with a regular block and transform on split, but this caused grid template issues. **Solution**: Splittable blocks now start as groups with:
+   - Single child block (e.g., `root` → `root-content`)
+   - `direction: undefined` (set on first split, then locked)
+   - Grid template: `grid-template-columns: 1fr; grid-template-rows: 1fr;`
+
+3. **useSplitBlock hook context issue**: The `useSplitBlock()` hook was returning undefined state during component initialization, causing blank page. **Solution**: Use `useGridContext()` directly in demo components instead of the wrapper hook.
+
+4. **Direction mismatch on nested splits**: Trying to split horizontally after a vertical split would fail because it tried to add to parent with wrong direction. **Solution**: Updated split handlers to check if parent direction matches requested direction before using parent, otherwise split the block itself.
+
+### Architecture Insights
+
+**Key principle discovered**: Splittable containers must be grid containers from the start, not just after being split.
+
+```typescript
+// ✅ Correct approach
+const initialBlocks = [
+  {
+    id: "root",
+    type: "group",
+    direction: undefined,  // Set on first split
+    children: ["root-content"],
+    canSplit: true,
+  },
+  {
+    id: "root-content",
+    type: "block",
+    parentId: "root",
+    order: 0,
+    defaultSize: 1,
+    sizeUnit: "fr",
+  },
+];
+
+// ❌ Wrong approach (doesn't work)
+const initialBlocks = [
+  {
+    id: "root",
+    type: "block",  // Not a grid container initially
+    canSplit: true,
+  },
+];
+```
+
+**Direction locking**: Once a group's direction is set (on first split), it's locked forever. To split in a different direction, split the child block itself (transforms it into a new group).
+
+### Fixed Issues (Continued)
+
+5. **root-content block persisting after split (2025-10-19)**: When splitting a group with undefined direction (Case 2), the old `root-content` child block was not being deleted from state, causing grid templates to include 3 columns when only 2 blocks existed. **Solution**:
+   - Modified SPLIT_BLOCK reducer Case 2 to explicitly delete old children blocks before creating new state
+   - Changed from `{ ...state.blocks, [newBlocks] }` to creating a clean `newBlocks` object, deleting old children with `delete newBlocks[childId]`, then adding updated blocks
+   - Result: Grid now correctly generates 2-column template for split with only `root-1` and `root-2` blocks
+
+6. **Demo using local component copies**: The examples demo at `/examples/demo/` has its own copies of grid components in `/examples/demo/src/components/grid/` (imported via `@/components/grid/`), separate from the main library at `/src/`. This is intentional (shadcn-style registry pattern) but meant fixes had to be applied to both locations.
+
 ### Known Issues
-- **Keyboard shortcut Ctrl+Shift+\\** (horizontal split) not triggering - needs investigation
-- Workaround: Use button clicks for horizontal splits
+- None currently! All core functionality working as expected.
 
 ---
 

@@ -9,7 +9,7 @@
  * This is the foundation for polymorphic UIs!
  */
 
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   Grid,
   Block,
@@ -22,7 +22,7 @@ import {
   type BlockConfig,
   type ViewDescriptor,
   type ViewProps,
-} from '@pretty-poly/react'
+} from "@pretty-poly/react";
 import {
   FileText,
   Image,
@@ -32,7 +32,7 @@ import {
   Database,
   LineChart,
   type LucideIcon,
-} from 'lucide-react'
+} from "lucide-react";
 
 // ============================================================================
 // Example View Components
@@ -52,14 +52,14 @@ function TextEditorView({ blockId }: ViewProps) {
       />
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 /**
  * Image Gallery View
  */
 function ImageGalleryView({ blockId }: ViewProps) {
-  const images = ['🖼️', '🎨', '📸', '🌄', '🌅', '🌆', '🌇', '🌃']
+  const images = ["🖼️", "🎨", "📸", "🌄", "🌅", "🌆", "🌇", "🌃"];
 
   return (
     <div className="p-4 h-full flex flex-col gap-2">
@@ -76,7 +76,7 @@ function ImageGalleryView({ blockId }: ViewProps) {
       </div>
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 /**
@@ -90,20 +90,26 @@ function VideoPlayerView({ blockId }: ViewProps) {
         <div className="text-white/60 text-6xl">▶️</div>
       </div>
       <div className="flex gap-2 justify-center">
-        <button className="px-3 py-1 border rounded hover:bg-accent text-sm">⏮️ Prev</button>
-        <button className="px-3 py-1 border rounded hover:bg-accent text-sm">⏯️ Play</button>
-        <button className="px-3 py-1 border rounded hover:bg-accent text-sm">⏭️ Next</button>
+        <button className="px-3 py-1 border rounded hover:bg-accent text-sm">
+          ⏮️ Prev
+        </button>
+        <button className="px-3 py-1 border rounded hover:bg-accent text-sm">
+          ⏯️ Play
+        </button>
+        <button className="px-3 py-1 border rounded hover:bg-accent text-sm">
+          ⏭️ Next
+        </button>
       </div>
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 /**
  * Audio Mixer View
  */
 function AudioMixerView({ blockId }: ViewProps) {
-  const channels = ['Vocals', 'Guitar', 'Bass', 'Drums']
+  const channels = ["Vocals", "Guitar", "Bass", "Drums"];
 
   return (
     <div className="p-4 h-full flex flex-col gap-2">
@@ -123,14 +129,14 @@ function AudioMixerView({ blockId }: ViewProps) {
       </div>
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 /**
  * Code Editor View
  */
 function CodeEditorView({ blockId }: ViewProps) {
-  const code = `function hello() {\n  console.log("Hello from Code Editor!");\n  return "This is a code editor view";\n}`
+  const code = `function hello() {\n  console.log("Hello from Code Editor!");\n  return "This is a code editor view";\n}`;
 
   return (
     <div className="p-4 h-full flex flex-col gap-2">
@@ -140,7 +146,7 @@ function CodeEditorView({ blockId }: ViewProps) {
       </div>
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 /**
@@ -148,10 +154,10 @@ function CodeEditorView({ blockId }: ViewProps) {
  */
 function DatabaseView({ blockId }: ViewProps) {
   const data = [
-    { id: 1, name: 'Alice', role: 'Engineer' },
-    { id: 2, name: 'Bob', role: 'Designer' },
-    { id: 3, name: 'Charlie', role: 'Manager' },
-  ]
+    { id: 1, name: "Alice", role: "Engineer" },
+    { id: 2, name: "Bob", role: "Designer" },
+    { id: 3, name: "Charlie", role: "Manager" },
+  ];
 
   return (
     <div className="p-4 h-full flex flex-col gap-2">
@@ -166,7 +172,7 @@ function DatabaseView({ blockId }: ViewProps) {
             </tr>
           </thead>
           <tbody>
-            {data.map(row => (
+            {data.map((row) => (
               <tr key={row.id} className="border-t hover:bg-accent">
                 <td className="p-2">{row.id}</td>
                 <td className="p-2">{row.name}</td>
@@ -178,7 +184,7 @@ function DatabaseView({ blockId }: ViewProps) {
       </div>
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 /**
@@ -207,7 +213,7 @@ function AnalyticsView({ blockId }: ViewProps) {
       </div>
       <div className="text-xs text-muted-foreground">Block ID: {blockId}</div>
     </div>
-  )
+  );
 }
 
 // ============================================================================
@@ -216,79 +222,83 @@ function AnalyticsView({ blockId }: ViewProps) {
 
 const VIEW_TYPES: ViewDescriptor[] = [
   {
-    id: 'text-editor',
-    title: 'Text Editor',
+    id: "text-editor",
+    title: "Text Editor",
     icon: FileText,
     component: TextEditorView,
-    category: 'editor',
+    category: "editor",
     order: 1,
   },
   {
-    id: 'image-gallery',
-    title: 'Image Gallery',
+    id: "image-gallery",
+    title: "Image Gallery",
     icon: Image,
     component: ImageGalleryView,
-    category: 'media',
+    category: "media",
     order: 2,
   },
   {
-    id: 'video-player',
-    title: 'Video Player',
+    id: "video-player",
+    title: "Video Player",
     icon: Video,
     component: VideoPlayerView,
-    category: 'media',
+    category: "media",
     order: 3,
   },
   {
-    id: 'audio-mixer',
-    title: 'Audio Mixer',
+    id: "audio-mixer",
+    title: "Audio Mixer",
     icon: Music,
     component: AudioMixerView,
-    category: 'media',
+    category: "media",
     order: 4,
   },
   {
-    id: 'code-editor',
-    title: 'Code Editor',
+    id: "code-editor",
+    title: "Code Editor",
     icon: Code,
     component: CodeEditorView,
-    category: 'editor',
+    category: "editor",
     order: 5,
   },
   {
-    id: 'database',
-    title: 'Database',
+    id: "database",
+    title: "Database",
     icon: Database,
     component: DatabaseView,
-    category: 'data',
+    category: "data",
     order: 6,
   },
   {
-    id: 'analytics',
-    title: 'Analytics',
+    id: "analytics",
+    title: "Analytics",
     icon: LineChart,
     component: AnalyticsView,
-    category: 'data',
+    category: "data",
     order: 7,
   },
-]
+];
 
 // ============================================================================
 // View Switcher Component (Blender-style dropdown)
 // ============================================================================
 
 interface ViewSwitcherProps {
-  blockId: string
-  currentViewType: string
-  onViewTypeChange: (viewType: string) => void
+  blockId: string;
+  currentViewType: string;
+  onViewTypeChange: (viewType: string) => void;
 }
 
-function ViewSwitcher({ blockId, currentViewType, onViewTypeChange }: ViewSwitcherProps) {
-  const registry = useViewRegistry()
-  const allViews = registry.getAllViews()
-  const currentView = registry.getView(currentViewType)
+function ViewSwitcher({
+  blockId,
+  currentViewType,
+  onViewTypeChange,
+}: ViewSwitcherProps) {
+  const registry = useViewRegistry();
+  const allViews = registry.getAllViews();
+  const currentView = registry.getView(currentViewType);
 
-  const Icon = currentView?.icon as LucideIcon | undefined
+  const Icon = currentView?.icon as LucideIcon | undefined;
 
   return (
     <div className="flex items-center gap-2">
@@ -298,20 +308,18 @@ function ViewSwitcher({ blockId, currentViewType, onViewTypeChange }: ViewSwitch
         onChange={(e) => onViewTypeChange(e.target.value)}
         className="px-2 py-1 text-sm border rounded bg-background cursor-pointer hover:bg-accent"
       >
-        {allViews.map(view => {
-          const ViewIcon = view.icon as LucideIcon | undefined
+        {allViews.map((view) => {
+          const ViewIcon = view.icon as LucideIcon | undefined;
           return (
             <option key={view.id} value={view.id}>
               {view.title}
             </option>
-          )
+          );
         })}
       </select>
-      <span className="text-xs text-muted-foreground">
-        ({blockId})
-      </span>
+      <span className="text-xs text-muted-foreground">({blockId})</span>
     </div>
-  )
+  );
 }
 
 // ============================================================================
@@ -319,14 +327,14 @@ function ViewSwitcher({ blockId, currentViewType, onViewTypeChange }: ViewSwitch
 // ============================================================================
 
 interface DynamicBlockProps {
-  id: string
-  viewType: string
-  onViewTypeChange: (viewType: string) => void
+  id: string;
+  viewType: string;
+  onViewTypeChange: (viewType: string) => void;
 }
 
 function DynamicBlock({ id, viewType, onViewTypeChange }: DynamicBlockProps) {
-  const registry = useViewRegistry()
-  const viewDescriptor = registry.getView(viewType)
+  const registry = useViewRegistry();
+  const viewDescriptor = registry.getView(viewType);
 
   if (!viewDescriptor) {
     return (
@@ -337,10 +345,10 @@ function DynamicBlock({ id, viewType, onViewTypeChange }: DynamicBlockProps) {
           </div>
         </BlockContent>
       </Block>
-    )
+    );
   }
 
-  const ViewComponent = viewDescriptor.component
+  const ViewComponent = viewDescriptor.component;
 
   return (
     <Block id={id}>
@@ -359,7 +367,7 @@ function DynamicBlock({ id, viewType, onViewTypeChange }: DynamicBlockProps) {
         <ViewComponent viewId={viewType} blockId={id} />
       </BlockContent>
     </Block>
-  )
+  );
 }
 
 // ============================================================================
@@ -367,96 +375,103 @@ function DynamicBlock({ id, viewType, onViewTypeChange }: DynamicBlockProps) {
 // ============================================================================
 
 export default function ViewRegistryDemo() {
-  const registry = useViewRegistry()
+  const registry = useViewRegistry();
 
   // Register all view types synchronously on mount (not in effect)
   // This ensures views are available before first render
   React.useMemo(() => {
-    VIEW_TYPES.forEach(view => registry.registerView(view))
-  }, [registry])
+    VIEW_TYPES.forEach((view) => registry.registerView(view));
+  }, [registry]);
 
   // Track which view type each block is displaying
   const [viewTypes, setViewTypes] = useState({
-    topLeft: 'text-editor',
-    topRight: 'image-gallery',
-    bottomLeft: 'code-editor',
-    bottomRight: 'analytics',
-  })
+    topLeft: "text-editor",
+    topRight: "image-gallery",
+    bottomLeft: "code-editor",
+    bottomRight: "analytics",
+  });
 
-  const handleViewTypeChange = (blockId: keyof typeof viewTypes, newType: string) => {
-    setViewTypes(prev => ({ ...prev, [blockId]: newType }))
-  }
+  const handleViewTypeChange = (
+    blockId: keyof typeof viewTypes,
+    newType: string
+  ) => {
+    setViewTypes((prev) => ({ ...prev, [blockId]: newType }));
+  };
 
   // Grid layout: 2x2 grid
   const blocks: BlockConfig[] = [
     {
-      id: 'root',
-      type: 'group',
-      direction: 'column',
-      children: ['topRow', 'bottomRow'],
+      id: "root",
+      type: "group",
+      direction: "column",
+      children: ["topRow", "bottomRow"],
     },
     {
-      id: 'topRow',
-      type: 'group',
-      direction: 'row',
-      parentId: 'root',
+      id: "topRow",
+      type: "group",
+      direction: "row",
+      parentId: "root",
       order: 0,
-      children: ['topLeft', 'topRight'],
+      children: ["topLeft", "topRight"],
     },
     {
-      id: 'bottomRow',
-      type: 'group',
-      direction: 'row',
-      parentId: 'root',
+      id: "bottomRow",
+      type: "group",
+      direction: "row",
+      parentId: "root",
       order: 1,
-      children: ['bottomLeft', 'bottomRight'],
+      children: ["bottomLeft", "bottomRight"],
     },
     {
-      id: 'topLeft',
-      type: 'block',
-      parentId: 'topRow',
-      order: 0,
-      defaultSize: 1,
-      sizeUnit: 'fr',
-    },
-    {
-      id: 'topRight',
-      type: 'block',
-      parentId: 'topRow',
-      order: 1,
-      defaultSize: 1,
-      sizeUnit: 'fr',
-    },
-    {
-      id: 'bottomLeft',
-      type: 'block',
-      parentId: 'bottomRow',
+      id: "topLeft",
+      type: "block",
+      parentId: "topRow",
       order: 0,
       defaultSize: 1,
-      sizeUnit: 'fr',
+      sizeUnit: "fr",
     },
     {
-      id: 'bottomRight',
-      type: 'block',
-      parentId: 'bottomRow',
+      id: "topRight",
+      type: "block",
+      parentId: "topRow",
       order: 1,
       defaultSize: 1,
-      sizeUnit: 'fr',
+      sizeUnit: "fr",
     },
-  ]
+    {
+      id: "bottomLeft",
+      type: "block",
+      parentId: "bottomRow",
+      order: 0,
+      defaultSize: 1,
+      sizeUnit: "fr",
+    },
+    {
+      id: "bottomRight",
+      type: "block",
+      parentId: "bottomRow",
+      order: 1,
+      defaultSize: 1,
+      sizeUnit: "fr",
+    },
+  ];
 
   return (
     <div className="h-screen flex flex-col">
       {/* Info Banner */}
       <div className="bg-blue-50 dark:bg-blue-950 border-b border-blue-200 dark:border-blue-800 p-4">
-        <h1 className="text-xl font-bold mb-2">View Registry Demo (Pretty Poly 2.0)</h1>
+        <h1 className="text-xl font-bold mb-2">
+          View Registry Demo (Pretty Poly 2.0)
+        </h1>
         <p className="text-sm text-muted-foreground mb-2">
-          This demonstrates the <strong>ViewRegistry</strong> primitive - the foundation for polymorphic UIs.
-          Each block can display any registered view type, inspired by Blender's Area concept.
+          This demonstrates the <strong>ViewRegistry</strong> primitive - the
+          foundation for polymorphic UIs. Each block can display any registered
+          view type, inspired by Blender's Area concept.
         </p>
         <div className="flex gap-4 text-xs">
           <div>
-            <strong>✨ Try this:</strong> Use the dropdowns to change what each block displays
+            <strong>✨ Try this:</strong> Use the dropdowns to change what each
+            block displays
           </div>
           <div>
             <strong>📦 Registered:</strong> {VIEW_TYPES.length} view types
@@ -470,27 +485,31 @@ export default function ViewRegistryDemo() {
           <DynamicBlock
             id="topLeft"
             viewType={viewTypes.topLeft}
-            onViewTypeChange={(type) => handleViewTypeChange('topLeft', type)}
+            onViewTypeChange={(type) => handleViewTypeChange("topLeft", type)}
           />
           <DynamicBlock
             id="topRight"
             viewType={viewTypes.topRight}
-            onViewTypeChange={(type) => handleViewTypeChange('topRight', type)}
+            onViewTypeChange={(type) => handleViewTypeChange("topRight", type)}
           />
           <DynamicBlock
             id="bottomLeft"
             viewType={viewTypes.bottomLeft}
-            onViewTypeChange={(type) => handleViewTypeChange('bottomLeft', type)}
+            onViewTypeChange={(type) =>
+              handleViewTypeChange("bottomLeft", type)
+            }
           />
           <DynamicBlock
             id="bottomRight"
             viewType={viewTypes.bottomRight}
-            onViewTypeChange={(type) => handleViewTypeChange('bottomRight', type)}
+            onViewTypeChange={(type) =>
+              handleViewTypeChange("bottomRight", type)
+            }
           />
         </Grid>
       </div>
     </div>
-  )
+  );
 }
 
 // Wrap demo with ViewRegistryProvider
@@ -499,5 +518,5 @@ export function ViewRegistryDemoWrapper() {
     <ViewRegistryProvider>
       <ViewRegistryDemo />
     </ViewRegistryProvider>
-  )
+  );
 }

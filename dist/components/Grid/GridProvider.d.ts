@@ -76,6 +76,9 @@ export declare function useBlockState(blockId: string): {
     viewType?: string;
     viewState?: any;
     canSplit?: boolean;
+    hasToolbar?: boolean;
+    defaultViewType?: string;
+    toolbarSize?: number;
     splitConfig?: {
         horizontal?: boolean;
         vertical?: boolean;
@@ -110,6 +113,9 @@ export declare function useParentBlockState(blockId: string): {
     viewType?: string;
     viewState?: any;
     canSplit?: boolean;
+    hasToolbar?: boolean;
+    defaultViewType?: string;
+    toolbarSize?: number;
     splitConfig?: {
         horizontal?: boolean;
         vertical?: boolean;
@@ -148,6 +154,7 @@ export declare function useSplitBlock(): {
     }) => string;
     unsplitBlock: (blockId: string) => void;
     canSplit: (blockId: string) => boolean;
+    state: GridState;
 };
 /**
  * Hook to split a block

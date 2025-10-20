@@ -1,7 +1,7 @@
-var Tt = Object.defineProperty;
-var Ct = (e, t, r) => t in e ? Tt(e, t, { enumerable: !0, configurable: !0, writable: !0, value: r }) : e[t] = r;
+var Et = Object.defineProperty;
+var Ct = (e, t, r) => t in e ? Et(e, t, { enumerable: !0, configurable: !0, writable: !0, value: r }) : e[t] = r;
 var Q = (e, t, r) => Ct(e, typeof t != "symbol" ? t + "" : t, r);
-import At, { useState as J, useCallback as _, useMemo as ee, useEffect as V, useRef as me, createContext as Ie, useContext as Re, useReducer as It, useLayoutEffect as Rt, forwardRef as Z, useImperativeHandle as Lt } from "react";
+import At, { useState as J, useCallback as O, useMemo as ee, useEffect as $, useRef as me, createContext as Ie, useContext as Re, useReducer as It, useLayoutEffect as Rt, forwardRef as Z, useImperativeHandle as Lt } from "react";
 var _e = { exports: {} }, xe = {};
 /**
  * @license React
@@ -17,18 +17,18 @@ function jt() {
   if (We) return xe;
   We = 1;
   var e = Symbol.for("react.transitional.element"), t = Symbol.for("react.fragment");
-  function r(o, n, i) {
+  function r(o, s, i) {
     var a = null;
-    if (i !== void 0 && (a = "" + i), n.key !== void 0 && (a = "" + n.key), "key" in n) {
+    if (i !== void 0 && (a = "" + i), s.key !== void 0 && (a = "" + s.key), "key" in s) {
       i = {};
-      for (var l in n)
-        l !== "key" && (i[l] = n[l]);
-    } else i = n;
-    return n = i.ref, {
+      for (var l in s)
+        l !== "key" && (i[l] = s[l]);
+    } else i = s;
+    return s = i.ref, {
       $$typeof: e,
       type: o,
       key: a,
-      ref: n !== void 0 ? n : null,
+      ref: s !== void 0 ? s : null,
       props: i
     };
   }
@@ -50,7 +50,7 @@ function Pt() {
     function e(m) {
       if (m == null) return null;
       if (typeof m == "function")
-        return m.$$typeof === D ? null : m.displayName || m.name || null;
+        return m.$$typeof === _ ? null : m.displayName || m.name || null;
       if (typeof m == "string") return m;
       switch (m) {
         case g:
@@ -59,32 +59,32 @@ function Pt() {
           return "Profiler";
         case c:
           return "StrictMode";
-        case E:
-          return "Suspense";
-        case I:
-          return "SuspenseList";
         case T:
+          return "Suspense";
+        case C:
+          return "SuspenseList";
+        case E:
           return "Activity";
       }
       if (typeof m == "object")
         switch (typeof m.tag == "number" && console.error(
           "Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."
         ), m.$$typeof) {
-          case s:
+          case n:
             return "Portal";
-          case f:
+          case d:
             return (m.displayName || "Context") + ".Provider";
-          case k:
+          case y:
             return (m._context.displayName || "Context") + ".Consumer";
-          case v:
-            var A = m.render;
-            return m = m.displayName, m || (m = A.displayName || A.name || "", m = m !== "" ? "ForwardRef(" + m + ")" : "ForwardRef"), m;
-          case L:
-            return A = m.displayName || null, A !== null ? A : e(m.type) || "Memo";
+          case w:
+            var I = m.render;
+            return m = m.displayName, m || (m = I.displayName || I.name || "", m = m !== "" ? "ForwardRef(" + m + ")" : "ForwardRef"), m;
+          case R:
+            return I = m.displayName || null, I !== null ? I : e(m.type) || "Memo";
           case h:
-            A = m._payload, m = m._init;
+            I = m._payload, m = m._init;
             try {
-              return e(m(A));
+              return e(m(I));
             } catch {
             }
         }
@@ -96,17 +96,17 @@ function Pt() {
     function r(m) {
       try {
         t(m);
-        var A = !1;
+        var I = !1;
       } catch {
-        A = !0;
+        I = !0;
       }
-      if (A) {
-        A = console;
-        var O = A.error, P = typeof Symbol == "function" && Symbol.toStringTag && m[Symbol.toStringTag] || m.constructor.name || "Object";
-        return O.call(
-          A,
+      if (I) {
+        I = console;
+        var D = I.error, M = typeof Symbol == "function" && Symbol.toStringTag && m[Symbol.toStringTag] || m.constructor.name || "Object";
+        return D.call(
+          I,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
-          P
+          M
         ), t(m);
       }
     }
@@ -115,52 +115,52 @@ function Pt() {
       if (typeof m == "object" && m !== null && m.$$typeof === h)
         return "<...>";
       try {
-        var A = e(m);
-        return A ? "<" + A + ">" : "<...>";
+        var I = e(m);
+        return I ? "<" + I + ">" : "<...>";
       } catch {
         return "<...>";
       }
     }
-    function n() {
-      var m = U.A;
+    function s() {
+      var m = V.A;
       return m === null ? null : m.getOwner();
     }
     function i() {
       return Error("react-stack-top-frame");
     }
     function a(m) {
-      if (F.call(m, "key")) {
-        var A = Object.getOwnPropertyDescriptor(m, "key").get;
-        if (A && A.isReactWarning) return !1;
+      if (W.call(m, "key")) {
+        var I = Object.getOwnPropertyDescriptor(m, "key").get;
+        if (I && I.isReactWarning) return !1;
       }
       return m.key !== void 0;
     }
-    function l(m, A) {
-      function O() {
-        G || (G = !0, console.error(
+    function l(m, I) {
+      function D() {
+        N || (N = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
-          A
+          I
         ));
       }
-      O.isReactWarning = !0, Object.defineProperty(m, "key", {
-        get: O,
+      D.isReactWarning = !0, Object.defineProperty(m, "key", {
+        get: D,
         configurable: !0
       });
     }
     function p() {
       var m = e(this.type);
-      return W[m] || (W[m] = !0, console.error(
+      return K[m] || (K[m] = !0, console.error(
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
       )), m = this.props.ref, m !== void 0 ? m : null;
     }
-    function w(m, A, O, P, N, q, de, $) {
-      return O = q.ref, m = {
-        $$typeof: d,
+    function v(m, I, D, M, G, Y, de, U) {
+      return D = Y.ref, m = {
+        $$typeof: f,
         type: m,
-        key: A,
-        props: q,
-        _owner: N
-      }, (O !== void 0 ? O : null) !== null ? Object.defineProperty(m, "ref", {
+        key: I,
+        props: Y,
+        _owner: G
+      }, (D !== void 0 ? D : null) !== null ? Object.defineProperty(m, "ref", {
         enumerable: !1,
         get: p
       }) : Object.defineProperty(m, "ref", { enumerable: !1, value: null }), m._store = {}, Object.defineProperty(m._store, "validated", {
@@ -182,114 +182,114 @@ function Pt() {
         configurable: !1,
         enumerable: !1,
         writable: !0,
-        value: $
+        value: U
       }), Object.freeze && (Object.freeze(m.props), Object.freeze(m)), m;
     }
-    function b(m, A, O, P, N, q, de, $) {
-      var K = A.children;
-      if (K !== void 0)
-        if (P)
-          if (M(K)) {
-            for (P = 0; P < K.length; P++)
-              x(K[P]);
-            Object.freeze && Object.freeze(K);
+    function k(m, I, D, M, G, Y, de, U) {
+      var H = I.children;
+      if (H !== void 0)
+        if (M)
+          if (P(H)) {
+            for (M = 0; M < H.length; M++)
+              x(H[M]);
+            Object.freeze && Object.freeze(H);
           } else
             console.error(
               "React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead."
             );
-        else x(K);
-      if (F.call(A, "key")) {
-        K = e(m);
-        var X = Object.keys(A).filter(function(ke) {
+        else x(H);
+      if (W.call(I, "key")) {
+        H = e(m);
+        var X = Object.keys(I).filter(function(ke) {
           return ke !== "key";
         });
-        P = 0 < X.length ? "{key: someKey, " + X.join(": ..., ") + ": ...}" : "{key: someKey}", ne[K + P] || (X = 0 < X.length ? "{" + X.join(": ..., ") + ": ...}" : "{}", console.error(
+        M = 0 < X.length ? "{key: someKey, " + X.join(": ..., ") + ": ...}" : "{key: someKey}", te[H + M] || (X = 0 < X.length ? "{" + X.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
 React keys must be passed directly to JSX without using spread:
   let props = %s;
   <%s key={someKey} {...props} />`,
-          P,
-          K,
+          M,
+          H,
           X,
-          K
-        ), ne[K + P] = !0);
+          H
+        ), te[H + M] = !0);
       }
-      if (K = null, O !== void 0 && (r(O), K = "" + O), a(A) && (r(A.key), K = "" + A.key), "key" in A) {
-        O = {};
-        for (var se in A)
-          se !== "key" && (O[se] = A[se]);
-      } else O = A;
-      return K && l(
-        O,
+      if (H = null, D !== void 0 && (r(D), H = "" + D), a(I) && (r(I.key), H = "" + I.key), "key" in I) {
+        D = {};
+        for (var se in I)
+          se !== "key" && (D[se] = I[se]);
+      } else D = I;
+      return H && l(
+        D,
         typeof m == "function" ? m.displayName || m.name || "Unknown" : m
-      ), w(
+      ), v(
         m,
-        K,
-        q,
-        N,
-        n(),
-        O,
+        H,
+        Y,
+        G,
+        s(),
+        D,
         de,
-        $
+        U
       );
     }
     function x(m) {
-      typeof m == "object" && m !== null && m.$$typeof === d && m._store && (m._store.validated = 1);
+      typeof m == "object" && m !== null && m.$$typeof === f && m._store && (m._store.validated = 1);
     }
-    var y = At, d = Symbol.for("react.transitional.element"), s = Symbol.for("react.portal"), g = Symbol.for("react.fragment"), c = Symbol.for("react.strict_mode"), u = Symbol.for("react.profiler"), k = Symbol.for("react.consumer"), f = Symbol.for("react.context"), v = Symbol.for("react.forward_ref"), E = Symbol.for("react.suspense"), I = Symbol.for("react.suspense_list"), L = Symbol.for("react.memo"), h = Symbol.for("react.lazy"), T = Symbol.for("react.activity"), D = Symbol.for("react.client.reference"), U = y.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, F = Object.prototype.hasOwnProperty, M = Array.isArray, B = console.createTask ? console.createTask : function() {
+    var b = At, f = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), g = Symbol.for("react.fragment"), c = Symbol.for("react.strict_mode"), u = Symbol.for("react.profiler"), y = Symbol.for("react.consumer"), d = Symbol.for("react.context"), w = Symbol.for("react.forward_ref"), T = Symbol.for("react.suspense"), C = Symbol.for("react.suspense_list"), R = Symbol.for("react.memo"), h = Symbol.for("react.lazy"), E = Symbol.for("react.activity"), _ = Symbol.for("react.client.reference"), V = b.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, W = Object.prototype.hasOwnProperty, P = Array.isArray, B = console.createTask ? console.createTask : function() {
       return null;
     };
-    y = {
+    b = {
       react_stack_bottom_frame: function(m) {
         return m();
       }
     };
-    var G, W = {}, Y = y.react_stack_bottom_frame.bind(
-      y,
+    var N, K = {}, q = b.react_stack_bottom_frame.bind(
+      b,
       i
-    )(), C = B(o(i)), ne = {};
-    Se.Fragment = g, Se.jsx = function(m, A, O, P, N) {
-      var q = 1e4 > U.recentlyCreatedOwnerStacks++;
-      return b(
+    )(), A = B(o(i)), te = {};
+    Se.Fragment = g, Se.jsx = function(m, I, D, M, G) {
+      var Y = 1e4 > V.recentlyCreatedOwnerStacks++;
+      return k(
         m,
-        A,
-        O,
+        I,
+        D,
         !1,
-        P,
-        N,
-        q ? Error("react-stack-top-frame") : Y,
-        q ? B(o(m)) : C
+        M,
+        G,
+        Y ? Error("react-stack-top-frame") : q,
+        Y ? B(o(m)) : A
       );
-    }, Se.jsxs = function(m, A, O, P, N) {
-      var q = 1e4 > U.recentlyCreatedOwnerStacks++;
-      return b(
+    }, Se.jsxs = function(m, I, D, M, G) {
+      var Y = 1e4 > V.recentlyCreatedOwnerStacks++;
+      return k(
         m,
-        A,
-        O,
+        I,
+        D,
         !0,
-        P,
-        N,
-        q ? Error("react-stack-top-frame") : Y,
-        q ? B(o(m)) : C
+        M,
+        G,
+        Y ? Error("react-stack-top-frame") : q,
+        Y ? B(o(m)) : A
       );
     };
   }()), Se;
 }
 process.env.NODE_ENV === "production" ? _e.exports = jt() : _e.exports = Pt();
-var R = _e.exports;
+var L = _e.exports;
 function Je(e) {
   var t, r, o = "";
   if (typeof e == "string" || typeof e == "number") o += e;
   else if (typeof e == "object") if (Array.isArray(e)) {
-    var n = e.length;
-    for (t = 0; t < n; t++) e[t] && (r = Je(e[t])) && (o && (o += " "), o += r);
+    var s = e.length;
+    for (t = 0; t < s; t++) e[t] && (r = Je(e[t])) && (o && (o += " "), o += r);
   } else for (r in e) e[r] && (o && (o += " "), o += r);
   return o;
 }
 function ae() {
-  for (var e, t, r = 0, o = "", n = arguments.length; r < n; r++) (e = arguments[r]) && (t = Je(e)) && (o && (o += " "), o += t);
+  for (var e, t, r = 0, o = "", s = arguments.length; r < s; r++) (e = arguments[r]) && (t = Je(e)) && (o && (o += " "), o += t);
   return o;
 }
 const Ve = "-", Mt = (e) => {
@@ -311,9 +311,9 @@ const Ve = "-", Mt = (e) => {
   var a;
   if (e.length === 0)
     return t.classGroupId;
-  const r = e[0], o = t.nextPart.get(r), n = o ? Ze(e.slice(1), o) : void 0;
-  if (n)
-    return n;
+  const r = e[0], o = t.nextPart.get(r), s = o ? Ze(e.slice(1), o) : void 0;
+  if (s)
+    return s;
   if (t.validators.length === 0)
     return;
   const i = e.join(Ve);
@@ -334,28 +334,28 @@ const Ve = "-", Mt = (e) => {
     nextPart: /* @__PURE__ */ new Map(),
     validators: []
   };
-  for (const n in r)
-    Oe(r[n], o, n, t);
+  for (const s in r)
+    Oe(r[s], o, s, t);
   return o;
 }, Oe = (e, t, r, o) => {
-  e.forEach((n) => {
-    if (typeof n == "string") {
-      const i = n === "" ? t : Fe(t, n);
+  e.forEach((s) => {
+    if (typeof s == "string") {
+      const i = s === "" ? t : Fe(t, s);
       i.classGroupId = r;
       return;
     }
-    if (typeof n == "function") {
-      if (Dt(n)) {
-        Oe(n(o), t, r, o);
+    if (typeof s == "function") {
+      if (Dt(s)) {
+        Oe(s(o), t, r, o);
         return;
       }
       t.validators.push({
-        validator: n,
+        validator: s,
         classGroupId: r
       });
       return;
     }
-    Object.entries(n).forEach(([i, a]) => {
+    Object.entries(s).forEach(([i, a]) => {
       Oe(a, Fe(t, i), r, o);
     });
   });
@@ -376,7 +376,7 @@ const Ve = "-", Mt = (e) => {
       }
     };
   let t = 0, r = /* @__PURE__ */ new Map(), o = /* @__PURE__ */ new Map();
-  const n = (i, a) => {
+  const s = (i, a) => {
     r.set(i, a), t++, t > e && (t = 0, o = r, r = /* @__PURE__ */ new Map());
   };
   return {
@@ -385,45 +385,45 @@ const Ve = "-", Mt = (e) => {
       if (a !== void 0)
         return a;
       if ((a = o.get(i)) !== void 0)
-        return n(i, a), a;
+        return s(i, a), a;
     },
     set(i, a) {
-      r.has(i) ? r.set(i, a) : n(i, a);
+      r.has(i) ? r.set(i, a) : s(i, a);
     }
   };
-}, De = "!", Be = ":", Vt = Be.length, Nt = (e) => {
+}, De = "!", Be = ":", Vt = Be.length, $t = (e) => {
   const {
     prefix: t,
     experimentalParseClassName: r
   } = e;
-  let o = (n) => {
+  let o = (s) => {
     const i = [];
-    let a = 0, l = 0, p = 0, w;
-    for (let s = 0; s < n.length; s++) {
-      let g = n[s];
+    let a = 0, l = 0, p = 0, v;
+    for (let n = 0; n < s.length; n++) {
+      let g = s[n];
       if (a === 0 && l === 0) {
         if (g === Be) {
-          i.push(n.slice(p, s)), p = s + Vt;
+          i.push(s.slice(p, n)), p = n + Vt;
           continue;
         }
         if (g === "/") {
-          w = s;
+          v = n;
           continue;
         }
       }
       g === "[" ? a++ : g === "]" ? a-- : g === "(" ? l++ : g === ")" && l--;
     }
-    const b = i.length === 0 ? n : n.substring(p), x = $t(b), y = x !== b, d = w && w > p ? w - p : void 0;
+    const k = i.length === 0 ? s : s.substring(p), x = Nt(k), b = x !== k, f = v && v > p ? v - p : void 0;
     return {
       modifiers: i,
-      hasImportantModifier: y,
+      hasImportantModifier: b,
       baseClassName: x,
-      maybePostfixModifierPosition: d
+      maybePostfixModifierPosition: f
     };
   };
   if (t) {
-    const n = t + Be, i = o;
-    o = (a) => a.startsWith(n) ? i(a.substring(n.length)) : {
+    const s = t + Be, i = o;
+    o = (a) => a.startsWith(s) ? i(a.substring(s.length)) : {
       isExternal: !0,
       modifiers: [],
       hasImportantModifier: !1,
@@ -432,71 +432,71 @@ const Ve = "-", Mt = (e) => {
     };
   }
   if (r) {
-    const n = o;
+    const s = o;
     o = (i) => r({
       className: i,
-      parseClassName: n
+      parseClassName: s
     });
   }
   return o;
-}, $t = (e) => e.endsWith(De) ? e.substring(0, e.length - 1) : e.startsWith(De) ? e.substring(1) : e, Gt = (e) => {
+}, Nt = (e) => e.endsWith(De) ? e.substring(0, e.length - 1) : e.startsWith(De) ? e.substring(1) : e, Gt = (e) => {
   const t = Object.fromEntries(e.orderSensitiveModifiers.map((o) => [o, !0]));
   return (o) => {
     if (o.length <= 1)
       return o;
-    const n = [];
+    const s = [];
     let i = [];
     return o.forEach((a) => {
-      a[0] === "[" || t[a] ? (n.push(...i.sort(), a), i = []) : i.push(a);
-    }), n.push(...i.sort()), n;
+      a[0] === "[" || t[a] ? (s.push(...i.sort(), a), i = []) : i.push(a);
+    }), s.push(...i.sort()), s;
   };
 }, Ut = (e) => ({
   cache: Bt(e.cacheSize),
-  parseClassName: Nt(e),
+  parseClassName: $t(e),
   sortModifiers: Gt(e),
   ...Mt(e)
 }), Wt = /\s+/, Kt = (e, t) => {
   const {
     parseClassName: r,
     getClassGroupId: o,
-    getConflictingClassGroupIds: n,
+    getConflictingClassGroupIds: s,
     sortModifiers: i
   } = t, a = [], l = e.trim().split(Wt);
   let p = "";
-  for (let w = l.length - 1; w >= 0; w -= 1) {
-    const b = l[w], {
+  for (let v = l.length - 1; v >= 0; v -= 1) {
+    const k = l[v], {
       isExternal: x,
-      modifiers: y,
-      hasImportantModifier: d,
-      baseClassName: s,
+      modifiers: b,
+      hasImportantModifier: f,
+      baseClassName: n,
       maybePostfixModifierPosition: g
-    } = r(b);
+    } = r(k);
     if (x) {
-      p = b + (p.length > 0 ? " " + p : p);
+      p = k + (p.length > 0 ? " " + p : p);
       continue;
     }
-    let c = !!g, u = o(c ? s.substring(0, g) : s);
+    let c = !!g, u = o(c ? n.substring(0, g) : n);
     if (!u) {
       if (!c) {
-        p = b + (p.length > 0 ? " " + p : p);
+        p = k + (p.length > 0 ? " " + p : p);
         continue;
       }
-      if (u = o(s), !u) {
-        p = b + (p.length > 0 ? " " + p : p);
+      if (u = o(n), !u) {
+        p = k + (p.length > 0 ? " " + p : p);
         continue;
       }
       c = !1;
     }
-    const k = i(y).join(":"), f = d ? k + De : k, v = f + u;
-    if (a.includes(v))
+    const y = i(b).join(":"), d = f ? y + De : y, w = d + u;
+    if (a.includes(w))
       continue;
-    a.push(v);
-    const E = n(u, c);
-    for (let I = 0; I < E.length; ++I) {
-      const L = E[I];
-      a.push(f + L);
+    a.push(w);
+    const T = s(u, c);
+    for (let C = 0; C < T.length; ++C) {
+      const R = T[C];
+      a.push(d + R);
     }
-    p = b + (p.length > 0 ? " " + p : p);
+    p = k + (p.length > 0 ? " " + p : p);
   }
   return p;
 };
@@ -515,38 +515,38 @@ const Xe = (e) => {
   return r;
 };
 function Ft(e, ...t) {
-  let r, o, n, i = a;
+  let r, o, s, i = a;
   function a(p) {
-    const w = t.reduce((b, x) => x(b), e());
-    return r = Ut(w), o = r.cache.get, n = r.cache.set, i = l, l(p);
+    const v = t.reduce((k, x) => x(k), e());
+    return r = Ut(v), o = r.cache.get, s = r.cache.set, i = l, l(p);
   }
   function l(p) {
-    const w = o(p);
-    if (w)
-      return w;
-    const b = Kt(p, r);
-    return n(p, b), b;
+    const v = o(p);
+    if (v)
+      return v;
+    const k = Kt(p, r);
+    return s(p, k), k;
   }
   return function() {
     return i(Ht.apply(null, arguments));
   };
 }
-const H = (e) => {
+const F = (e) => {
   const t = (r) => r[e] || [];
   return t.isThemeGetter = !0, t;
-}, Qe = /^\[(?:(\w[\w-]*):)?(.+)\]$/i, et = /^\((?:(\w[\w-]*):)?(.+)\)$/i, Yt = /^\d+\/\d+$/, qt = /^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$/, Jt = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$/, Zt = /^(rgba?|hsla?|hwb|(ok)?(lab|lch)|color-mix)\(.+\)$/, Xt = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/, Qt = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/, ue = (e) => Yt.test(e), j = (e) => !!e && !Number.isNaN(Number(e)), ie = (e) => !!e && Number.isInteger(Number(e)), je = (e) => e.endsWith("%") && j(e.slice(0, -1)), oe = (e) => qt.test(e), er = () => !0, tr = (e) => (
+}, Qe = /^\[(?:(\w[\w-]*):)?(.+)\]$/i, et = /^\((?:(\w[\w-]*):)?(.+)\)$/i, qt = /^\d+\/\d+$/, Yt = /^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$/, Jt = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$/, Zt = /^(rgba?|hsla?|hwb|(ok)?(lab|lch)|color-mix)\(.+\)$/, Xt = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/, Qt = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/, ue = (e) => qt.test(e), j = (e) => !!e && !Number.isNaN(Number(e)), ie = (e) => !!e && Number.isInteger(Number(e)), je = (e) => e.endsWith("%") && j(e.slice(0, -1)), ne = (e) => Yt.test(e), er = () => !0, tr = (e) => (
   // `colorFunctionRegex` check is necessary because color functions can have percentages in them which which would be incorrectly classified as lengths.
   // For example, `hsl(0 0% 0%)` would be classified as a length without this check.
   // I could also use lookbehind assertion in `lengthUnitRegex` but that isn't supported widely enough.
   Jt.test(e) && !Zt.test(e)
-), tt = () => !1, rr = (e) => Xt.test(e), or = (e) => Qt.test(e), nr = (e) => !S(e) && !z(e), sr = (e) => he(e, nt, tt), S = (e) => Qe.test(e), ce = (e) => he(e, st, tr), Pe = (e) => he(e, dr, j), Ye = (e) => he(e, rt, tt), ir = (e) => he(e, ot, or), Te = (e) => he(e, it, rr), z = (e) => et.test(e), ze = (e) => be(e, st), ar = (e) => be(e, ur), qe = (e) => be(e, rt), lr = (e) => be(e, nt), cr = (e) => be(e, ot), Ce = (e) => be(e, it, !0), he = (e, t, r) => {
+), tt = () => !1, rr = (e) => Xt.test(e), or = (e) => Qt.test(e), nr = (e) => !S(e) && !z(e), sr = (e) => be(e, nt, tt), S = (e) => Qe.test(e), ce = (e) => be(e, st, tr), Pe = (e) => be(e, dr, j), qe = (e) => be(e, rt, tt), ir = (e) => be(e, ot, or), Ee = (e) => be(e, it, rr), z = (e) => et.test(e), ze = (e) => ye(e, st), ar = (e) => ye(e, ur), Ye = (e) => ye(e, rt), lr = (e) => ye(e, nt), cr = (e) => ye(e, ot), Ce = (e) => ye(e, it, !0), be = (e, t, r) => {
   const o = Qe.exec(e);
   return o ? o[1] ? t(o[1]) : r(o[2]) : !1;
-}, be = (e, t, r = !1) => {
+}, ye = (e, t, r = !1) => {
   const o = et.exec(e);
   return o ? o[1] ? t(o[1]) : r : !1;
 }, rt = (e) => e === "position" || e === "percentage", ot = (e) => e === "image" || e === "url", nt = (e) => e === "length" || e === "size" || e === "bg-size", st = (e) => e === "length", dr = (e) => e === "number", ur = (e) => e === "family-name", it = (e) => e === "shadow", fr = () => {
-  const e = H("color"), t = H("font"), r = H("text"), o = H("font-weight"), n = H("tracking"), i = H("leading"), a = H("breakpoint"), l = H("container"), p = H("spacing"), w = H("radius"), b = H("shadow"), x = H("inset-shadow"), y = H("text-shadow"), d = H("drop-shadow"), s = H("blur"), g = H("perspective"), c = H("aspect"), u = H("ease"), k = H("animate"), f = () => ["auto", "avoid", "all", "avoid-page", "page", "left", "right", "column"], v = () => [
+  const e = F("color"), t = F("font"), r = F("text"), o = F("font-weight"), s = F("tracking"), i = F("leading"), a = F("breakpoint"), l = F("container"), p = F("spacing"), v = F("radius"), k = F("shadow"), x = F("inset-shadow"), b = F("text-shadow"), f = F("drop-shadow"), n = F("blur"), g = F("perspective"), c = F("aspect"), u = F("ease"), y = F("animate"), d = () => ["auto", "avoid", "all", "avoid-page", "page", "left", "right", "column"], w = () => [
     "center",
     "top",
     "bottom",
@@ -564,51 +564,51 @@ const H = (e) => {
     "bottom-left",
     // Deprecated since Tailwind CSS v4.1.0, see https://github.com/tailwindlabs/tailwindcss/pull/17378
     "left-bottom"
-  ], E = () => [...v(), z, S], I = () => ["auto", "hidden", "clip", "visible", "scroll"], L = () => ["auto", "contain", "none"], h = () => [z, S, p], T = () => [ue, "full", "auto", ...h()], D = () => [ie, "none", "subgrid", z, S], U = () => ["auto", {
+  ], T = () => [...w(), z, S], C = () => ["auto", "hidden", "clip", "visible", "scroll"], R = () => ["auto", "contain", "none"], h = () => [z, S, p], E = () => [ue, "full", "auto", ...h()], _ = () => [ie, "none", "subgrid", z, S], V = () => ["auto", {
     span: ["full", ie, z, S]
-  }, ie, z, S], F = () => [ie, "auto", z, S], M = () => ["auto", "min", "max", "fr", z, S], B = () => ["start", "end", "center", "between", "around", "evenly", "stretch", "baseline", "center-safe", "end-safe"], G = () => ["start", "end", "center", "stretch", "center-safe", "end-safe"], W = () => ["auto", ...h()], Y = () => [ue, "auto", "full", "dvw", "dvh", "lvw", "lvh", "svw", "svh", "min", "max", "fit", ...h()], C = () => [e, z, S], ne = () => [...v(), qe, Ye, {
+  }, ie, z, S], W = () => [ie, "auto", z, S], P = () => ["auto", "min", "max", "fr", z, S], B = () => ["start", "end", "center", "between", "around", "evenly", "stretch", "baseline", "center-safe", "end-safe"], N = () => ["start", "end", "center", "stretch", "center-safe", "end-safe"], K = () => ["auto", ...h()], q = () => [ue, "auto", "full", "dvw", "dvh", "lvw", "lvh", "svw", "svh", "min", "max", "fit", ...h()], A = () => [e, z, S], te = () => [...w(), Ye, qe, {
     position: [z, S]
   }], m = () => ["no-repeat", {
     repeat: ["", "x", "y", "space", "round"]
-  }], A = () => ["auto", "cover", "contain", lr, sr, {
+  }], I = () => ["auto", "cover", "contain", lr, sr, {
     size: [z, S]
-  }], O = () => [je, ze, ce], P = () => [
+  }], D = () => [je, ze, ce], M = () => [
     // Deprecated since Tailwind CSS v4.0.0
     "",
     "none",
     "full",
-    w,
+    v,
     z,
     S
-  ], N = () => ["", j, ze, ce], q = () => ["solid", "dashed", "dotted", "double"], de = () => ["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue", "saturation", "color", "luminosity"], $ = () => [j, je, qe, Ye], K = () => [
+  ], G = () => ["", j, ze, ce], Y = () => ["solid", "dashed", "dotted", "double"], de = () => ["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue", "saturation", "color", "luminosity"], U = () => [j, je, Ye, qe], H = () => [
     // Deprecated since Tailwind CSS v4.0.0
     "",
     "none",
-    s,
+    n,
     z,
     S
-  ], X = () => ["none", j, z, S], se = () => ["none", j, z, S], ke = () => [j, z, S], Ee = () => [ue, "full", ...h()];
+  ], X = () => ["none", j, z, S], se = () => ["none", j, z, S], ke = () => [j, z, S], Te = () => [ue, "full", ...h()];
   return {
     cacheSize: 500,
     theme: {
       animate: ["spin", "ping", "pulse", "bounce"],
       aspect: ["video"],
-      blur: [oe],
-      breakpoint: [oe],
+      blur: [ne],
+      breakpoint: [ne],
       color: [er],
-      container: [oe],
-      "drop-shadow": [oe],
+      container: [ne],
+      "drop-shadow": [ne],
       ease: ["in", "out", "in-out"],
       font: [nr],
       "font-weight": ["thin", "extralight", "light", "normal", "medium", "semibold", "bold", "extrabold", "black"],
-      "inset-shadow": [oe],
+      "inset-shadow": [ne],
       leading: ["none", "tight", "snug", "normal", "relaxed", "loose"],
       perspective: ["dramatic", "near", "normal", "midrange", "distant", "none"],
-      radius: [oe],
-      shadow: [oe],
+      radius: [ne],
+      shadow: [ne],
       spacing: ["px", j],
-      text: [oe],
-      "text-shadow": [oe],
+      text: [ne],
+      "text-shadow": [ne],
       tracking: ["tighter", "tight", "normal", "wide", "wider", "widest"]
     },
     classGroups: {
@@ -640,14 +640,14 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/break-after
        */
       "break-after": [{
-        "break-after": f()
+        "break-after": d()
       }],
       /**
        * Break Before
        * @see https://tailwindcss.com/docs/break-before
        */
       "break-before": [{
-        "break-before": f()
+        "break-before": d()
       }],
       /**
        * Break Inside
@@ -711,49 +711,49 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/object-position
        */
       "object-position": [{
-        object: E()
+        object: T()
       }],
       /**
        * Overflow
        * @see https://tailwindcss.com/docs/overflow
        */
       overflow: [{
-        overflow: I()
+        overflow: C()
       }],
       /**
        * Overflow X
        * @see https://tailwindcss.com/docs/overflow
        */
       "overflow-x": [{
-        "overflow-x": I()
+        "overflow-x": C()
       }],
       /**
        * Overflow Y
        * @see https://tailwindcss.com/docs/overflow
        */
       "overflow-y": [{
-        "overflow-y": I()
+        "overflow-y": C()
       }],
       /**
        * Overscroll Behavior
        * @see https://tailwindcss.com/docs/overscroll-behavior
        */
       overscroll: [{
-        overscroll: L()
+        overscroll: R()
       }],
       /**
        * Overscroll Behavior X
        * @see https://tailwindcss.com/docs/overscroll-behavior
        */
       "overscroll-x": [{
-        "overscroll-x": L()
+        "overscroll-x": R()
       }],
       /**
        * Overscroll Behavior Y
        * @see https://tailwindcss.com/docs/overscroll-behavior
        */
       "overscroll-y": [{
-        "overscroll-y": L()
+        "overscroll-y": R()
       }],
       /**
        * Position
@@ -765,63 +765,63 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       inset: [{
-        inset: T()
+        inset: E()
       }],
       /**
        * Right / Left
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       "inset-x": [{
-        "inset-x": T()
+        "inset-x": E()
       }],
       /**
        * Top / Bottom
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       "inset-y": [{
-        "inset-y": T()
+        "inset-y": E()
       }],
       /**
        * Start
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       start: [{
-        start: T()
+        start: E()
       }],
       /**
        * End
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       end: [{
-        end: T()
+        end: E()
       }],
       /**
        * Top
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       top: [{
-        top: T()
+        top: E()
       }],
       /**
        * Right
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       right: [{
-        right: T()
+        right: E()
       }],
       /**
        * Bottom
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       bottom: [{
-        bottom: T()
+        bottom: E()
       }],
       /**
        * Left
        * @see https://tailwindcss.com/docs/top-right-bottom-left
        */
       left: [{
-        left: T()
+        left: E()
       }],
       /**
        * Visibility
@@ -892,56 +892,56 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/grid-template-columns
        */
       "grid-cols": [{
-        "grid-cols": D()
+        "grid-cols": _()
       }],
       /**
        * Grid Column Start / End
        * @see https://tailwindcss.com/docs/grid-column
        */
       "col-start-end": [{
-        col: U()
+        col: V()
       }],
       /**
        * Grid Column Start
        * @see https://tailwindcss.com/docs/grid-column
        */
       "col-start": [{
-        "col-start": F()
+        "col-start": W()
       }],
       /**
        * Grid Column End
        * @see https://tailwindcss.com/docs/grid-column
        */
       "col-end": [{
-        "col-end": F()
+        "col-end": W()
       }],
       /**
        * Grid Template Rows
        * @see https://tailwindcss.com/docs/grid-template-rows
        */
       "grid-rows": [{
-        "grid-rows": D()
+        "grid-rows": _()
       }],
       /**
        * Grid Row Start / End
        * @see https://tailwindcss.com/docs/grid-row
        */
       "row-start-end": [{
-        row: U()
+        row: V()
       }],
       /**
        * Grid Row Start
        * @see https://tailwindcss.com/docs/grid-row
        */
       "row-start": [{
-        "row-start": F()
+        "row-start": W()
       }],
       /**
        * Grid Row End
        * @see https://tailwindcss.com/docs/grid-row
        */
       "row-end": [{
-        "row-end": F()
+        "row-end": W()
       }],
       /**
        * Grid Auto Flow
@@ -955,14 +955,14 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/grid-auto-columns
        */
       "auto-cols": [{
-        "auto-cols": M()
+        "auto-cols": P()
       }],
       /**
        * Grid Auto Rows
        * @see https://tailwindcss.com/docs/grid-auto-rows
        */
       "auto-rows": [{
-        "auto-rows": M()
+        "auto-rows": P()
       }],
       /**
        * Gap
@@ -997,14 +997,14 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/justify-items
        */
       "justify-items": [{
-        "justify-items": [...G(), "normal"]
+        "justify-items": [...N(), "normal"]
       }],
       /**
        * Justify Self
        * @see https://tailwindcss.com/docs/justify-self
        */
       "justify-self": [{
-        "justify-self": ["auto", ...G()]
+        "justify-self": ["auto", ...N()]
       }],
       /**
        * Align Content
@@ -1018,7 +1018,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/align-items
        */
       "align-items": [{
-        items: [...G(), {
+        items: [...N(), {
           baseline: ["", "last"]
         }]
       }],
@@ -1027,7 +1027,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/align-self
        */
       "align-self": [{
-        self: ["auto", ...G(), {
+        self: ["auto", ...N(), {
           baseline: ["", "last"]
         }]
       }],
@@ -1043,14 +1043,14 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/place-items
        */
       "place-items": [{
-        "place-items": [...G(), "baseline"]
+        "place-items": [...N(), "baseline"]
       }],
       /**
        * Place Self
        * @see https://tailwindcss.com/docs/place-self
        */
       "place-self": [{
-        "place-self": ["auto", ...G()]
+        "place-self": ["auto", ...N()]
       }],
       // Spacing
       /**
@@ -1121,63 +1121,63 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/margin
        */
       m: [{
-        m: W()
+        m: K()
       }],
       /**
        * Margin X
        * @see https://tailwindcss.com/docs/margin
        */
       mx: [{
-        mx: W()
+        mx: K()
       }],
       /**
        * Margin Y
        * @see https://tailwindcss.com/docs/margin
        */
       my: [{
-        my: W()
+        my: K()
       }],
       /**
        * Margin Start
        * @see https://tailwindcss.com/docs/margin
        */
       ms: [{
-        ms: W()
+        ms: K()
       }],
       /**
        * Margin End
        * @see https://tailwindcss.com/docs/margin
        */
       me: [{
-        me: W()
+        me: K()
       }],
       /**
        * Margin Top
        * @see https://tailwindcss.com/docs/margin
        */
       mt: [{
-        mt: W()
+        mt: K()
       }],
       /**
        * Margin Right
        * @see https://tailwindcss.com/docs/margin
        */
       mr: [{
-        mr: W()
+        mr: K()
       }],
       /**
        * Margin Bottom
        * @see https://tailwindcss.com/docs/margin
        */
       mb: [{
-        mb: W()
+        mb: K()
       }],
       /**
        * Margin Left
        * @see https://tailwindcss.com/docs/margin
        */
       ml: [{
-        ml: W()
+        ml: K()
       }],
       /**
        * Space Between X
@@ -1211,14 +1211,14 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/width#setting-both-width-and-height
        */
       size: [{
-        size: Y()
+        size: q()
       }],
       /**
        * Width
        * @see https://tailwindcss.com/docs/width
        */
       w: [{
-        w: [l, "screen", ...Y()]
+        w: [l, "screen", ...q()]
       }],
       /**
        * Min-Width
@@ -1230,7 +1230,7 @@ const H = (e) => {
           "screen",
           /** Deprecated. @see https://github.com/tailwindlabs/tailwindcss.com/issues/2027#issuecomment-2620152757 */
           "none",
-          ...Y()
+          ...q()
         ]
       }],
       /**
@@ -1248,7 +1248,7 @@ const H = (e) => {
           {
             screen: [a]
           },
-          ...Y()
+          ...q()
         ]
       }],
       /**
@@ -1256,21 +1256,21 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/height
        */
       h: [{
-        h: ["screen", "lh", ...Y()]
+        h: ["screen", "lh", ...q()]
       }],
       /**
        * Min-Height
        * @see https://tailwindcss.com/docs/min-height
        */
       "min-h": [{
-        "min-h": ["screen", "lh", "none", ...Y()]
+        "min-h": ["screen", "lh", "none", ...q()]
       }],
       /**
        * Max-Height
        * @see https://tailwindcss.com/docs/max-height
        */
       "max-h": [{
-        "max-h": ["screen", "lh", ...Y()]
+        "max-h": ["screen", "lh", ...q()]
       }],
       // ------------------
       // --- Typography ---
@@ -1348,7 +1348,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/letter-spacing
        */
       tracking: [{
-        tracking: [n, z, S]
+        tracking: [s, z, S]
       }],
       /**
        * Line Clamp
@@ -1402,14 +1402,14 @@ const H = (e) => {
        * @see https://v3.tailwindcss.com/docs/placeholder-color
        */
       "placeholder-color": [{
-        placeholder: C()
+        placeholder: A()
       }],
       /**
        * Text Color
        * @see https://tailwindcss.com/docs/text-color
        */
       "text-color": [{
-        text: C()
+        text: A()
       }],
       /**
        * Text Decoration
@@ -1421,7 +1421,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/text-decoration-style
        */
       "text-decoration-style": [{
-        decoration: [...q(), "wavy"]
+        decoration: [...Y(), "wavy"]
       }],
       /**
        * Text Decoration Thickness
@@ -1435,7 +1435,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/text-decoration-color
        */
       "text-decoration-color": [{
-        decoration: C()
+        decoration: A()
       }],
       /**
        * Text Underline Offset
@@ -1539,7 +1539,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/background-position
        */
       "bg-position": [{
-        bg: ne()
+        bg: te()
       }],
       /**
        * Background Repeat
@@ -1553,7 +1553,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/background-size
        */
       "bg-size": [{
-        bg: A()
+        bg: I()
       }],
       /**
        * Background Image
@@ -1573,49 +1573,49 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/background-color
        */
       "bg-color": [{
-        bg: C()
+        bg: A()
       }],
       /**
        * Gradient Color Stops From Position
        * @see https://tailwindcss.com/docs/gradient-color-stops
        */
       "gradient-from-pos": [{
-        from: O()
+        from: D()
       }],
       /**
        * Gradient Color Stops Via Position
        * @see https://tailwindcss.com/docs/gradient-color-stops
        */
       "gradient-via-pos": [{
-        via: O()
+        via: D()
       }],
       /**
        * Gradient Color Stops To Position
        * @see https://tailwindcss.com/docs/gradient-color-stops
        */
       "gradient-to-pos": [{
-        to: O()
+        to: D()
       }],
       /**
        * Gradient Color Stops From
        * @see https://tailwindcss.com/docs/gradient-color-stops
        */
       "gradient-from": [{
-        from: C()
+        from: A()
       }],
       /**
        * Gradient Color Stops Via
        * @see https://tailwindcss.com/docs/gradient-color-stops
        */
       "gradient-via": [{
-        via: C()
+        via: A()
       }],
       /**
        * Gradient Color Stops To
        * @see https://tailwindcss.com/docs/gradient-color-stops
        */
       "gradient-to": [{
-        to: C()
+        to: A()
       }],
       // ---------------
       // --- Borders ---
@@ -1625,175 +1625,175 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/border-radius
        */
       rounded: [{
-        rounded: P()
+        rounded: M()
       }],
       /**
        * Border Radius Start
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-s": [{
-        "rounded-s": P()
+        "rounded-s": M()
       }],
       /**
        * Border Radius End
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-e": [{
-        "rounded-e": P()
+        "rounded-e": M()
       }],
       /**
        * Border Radius Top
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-t": [{
-        "rounded-t": P()
+        "rounded-t": M()
       }],
       /**
        * Border Radius Right
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-r": [{
-        "rounded-r": P()
+        "rounded-r": M()
       }],
       /**
        * Border Radius Bottom
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-b": [{
-        "rounded-b": P()
+        "rounded-b": M()
       }],
       /**
        * Border Radius Left
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-l": [{
-        "rounded-l": P()
+        "rounded-l": M()
       }],
       /**
        * Border Radius Start Start
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-ss": [{
-        "rounded-ss": P()
+        "rounded-ss": M()
       }],
       /**
        * Border Radius Start End
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-se": [{
-        "rounded-se": P()
+        "rounded-se": M()
       }],
       /**
        * Border Radius End End
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-ee": [{
-        "rounded-ee": P()
+        "rounded-ee": M()
       }],
       /**
        * Border Radius End Start
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-es": [{
-        "rounded-es": P()
+        "rounded-es": M()
       }],
       /**
        * Border Radius Top Left
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-tl": [{
-        "rounded-tl": P()
+        "rounded-tl": M()
       }],
       /**
        * Border Radius Top Right
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-tr": [{
-        "rounded-tr": P()
+        "rounded-tr": M()
       }],
       /**
        * Border Radius Bottom Right
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-br": [{
-        "rounded-br": P()
+        "rounded-br": M()
       }],
       /**
        * Border Radius Bottom Left
        * @see https://tailwindcss.com/docs/border-radius
        */
       "rounded-bl": [{
-        "rounded-bl": P()
+        "rounded-bl": M()
       }],
       /**
        * Border Width
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w": [{
-        border: N()
+        border: G()
       }],
       /**
        * Border Width X
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-x": [{
-        "border-x": N()
+        "border-x": G()
       }],
       /**
        * Border Width Y
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-y": [{
-        "border-y": N()
+        "border-y": G()
       }],
       /**
        * Border Width Start
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-s": [{
-        "border-s": N()
+        "border-s": G()
       }],
       /**
        * Border Width End
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-e": [{
-        "border-e": N()
+        "border-e": G()
       }],
       /**
        * Border Width Top
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-t": [{
-        "border-t": N()
+        "border-t": G()
       }],
       /**
        * Border Width Right
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-r": [{
-        "border-r": N()
+        "border-r": G()
       }],
       /**
        * Border Width Bottom
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-b": [{
-        "border-b": N()
+        "border-b": G()
       }],
       /**
        * Border Width Left
        * @see https://tailwindcss.com/docs/border-width
        */
       "border-w-l": [{
-        "border-l": N()
+        "border-l": G()
       }],
       /**
        * Divide Width X
        * @see https://tailwindcss.com/docs/border-width#between-children
        */
       "divide-x": [{
-        "divide-x": N()
+        "divide-x": G()
       }],
       /**
        * Divide Width X Reverse
@@ -1805,7 +1805,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/border-width#between-children
        */
       "divide-y": [{
-        "divide-y": N()
+        "divide-y": G()
       }],
       /**
        * Divide Width Y Reverse
@@ -1817,91 +1817,91 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/border-style
        */
       "border-style": [{
-        border: [...q(), "hidden", "none"]
+        border: [...Y(), "hidden", "none"]
       }],
       /**
        * Divide Style
        * @see https://tailwindcss.com/docs/border-style#setting-the-divider-style
        */
       "divide-style": [{
-        divide: [...q(), "hidden", "none"]
+        divide: [...Y(), "hidden", "none"]
       }],
       /**
        * Border Color
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color": [{
-        border: C()
+        border: A()
       }],
       /**
        * Border Color X
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-x": [{
-        "border-x": C()
+        "border-x": A()
       }],
       /**
        * Border Color Y
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-y": [{
-        "border-y": C()
+        "border-y": A()
       }],
       /**
        * Border Color S
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-s": [{
-        "border-s": C()
+        "border-s": A()
       }],
       /**
        * Border Color E
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-e": [{
-        "border-e": C()
+        "border-e": A()
       }],
       /**
        * Border Color Top
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-t": [{
-        "border-t": C()
+        "border-t": A()
       }],
       /**
        * Border Color Right
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-r": [{
-        "border-r": C()
+        "border-r": A()
       }],
       /**
        * Border Color Bottom
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-b": [{
-        "border-b": C()
+        "border-b": A()
       }],
       /**
        * Border Color Left
        * @see https://tailwindcss.com/docs/border-color
        */
       "border-color-l": [{
-        "border-l": C()
+        "border-l": A()
       }],
       /**
        * Divide Color
        * @see https://tailwindcss.com/docs/divide-color
        */
       "divide-color": [{
-        divide: C()
+        divide: A()
       }],
       /**
        * Outline Style
        * @see https://tailwindcss.com/docs/outline-style
        */
       "outline-style": [{
-        outline: [...q(), "none", "hidden"]
+        outline: [...Y(), "none", "hidden"]
       }],
       /**
        * Outline Offset
@@ -1922,7 +1922,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/outline-color
        */
       "outline-color": [{
-        outline: C()
+        outline: A()
       }],
       // ---------------
       // --- Effects ---
@@ -1936,9 +1936,9 @@ const H = (e) => {
           // Deprecated since Tailwind CSS v4.0.0
           "",
           "none",
-          b,
+          k,
           Ce,
-          Te
+          Ee
         ]
       }],
       /**
@@ -1946,28 +1946,28 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/box-shadow#setting-the-shadow-color
        */
       "shadow-color": [{
-        shadow: C()
+        shadow: A()
       }],
       /**
        * Inset Box Shadow
        * @see https://tailwindcss.com/docs/box-shadow#adding-an-inset-shadow
        */
       "inset-shadow": [{
-        "inset-shadow": ["none", x, Ce, Te]
+        "inset-shadow": ["none", x, Ce, Ee]
       }],
       /**
        * Inset Box Shadow Color
        * @see https://tailwindcss.com/docs/box-shadow#setting-the-inset-shadow-color
        */
       "inset-shadow-color": [{
-        "inset-shadow": C()
+        "inset-shadow": A()
       }],
       /**
        * Ring Width
        * @see https://tailwindcss.com/docs/box-shadow#adding-a-ring
        */
       "ring-w": [{
-        ring: N()
+        ring: G()
       }],
       /**
        * Ring Width Inset
@@ -1981,7 +1981,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/box-shadow#setting-the-ring-color
        */
       "ring-color": [{
-        ring: C()
+        ring: A()
       }],
       /**
        * Ring Offset Width
@@ -1999,35 +1999,35 @@ const H = (e) => {
        * @see https://github.com/tailwindlabs/tailwindcss/blob/v4.0.0/packages/tailwindcss/src/utilities.ts#L4158
        */
       "ring-offset-color": [{
-        "ring-offset": C()
+        "ring-offset": A()
       }],
       /**
        * Inset Ring Width
        * @see https://tailwindcss.com/docs/box-shadow#adding-an-inset-ring
        */
       "inset-ring-w": [{
-        "inset-ring": N()
+        "inset-ring": G()
       }],
       /**
        * Inset Ring Color
        * @see https://tailwindcss.com/docs/box-shadow#setting-the-inset-ring-color
        */
       "inset-ring-color": [{
-        "inset-ring": C()
+        "inset-ring": A()
       }],
       /**
        * Text Shadow
        * @see https://tailwindcss.com/docs/text-shadow
        */
       "text-shadow": [{
-        "text-shadow": ["none", y, Ce, Te]
+        "text-shadow": ["none", b, Ce, Ee]
       }],
       /**
        * Text Shadow Color
        * @see https://tailwindcss.com/docs/text-shadow#setting-the-shadow-color
        */
       "text-shadow-color": [{
-        "text-shadow": C()
+        "text-shadow": A()
       }],
       /**
        * Opacity
@@ -2072,103 +2072,103 @@ const H = (e) => {
         "mask-linear": [j]
       }],
       "mask-image-linear-from-pos": [{
-        "mask-linear-from": $()
+        "mask-linear-from": U()
       }],
       "mask-image-linear-to-pos": [{
-        "mask-linear-to": $()
+        "mask-linear-to": U()
       }],
       "mask-image-linear-from-color": [{
-        "mask-linear-from": C()
+        "mask-linear-from": A()
       }],
       "mask-image-linear-to-color": [{
-        "mask-linear-to": C()
+        "mask-linear-to": A()
       }],
       "mask-image-t-from-pos": [{
-        "mask-t-from": $()
+        "mask-t-from": U()
       }],
       "mask-image-t-to-pos": [{
-        "mask-t-to": $()
+        "mask-t-to": U()
       }],
       "mask-image-t-from-color": [{
-        "mask-t-from": C()
+        "mask-t-from": A()
       }],
       "mask-image-t-to-color": [{
-        "mask-t-to": C()
+        "mask-t-to": A()
       }],
       "mask-image-r-from-pos": [{
-        "mask-r-from": $()
+        "mask-r-from": U()
       }],
       "mask-image-r-to-pos": [{
-        "mask-r-to": $()
+        "mask-r-to": U()
       }],
       "mask-image-r-from-color": [{
-        "mask-r-from": C()
+        "mask-r-from": A()
       }],
       "mask-image-r-to-color": [{
-        "mask-r-to": C()
+        "mask-r-to": A()
       }],
       "mask-image-b-from-pos": [{
-        "mask-b-from": $()
+        "mask-b-from": U()
       }],
       "mask-image-b-to-pos": [{
-        "mask-b-to": $()
+        "mask-b-to": U()
       }],
       "mask-image-b-from-color": [{
-        "mask-b-from": C()
+        "mask-b-from": A()
       }],
       "mask-image-b-to-color": [{
-        "mask-b-to": C()
+        "mask-b-to": A()
       }],
       "mask-image-l-from-pos": [{
-        "mask-l-from": $()
+        "mask-l-from": U()
       }],
       "mask-image-l-to-pos": [{
-        "mask-l-to": $()
+        "mask-l-to": U()
       }],
       "mask-image-l-from-color": [{
-        "mask-l-from": C()
+        "mask-l-from": A()
       }],
       "mask-image-l-to-color": [{
-        "mask-l-to": C()
+        "mask-l-to": A()
       }],
       "mask-image-x-from-pos": [{
-        "mask-x-from": $()
+        "mask-x-from": U()
       }],
       "mask-image-x-to-pos": [{
-        "mask-x-to": $()
+        "mask-x-to": U()
       }],
       "mask-image-x-from-color": [{
-        "mask-x-from": C()
+        "mask-x-from": A()
       }],
       "mask-image-x-to-color": [{
-        "mask-x-to": C()
+        "mask-x-to": A()
       }],
       "mask-image-y-from-pos": [{
-        "mask-y-from": $()
+        "mask-y-from": U()
       }],
       "mask-image-y-to-pos": [{
-        "mask-y-to": $()
+        "mask-y-to": U()
       }],
       "mask-image-y-from-color": [{
-        "mask-y-from": C()
+        "mask-y-from": A()
       }],
       "mask-image-y-to-color": [{
-        "mask-y-to": C()
+        "mask-y-to": A()
       }],
       "mask-image-radial": [{
         "mask-radial": [z, S]
       }],
       "mask-image-radial-from-pos": [{
-        "mask-radial-from": $()
+        "mask-radial-from": U()
       }],
       "mask-image-radial-to-pos": [{
-        "mask-radial-to": $()
+        "mask-radial-to": U()
       }],
       "mask-image-radial-from-color": [{
-        "mask-radial-from": C()
+        "mask-radial-from": A()
       }],
       "mask-image-radial-to-color": [{
-        "mask-radial-to": C()
+        "mask-radial-to": A()
       }],
       "mask-image-radial-shape": [{
         "mask-radial": ["circle", "ellipse"]
@@ -2180,22 +2180,22 @@ const H = (e) => {
         }]
       }],
       "mask-image-radial-pos": [{
-        "mask-radial-at": v()
+        "mask-radial-at": w()
       }],
       "mask-image-conic-pos": [{
         "mask-conic": [j]
       }],
       "mask-image-conic-from-pos": [{
-        "mask-conic-from": $()
+        "mask-conic-from": U()
       }],
       "mask-image-conic-to-pos": [{
-        "mask-conic-to": $()
+        "mask-conic-to": U()
       }],
       "mask-image-conic-from-color": [{
-        "mask-conic-from": C()
+        "mask-conic-from": A()
       }],
       "mask-image-conic-to-color": [{
-        "mask-conic-to": C()
+        "mask-conic-to": A()
       }],
       /**
        * Mask Mode
@@ -2216,7 +2216,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/mask-position
        */
       "mask-position": [{
-        mask: ne()
+        mask: te()
       }],
       /**
        * Mask Repeat
@@ -2230,7 +2230,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/mask-size
        */
       "mask-size": [{
-        mask: A()
+        mask: I()
       }],
       /**
        * Mask Type
@@ -2267,7 +2267,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/blur
        */
       blur: [{
-        blur: K()
+        blur: H()
       }],
       /**
        * Brightness
@@ -2292,9 +2292,9 @@ const H = (e) => {
           // Deprecated since Tailwind CSS v4.0.0
           "",
           "none",
-          d,
+          f,
           Ce,
-          Te
+          Ee
         ]
       }],
       /**
@@ -2302,7 +2302,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/filter-drop-shadow#setting-the-shadow-color
        */
       "drop-shadow-color": [{
-        "drop-shadow": C()
+        "drop-shadow": A()
       }],
       /**
        * Grayscale
@@ -2357,7 +2357,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/backdrop-blur
        */
       "backdrop-blur": [{
-        "backdrop-blur": K()
+        "backdrop-blur": H()
       }],
       /**
        * Backdrop Brightness
@@ -2503,7 +2503,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/animation
        */
       animate: [{
-        animate: ["none", k, z, S]
+        animate: ["none", y, z, S]
       }],
       // ------------------
       // --- Transforms ---
@@ -2527,7 +2527,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/perspective-origin
        */
       "perspective-origin": [{
-        "perspective-origin": E()
+        "perspective-origin": T()
       }],
       /**
        * Rotate
@@ -2623,7 +2623,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/transform-origin
        */
       "transform-origin": [{
-        origin: E()
+        origin: T()
       }],
       /**
        * Transform Style
@@ -2637,28 +2637,28 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/translate
        */
       translate: [{
-        translate: Ee()
+        translate: Te()
       }],
       /**
        * Translate X
        * @see https://tailwindcss.com/docs/translate
        */
       "translate-x": [{
-        "translate-x": Ee()
+        "translate-x": Te()
       }],
       /**
        * Translate Y
        * @see https://tailwindcss.com/docs/translate
        */
       "translate-y": [{
-        "translate-y": Ee()
+        "translate-y": Te()
       }],
       /**
        * Translate Z
        * @see https://tailwindcss.com/docs/translate
        */
       "translate-z": [{
-        "translate-z": Ee()
+        "translate-z": Te()
       }],
       /**
        * Translate None
@@ -2673,7 +2673,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/accent-color
        */
       accent: [{
-        accent: C()
+        accent: A()
       }],
       /**
        * Appearance
@@ -2687,7 +2687,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/just-in-time-mode#caret-color-utilities
        */
       "caret-color": [{
-        caret: C()
+        caret: A()
       }],
       /**
        * Color Scheme
@@ -2933,7 +2933,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/fill
        */
       fill: [{
-        fill: ["none", ...C()]
+        fill: ["none", ...A()]
       }],
       /**
        * Stroke Width
@@ -2947,7 +2947,7 @@ const H = (e) => {
        * @see https://tailwindcss.com/docs/stroke
        */
       stroke: [{
-        stroke: ["none", ...C()]
+        stroke: ["none", ...A()]
       }],
       // ---------------------
       // --- Accessibility ---
@@ -3042,47 +3042,47 @@ function at(e = mr) {
     width: window.innerWidth,
     height: window.innerHeight,
     orientation: window.innerWidth > window.innerHeight ? "landscape" : "portrait"
-  }), [o, n] = J(null), i = _(() => {
+  }), [o, s] = J(null), i = O(() => {
     if (typeof window > "u") return;
-    const s = {
+    const n = {
       width: window.innerWidth,
       height: window.innerHeight,
       orientation: window.innerWidth > window.innerHeight ? "landscape" : "portrait"
     };
-    r(s);
+    r(n);
   }, []), a = ee(() => {
     var g;
     if (o && e[o])
       return o;
-    const s = Object.entries(e).filter(([c, u]) => {
+    const n = Object.entries(e).filter(([c, u]) => {
       if (u.matcher)
         return u.matcher(t);
-      const k = !u.minWidth || t.width >= u.minWidth, f = !u.maxWidth || t.width <= u.maxWidth;
-      return k && f;
+      const y = !u.minWidth || t.width >= u.minWidth, d = !u.maxWidth || t.width <= u.maxWidth;
+      return y && d;
     });
-    return s.sort(([, c], [, u]) => {
-      const k = (c.minWidth ? 1 : 0) + (c.maxWidth ? 1 : 0);
-      return (u.minWidth ? 1 : 0) + (u.maxWidth ? 1 : 0) - k;
-    }), ((g = s[0]) == null ? void 0 : g[0]) || Object.keys(e)[0] || "desktop";
-  }, [t, e, o]), l = ee(() => e[a], [e, a]), p = ee(() => (l == null ? void 0 : l.type) || "grid", [l]), w = _((s) => {
-    if (s && !e[s]) {
-      console.warn(`Mode "${s}" not found in configuration`);
+    return n.sort(([, c], [, u]) => {
+      const y = (c.minWidth ? 1 : 0) + (c.maxWidth ? 1 : 0);
+      return (u.minWidth ? 1 : 0) + (u.maxWidth ? 1 : 0) - y;
+    }), ((g = n[0]) == null ? void 0 : g[0]) || Object.keys(e)[0] || "desktop";
+  }, [t, e, o]), l = ee(() => e[a], [e, a]), p = ee(() => (l == null ? void 0 : l.type) || "grid", [l]), v = O((n) => {
+    if (n && !e[n]) {
+      console.warn(`Mode "${n}" not found in configuration`);
       return;
     }
-    n(s);
-  }, [e]), b = _((s) => a === s, [a]), x = ee(() => Object.keys(e), [e]), y = _((s) => {
+    s(n);
+  }, [e]), k = O((n) => a === n, [a]), x = ee(() => Object.keys(e), [e]), b = O((n) => {
     switch (p) {
       case "grid":
-        return ["resizing", "dividers", "collapse"].includes(s);
+        return ["resizing", "dividers", "collapse"].includes(n);
       case "tabs":
-        return s === "tabs";
+        return n === "tabs";
       case "dock":
-        return s === "dock";
+        return n === "dock";
       default:
         return !1;
     }
-  }, [p]), d = ee(() => {
-    const s = Object.entries(e).map(([k, f]) => ({ name: k, ...f })).sort((k, f) => (k.breakpoint || 0) - (f.breakpoint || 0)), g = s.findIndex((k) => k.name === a), c = s[g + 1], u = s[g - 1];
+  }, [p]), f = ee(() => {
+    const n = Object.entries(e).map(([y, d]) => ({ name: y, ...d })).sort((y, d) => (y.breakpoint || 0) - (d.breakpoint || 0)), g = n.findIndex((y) => y.name === a), c = n[g + 1], u = n[g - 1];
     return {
       current: a,
       currentBreakpoint: (l == null ? void 0 : l.breakpoint) || 0,
@@ -3091,16 +3091,16 @@ function at(e = mr) {
       prevMode: u == null ? void 0 : u.name,
       prevBreakpoint: u == null ? void 0 : u.breakpoint,
       isSmallest: g === 0,
-      isLargest: g === s.length - 1
+      isLargest: g === n.length - 1
     };
   }, [e, a, l]);
-  return V(() => {
+  return $(() => {
     if (typeof window > "u") return;
-    const s = () => i(), g = () => {
+    const n = () => i(), g = () => {
       setTimeout(i, 100);
     };
-    return window.addEventListener("resize", s), window.addEventListener("orientationchange", g), () => {
-      window.removeEventListener("resize", s), window.removeEventListener("orientationchange", g);
+    return window.addEventListener("resize", n), window.addEventListener("orientationchange", g), () => {
+      window.removeEventListener("resize", n), window.removeEventListener("orientationchange", g);
     };
   }, [i]), {
     // Current state
@@ -3109,18 +3109,18 @@ function at(e = mr) {
     currentModeConfig: l,
     currentLayoutType: p,
     // Mode management
-    setMode: w,
-    isMode: b,
+    setMode: v,
+    isMode: k,
     availableModes: x,
     // Features and capabilities
-    supportsFeature: y,
-    breakpointInfo: d,
+    supportsFeature: b,
+    breakpointInfo: f,
     // Utilities
     isForced: !!o,
     updateViewport: i
   };
 }
-const te = "pretty-poly-grid-", ye = {
+const re = "pretty-poly-grid-", he = {
   save: (e, t) => {
     try {
       localStorage.setItem(e, JSON.stringify(t));
@@ -3148,7 +3148,7 @@ const te = "pretty-poly-grid-", ye = {
       const e = [];
       for (let t = 0; t < localStorage.length; t++) {
         const r = localStorage.key(t);
-        r && r.startsWith(te) && e.push(r);
+        r && r.startsWith(re) && e.push(r);
       }
       e.forEach((t) => localStorage.removeItem(t));
     } catch (e) {
@@ -3183,7 +3183,7 @@ const te = "pretty-poly-grid-", ye = {
       const e = [];
       for (let t = 0; t < sessionStorage.length; t++) {
         const r = sessionStorage.key(t);
-        r && r.startsWith(te) && e.push(r);
+        r && r.startsWith(re) && e.push(r);
       }
       e.forEach((t) => sessionStorage.removeItem(t));
     } catch (e) {
@@ -3200,13 +3200,13 @@ const te = "pretty-poly-grid-", ye = {
   },
   clear: () => {
     for (const e of pe.keys())
-      e.startsWith(te) && pe.delete(e);
+      e.startsWith(re) && pe.delete(e);
   }
 };
 function Me(e) {
   switch (e) {
     case "localStorage":
-      return typeof localStorage < "u" ? ye : Ae;
+      return typeof localStorage < "u" ? he : Ae;
     case "sessionStorage":
       return typeof sessionStorage < "u" ? lt : Ae;
     case "memory":
@@ -3214,49 +3214,49 @@ function Me(e) {
       return Ae;
   }
 }
-function Ne(e) {
-  return `${te}${e}`;
+function $e(e) {
+  return `${re}${e}`;
 }
-function gr(e, t, r = ye) {
-  const o = Ne(e), n = {
+function gr(e, t, r = he) {
+  const o = $e(e), s = {
     blocks: t.blocks,
     activeMode: t.activeMode
     // Don't persist viewport or transient state like activeDivider
   };
-  r.save(o, n);
+  r.save(o, s);
 }
-function yr(e, t = ye) {
-  const r = Ne(e);
+function hr(e, t = he) {
+  const r = $e(e);
   return t.load(r);
 }
-function hr(e, t = ye) {
-  const r = Ne(e);
+function br(e, t = he) {
+  const r = $e(e);
   t.remove(r);
 }
-function Nr(e = ye) {
+function $r(e = he) {
   const t = {};
   try {
-    if (e === ye && typeof localStorage < "u")
+    if (e === he && typeof localStorage < "u")
       for (let r = 0; r < localStorage.length; r++) {
         const o = localStorage.key(r);
-        if (o && o.startsWith(te)) {
-          const n = o.substring(te.length), i = e.load(o);
-          i && (t[n] = i);
+        if (o && o.startsWith(re)) {
+          const s = o.substring(re.length), i = e.load(o);
+          i && (t[s] = i);
         }
       }
     else if (e === lt && typeof sessionStorage < "u")
       for (let r = 0; r < sessionStorage.length; r++) {
         const o = sessionStorage.key(r);
-        if (o && o.startsWith(te)) {
-          const n = o.substring(te.length), i = e.load(o);
-          i && (t[n] = i);
+        if (o && o.startsWith(re)) {
+          const s = o.substring(re.length), i = e.load(o);
+          i && (t[s] = i);
         }
       }
     else if (e === Ae) {
       for (const r of pe.keys())
-        if (r.startsWith(te)) {
-          const o = r.substring(te.length), n = e.load(r);
-          n && (t[o] = n);
+        if (r.startsWith(re)) {
+          const o = r.substring(re.length), s = e.load(r);
+          s && (t[o] = s);
         }
     }
   } catch (r) {
@@ -3264,7 +3264,7 @@ function Nr(e = ye) {
   }
   return t;
 }
-function br(e) {
+function yr(e) {
   return {
     save: (t, r) => e(r),
     load: () => null,
@@ -3280,73 +3280,73 @@ function wr({
   enabled: t,
   state: r,
   onStateLoad: o,
-  autoSave: n = !0,
+  autoSave: s = !0,
   saveDelay: i = 500
 }) {
-  const a = me(null), l = me(), p = me(""), w = me(!1);
-  V(() => {
+  const a = me(null), l = me(), p = me(""), v = me(!1);
+  $(() => {
     if (!t) {
       a.current = null;
       return;
     }
-    typeof t == "function" ? a.current = br(t) : t === "localStorage" ? a.current = Me("localStorage") : t === "sessionStorage" ? a.current = Me("sessionStorage") : a.current = Me("localStorage");
-  }, [t]), V(() => {
-    if (!a.current || !t || typeof t == "function" || w.current)
+    typeof t == "function" ? a.current = yr(t) : t === "localStorage" ? a.current = Me("localStorage") : t === "sessionStorage" ? a.current = Me("sessionStorage") : a.current = Me("localStorage");
+  }, [t]), $(() => {
+    if (!a.current || !t || typeof t == "function" || v.current)
       return;
-    const s = yr(e, a.current);
-    s && (o == null || o(s), w.current = !0);
+    const n = hr(e, a.current);
+    n && (o == null || o(n), v.current = !0);
   }, [e, t]);
-  const b = _((s = r) => {
+  const k = O((n = r) => {
     if (!a.current || !t)
       return;
-    const g = JSON.stringify(s);
+    const g = JSON.stringify(n);
     if (g !== p.current)
       try {
-        gr(e, s, a.current), p.current = g;
+        gr(e, n, a.current), p.current = g;
       } catch (c) {
         console.warn("Failed to save grid state:", c);
       }
-  }, [e, t, r]), x = _((s = r) => {
+  }, [e, t, r]), x = O((n = r) => {
     l.current && clearTimeout(l.current), l.current = setTimeout(() => {
-      b(s);
+      k(n);
     }, i);
-  }, [b, i, r]), y = _(() => {
+  }, [k, i, r]), b = O(() => {
     if (!(!a.current || !t || typeof t == "function"))
       try {
-        hr(e, a.current), p.current = "";
-      } catch (s) {
-        console.warn("Failed to clear grid state:", s);
+        br(e, a.current), p.current = "";
+      } catch (n) {
+        console.warn("Failed to clear grid state:", n);
       }
-  }, [e, t]), d = _((s = r) => {
-    l.current && clearTimeout(l.current), b(s);
-  }, [b, r]);
-  return V(() => {
-    if (!(!n || !t))
+  }, [e, t]), f = O((n = r) => {
+    l.current && clearTimeout(l.current), k(n);
+  }, [k, r]);
+  return $(() => {
+    if (!(!s || !t))
       return x(r), () => {
         l.current && clearTimeout(l.current);
       };
-  }, [r, n, t, x]), V(() => {
+  }, [r, s, t, x]), $(() => {
     if (!t || typeof t == "function")
       return;
-    const s = () => {
-      d();
+    const n = () => {
+      f();
     };
-    return window.addEventListener("beforeunload", s), () => {
-      window.removeEventListener("beforeunload", s);
+    return window.addEventListener("beforeunload", n), () => {
+      window.removeEventListener("beforeunload", n);
     };
-  }, [d, t]), V(() => () => {
+  }, [f, t]), $(() => () => {
     l.current && clearTimeout(l.current);
   }, []), {
-    saveState: d,
+    saveState: f,
     debouncedSave: x,
-    clearState: y,
+    clearState: b,
     isEnabled: !!t
   };
 }
 function ct(e, t, r) {
   return Math.max(0, e - t - r);
 }
-function $r(e, t) {
+function Nr(e, t) {
   return t > 0 ? e / t : 0;
 }
 function ge(e, t, r) {
@@ -3355,14 +3355,14 @@ function ge(e, t, r) {
 function Gr(e, t) {
   return t > 0 && e <= t;
 }
-function vr(e, t, r, o, n) {
+function vr(e, t, r, o, s) {
   if (r === 0)
     return e;
   const i = t <= r, a = o * 2.5;
-  return i && e > a ? n : e < r && !i ? o : e;
+  return i && e > a ? s : e < r && !i ? o : e;
 }
-function kr(e, t, r = 0, o = 1 / 0, n = !1) {
-  const i = n ? -e : e, a = t + i;
+function kr(e, t, r = 0, o = 1 / 0, s = !1) {
+  const i = s ? -e : e, a = t + i;
   return ge(a, r, o);
 }
 function xr(e, t, r) {
@@ -3392,32 +3392,32 @@ function Kr(e, t, r = 1e-3) {
   return Math.abs(e + t) <= r;
 }
 function zr(e, t) {
-  const r = _((a) => "touches" in a ? {
+  const r = O((a) => "touches" in a ? {
     x: a.touches[0].clientX,
     y: a.touches[0].clientY
   } : {
     x: a.clientX,
     y: a.clientY
-  }, []), o = _((a, l, p) => {
-    const w = e.blocks[a];
-    if (!w) return;
-    if (w.resizable === !1) {
+  }, []), o = O((a, l, p) => {
+    const v = e.blocks[a];
+    if (!v) return;
+    if (v.resizable === !1) {
       console.warn(`Cannot resize block "${a}" - block is marked as non-resizable.`);
       return;
     }
-    const b = r(p), x = document.querySelector(`[data-divider-id="${l}"]`), y = (x == null ? void 0 : x.getAttribute("data-divider-position")) || "end", s = Object.values(e.blocks).filter(
-      (f) => f.parentId === w.parentId
+    const k = r(p), x = document.querySelector(`[data-divider-id="${l}"]`), b = (x == null ? void 0 : x.getAttribute("data-divider-position")) || "end", n = Object.values(e.blocks).filter(
+      (d) => d.parentId === v.parentId
     ).sort(
-      (f, v) => (f.order || 0) - (v.order || 0)
-    ), g = s.findIndex((f) => f.id === a);
+      (d, w) => (d.order || 0) - (w.order || 0)
+    ), g = n.findIndex((d) => d.id === a);
     let c = null;
-    if (y === "start" && g > 0 ? c = s[g - 1] : y === "end" && g < s.length - 1 && (c = s[g + 1]), c && c.resizable === !1) {
+    if (b === "start" && g > 0 ? c = n[g - 1] : b === "end" && g < n.length - 1 && (c = n[g + 1]), c && c.resizable === !1) {
       console.warn(
         `Cannot resize block "${a}" - adjacent block "${c.id}" is marked as non-resizable.`
       );
       return;
     }
-    if (c && w.sizeUnit === "fr" && c.sizeUnit === "px") {
+    if (c && v.sizeUnit === "fr" && c.sizeUnit === "px") {
       console.warn(
         `Cannot resize fr block "${a}" when adjacent to px block "${c.id}". Fr blocks fill available space and should not be directly resized. Consider resizing the px block instead.`
       );
@@ -3428,88 +3428,89 @@ function zr(e, t) {
       payload: {
         blockId: a,
         dividerId: l,
-        startPosition: b,
-        initialSize: w.defaultSize || 0,
+        startPosition: k,
+        initialSize: v.defaultSize || 0,
         initialAdjacentBlockId: c == null ? void 0 : c.id,
         initialAdjacentSize: c ? c.originalDefaultSize || c.defaultSize || 0 : void 0
       }
     }), document.body.style.userSelect = "none";
-    const u = w.parentId ? e.blocks[w.parentId] : null, k = (u == null ? void 0 : u.direction) || "row";
-    document.body.style.cursor = k === "row" ? "col-resize" : "row-resize";
-  }, [e.blocks, t, r]), n = _((a) => {
+    const u = v.parentId ? e.blocks[v.parentId] : null, y = (u == null ? void 0 : u.direction) || "row";
+    document.body.style.cursor = y === "row" ? "col-resize" : "row-resize";
+  }, [e.blocks, t, r]), s = O((a) => {
     if (!e.resize.isDragging || !e.resize.activeBlockId) return;
     const l = e.blocks[e.resize.activeBlockId];
     if (!l) return;
-    const p = r(a), w = l.parentId ? e.blocks[l.parentId] : null, b = (w == null ? void 0 : w.direction) || "row", x = b === "row" ? p.x - e.resize.startPosition.x : p.y - e.resize.startPosition.y;
+    const p = r(a), v = l.parentId ? e.blocks[l.parentId] : null, k = (v == null ? void 0 : v.direction) || "row", x = k === "row" ? p.x - e.resize.startPosition.x : p.y - e.resize.startPosition.y;
     if (l.sizeUnit === "px") {
-      const y = document.querySelector(`[data-divider-id="${e.resize.activeDividerId}"]`), s = ((y == null ? void 0 : y.getAttribute("data-divider-position")) || "end") === "start", g = kr(
+      const b = document.querySelector(`[data-divider-id="${e.resize.activeDividerId}"]`), n = ((b == null ? void 0 : b.getAttribute("data-divider-position")) || "end") === "start", g = kr(
         x,
         e.resize.initialSize,
         l.minSize,
         l.maxSize,
-        s
+        n
       );
       t({
         type: "RESIZE_BLOCK",
         payload: { blockId: e.resize.activeBlockId, size: g }
       });
     } else if (l.sizeUnit === "fr") {
-      const y = Object.values(e.blocks).filter(
-        (M) => M.parentId === l.parentId
-      ), d = y.filter((M) => M.sizeUnit === "fr"), s = l.parentId ? document.querySelector(`[data-block-id="${l.parentId}"]`) : document.querySelector('[data-block-id="root"]'), g = s ? b === "row" ? s.clientWidth : s.clientHeight : 1200, c = y.filter((M) => M.sizeUnit === "px").reduce((M, B) => {
-        const G = document.querySelector(`[data-block-id="${B.id}"]`);
-        if (!G) return M;
-        const W = b === "row" ? G.clientWidth : G.clientHeight;
-        return M + W;
-      }, 0), k = Array.from(
-        (s == null ? void 0 : s.querySelectorAll('[data-block-type="divider"]')) || []
-      ).reduce((M, B) => {
-        if (!(B instanceof HTMLElement)) return M;
-        const G = b === "row" ? B.clientWidth : B.clientHeight;
-        return M + G;
-      }, 0), v = ct(g, c, k), E = d.reduce(
-        (M, B) => M + (B.defaultSize || 1),
+      const b = Object.values(e.blocks).filter(
+        (P) => P.parentId === l.parentId
+      ), f = b.filter((P) => P.sizeUnit === "fr"), n = l.parentId ? document.querySelector(`[data-block-id="${l.parentId}"]`) : document.querySelector('[data-block-id="root"]'), g = n ? k === "row" ? n.clientWidth : n.clientHeight : 1200, c = b.filter((P) => P.sizeUnit === "px").reduce((P, B) => {
+        const N = document.querySelector(`[data-block-id="${B.id}"]`);
+        if (!N) return P;
+        const K = k === "row" ? N.clientWidth : N.clientHeight;
+        return P + K;
+      }, 0), y = Array.from(
+        (n == null ? void 0 : n.querySelectorAll('[data-block-type="divider"]')) || []
+      ).reduce((P, B) => {
+        if (!(B instanceof HTMLElement)) return P;
+        const N = k === "row" ? B.clientWidth : B.clientHeight;
+        return P + N;
+      }, 0), w = ct(g, c, y), T = f.reduce(
+        (P, B) => P + (B.defaultSize || 1),
         0
-      ), I = E > 0 ? v / E : 0;
-      if (I === 0) return;
-      const L = Sr(x, I), h = d.sort(
-        (M, B) => (M.order || 0) - (B.order || 0)
-      ), T = h.findIndex(
-        (M) => M.id === e.resize.activeBlockId
-      ), D = document.querySelector(`[data-divider-id="${e.resize.activeDividerId}"]`), U = (D == null ? void 0 : D.getAttribute("data-divider-position")) || "end";
-      let F = null;
-      if (U === "start" && T > 0 ? F = h[T - 1] : U === "end" && T < h.length - 1 && (F = h[T + 1]), F) {
-        let M, B;
-        M = L, B = -L;
-        const G = 0.1, W = Math.max(
-          G,
-          e.resize.initialSize + M
-        ), Y = Math.max(
-          G,
+      ), C = T > 0 ? w / T : 0;
+      if (C === 0) return;
+      const R = Sr(x, C), h = f.sort(
+        (P, B) => (P.order || 0) - (B.order || 0)
+      ), E = h.findIndex(
+        (P) => P.id === e.resize.activeBlockId
+      ), _ = document.querySelector(`[data-divider-id="${e.resize.activeDividerId}"]`), V = (_ == null ? void 0 : _.getAttribute("data-divider-position")) || "end";
+      let W = null;
+      if (V === "start" && E > 0 ? W = h[E - 1] : V === "end" && E < h.length - 1 && (W = h[E + 1]), W) {
+        let P, B;
+        P = R, B = -R;
+        const N = 0.1, K = Math.max(
+          N,
+          e.resize.initialSize + P
+        ), q = Math.max(
+          N,
           (e.resize.initialAdjacentSize || 1) + B
-        ), C = W - e.resize.initialSize, ne = Y - (e.resize.initialAdjacentSize || 1);
-        Math.abs(C + ne) < 0.01 && (t({
+        ), A = K - e.resize.initialSize, te = q - (e.resize.initialAdjacentSize || 1);
+        Math.abs(A + te) < 0.01 && (t({
           type: "RESIZE_BLOCK",
           payload: {
             blockId: e.resize.activeBlockId,
-            size: W
+            size: K
           }
         }), t({
           type: "RESIZE_BLOCK",
-          payload: { blockId: F.id, size: Y }
+          payload: { blockId: W.id, size: q }
         }));
       }
     }
-  }, [e.resize, e.blocks, t, r]), i = _(() => {
+  }, [e.resize, e.blocks, t, r]), i = O(() => {
     t({ type: "END_RESIZE" }), document.body.style.userSelect = "", document.body.style.cursor = "";
   }, [t]);
   return {
     startResize: o,
-    updateResize: n,
+    updateResize: s,
     endResize: i
   };
 }
-function Er(e, t) {
+function Tr(e, t) {
+  var r;
   switch (t.type) {
     case "HIDE_BLOCK":
       return {
@@ -3517,59 +3518,59 @@ function Er(e, t) {
         hiddenBlocks: /* @__PURE__ */ new Set([...e.hiddenBlocks, t.payload.blockId])
       };
     case "SHOW_BLOCK":
-      const r = new Set(e.hiddenBlocks);
-      return r.delete(t.payload.blockId), {
+      const o = new Set(e.hiddenBlocks);
+      return o.delete(t.payload.blockId), {
         ...e,
-        hiddenBlocks: r
+        hiddenBlocks: o
       };
     case "TOGGLE_BLOCK_VISIBILITY":
-      const o = e.hiddenBlocks.has(t.payload.blockId), n = new Set(e.hiddenBlocks);
-      return o ? n.delete(t.payload.blockId) : n.add(t.payload.blockId), {
+      const s = e.hiddenBlocks.has(t.payload.blockId), i = new Set(e.hiddenBlocks);
+      return s ? i.delete(t.payload.blockId) : i.add(t.payload.blockId), {
         ...e,
-        hiddenBlocks: n
+        hiddenBlocks: i
       };
     case "RESIZE_BLOCK":
-      const i = e.blocks[t.payload.blockId];
-      return i ? {
+      const a = e.blocks[t.payload.blockId];
+      return a ? {
         ...e,
         blocks: {
           ...e.blocks,
           [t.payload.blockId]: {
-            ...i,
+            ...a,
             defaultSize: t.payload.size,
             size: t.payload.size
           }
         }
       } : e;
     case "COLLAPSE_BLOCK":
-      const a = e.blocks[t.payload.blockId];
-      if (!a) return e;
-      const l = a.collapseTo ?? 0, p = a.minSize ?? 0, w = Math.max(l, p);
+      const l = e.blocks[t.payload.blockId];
+      if (!l) return e;
+      const p = l.collapseTo ?? 0, v = l.minSize ?? 0, k = Math.max(p, v);
       return {
         ...e,
         blocks: {
           ...e.blocks,
           [t.payload.blockId]: {
-            ...a,
+            ...l,
             // Preserve original size for expand
-            originalDefaultSize: a.originalDefaultSize || a.defaultSize,
-            defaultSize: w,
-            size: w
+            originalDefaultSize: l.originalDefaultSize || l.defaultSize,
+            defaultSize: k,
+            size: k
           }
         }
       };
     case "EXPAND_BLOCK":
-      const b = e.blocks[t.payload.blockId];
-      if (!b) return e;
-      const x = b.originalDefaultSize || b.defaultSize || 100;
+      const x = e.blocks[t.payload.blockId];
+      if (!x) return e;
+      const b = x.originalDefaultSize || x.defaultSize || 100;
       return {
         ...e,
         blocks: {
           ...e.blocks,
           [t.payload.blockId]: {
-            ...b,
-            defaultSize: x,
-            size: x
+            ...x,
+            defaultSize: b,
+            size: b
           }
         }
       };
@@ -3596,19 +3597,19 @@ function Er(e, t) {
         viewport: e.viewport
       };
     case "RESET_STATE":
-      const y = Object.fromEntries(
-        Object.entries(e.blocks).map(([d, s]) => [
-          d,
+      const f = Object.fromEntries(
+        Object.entries(e.blocks).map(([n, g]) => [
+          n,
           {
-            ...s,
-            size: s.defaultSize
+            ...g,
+            size: g.defaultSize
             // Reset to original defaultSize stored somewhere, or current defaultSize
           }
         ])
       );
       return {
         ...e,
-        blocks: y,
+        blocks: f,
         activeDivider: void 0,
         resize: {
           isDragging: !1,
@@ -3647,107 +3648,139 @@ function Er(e, t) {
         }
       };
     case "SPLIT_BLOCK": {
-      const { targetBlockId: d, direction: s, firstChildId: g, secondChildId: c, initialSize: u = 1 } = t.payload, k = e.blocks[d];
-      if (!k) return e;
-      const f = {
-        ...k,
-        type: "group",
-        direction: s === "horizontal" ? "column" : "row",
-        children: [g, c],
-        viewType: void 0
-        // Groups don't have view types
-      }, v = {
-        id: g,
-        type: "block",
-        parentId: d,
-        order: 0,
-        defaultSize: u,
-        sizeUnit: "fr",
-        viewType: k.viewType,
-        viewState: k.viewState
-      }, E = {
-        id: c,
-        type: "block",
-        parentId: d,
-        order: 1,
-        defaultSize: u,
-        sizeUnit: "fr",
-        viewType: t.payload.newViewType
-      };
-      return {
-        ...e,
-        blocks: {
-          ...e.blocks,
-          [d]: f,
-          [g]: v,
-          [c]: E
-        }
-      };
+      const { targetBlockId: n, direction: g, firstChildId: c, secondChildId: u, initialSize: y = 1 } = t.payload, d = e.blocks[n];
+      if (!d)
+        return console.warn(`Cannot split: block ${n} not found`), e;
+      if (d.type !== "group")
+        return console.warn(`Cannot split: block ${n} is not a group`), e;
+      if (d.canSplit !== !0)
+        return console.warn(`Cannot split: block ${n} does not have canSplit enabled`), e;
+      const w = g === "horizontal" ? "column" : "row", T = t.payload.newViewType || d.defaultViewType;
+      if (!d.direction) {
+        const C = d.children || [], R = C[0], h = R ? e.blocks[R] : void 0, E = {
+          ...d,
+          direction: w,
+          children: [c, u]
+        }, _ = {
+          id: c,
+          type: "block",
+          parentId: n,
+          order: 0,
+          defaultSize: y,
+          sizeUnit: "fr",
+          viewType: h == null ? void 0 : h.viewType,
+          viewState: h == null ? void 0 : h.viewState
+        }, V = {
+          id: u,
+          type: "block",
+          parentId: n,
+          order: 1,
+          defaultSize: y,
+          sizeUnit: "fr",
+          viewType: T
+        }, W = { ...e.blocks };
+        return C.forEach((P) => {
+          delete W[P];
+        }), {
+          ...e,
+          blocks: {
+            ...W,
+            [n]: E,
+            [c]: _,
+            [u]: V
+          }
+        };
+      }
+      if (d.direction) {
+        if (d.direction !== w)
+          return console.warn(`Cannot split group ${n}: direction mismatch (has ${d.direction}, requested ${w})`), e;
+        const C = {
+          ...d,
+          children: [...d.children || [], u]
+        }, R = {
+          id: u,
+          type: "block",
+          parentId: n,
+          order: ((r = d.children) == null ? void 0 : r.length) || 0,
+          defaultSize: y,
+          sizeUnit: "fr",
+          viewType: T
+        };
+        return {
+          ...e,
+          blocks: {
+            ...e.blocks,
+            [n]: C,
+            [u]: R
+          }
+        };
+      }
+      return e;
     }
     case "UNSPLIT_BLOCK": {
-      const { blockId: d } = t.payload, s = e.blocks[d];
-      if (!s || s.type !== "group" || !s.children)
+      const { blockId: n } = t.payload, g = e.blocks[n];
+      if (!g || g.type !== "group" || !g.children)
         return e;
-      const g = { ...e.blocks };
-      s.children.forEach((u) => {
-        delete g[u];
+      const c = { ...e.blocks };
+      g.children.forEach((y) => {
+        delete c[y];
       });
-      const c = {
-        ...s,
+      const u = {
+        ...g,
         type: "block",
         children: void 0,
         viewType: void 0
         // User will need to set content
       };
-      return g[d] = c, {
+      return c[n] = u, {
         ...e,
-        blocks: g
+        blocks: c
       };
     }
     case "ADD_BLOCK": {
-      const { parentId: d, block: s } = t.payload, g = e.blocks[d];
-      if (!g) return e;
-      const c = g.type === "group" && g.children ? {
-        ...g,
-        children: [...g.children, s.id]
-      } : g;
+      const { parentId: n, block: g } = t.payload, c = e.blocks[n];
+      if (!c) return e;
+      const u = c.type === "group" && c.children ? {
+        ...c,
+        children: [...c.children, g.id]
+      } : c;
       return {
         ...e,
         blocks: {
           ...e.blocks,
-          [d]: c,
-          [s.id]: s
+          [n]: u,
+          [g.id]: g
         }
       };
     }
     case "REMOVE_BLOCK": {
-      const { blockId: d } = t.payload, s = e.blocks[d];
-      if (!s) return e;
-      const g = { ...e.blocks };
-      if (s.parentId) {
-        const u = g[s.parentId];
-        u && u.type === "group" && u.children && (g[s.parentId] = {
-          ...u,
-          children: u.children.filter((k) => k !== d)
+      const { blockId: n } = t.payload, g = e.blocks[n];
+      if (!g) return e;
+      const c = { ...e.blocks };
+      if (g.parentId) {
+        const y = c[g.parentId];
+        y && y.type === "group" && y.children && (c[g.parentId] = {
+          ...y,
+          children: y.children.filter((d) => d !== n)
         });
       }
-      delete g[d];
-      const c = new Set(e.hiddenBlocks);
-      return c.delete(d), {
+      delete c[n];
+      const u = new Set(e.hiddenBlocks);
+      return u.delete(n), {
         ...e,
-        blocks: g,
-        hiddenBlocks: c
+        blocks: c,
+        hiddenBlocks: u
       };
     }
     case "SET_BLOCK_VIEW_TYPE": {
-      const { blockId: d, viewType: s } = t.payload, g = e.blocks[d];
-      return g ? {
+      const { blockId: n, viewType: g } = t.payload, c = e.blocks[n];
+      return c ? {
         ...e,
         blocks: {
           ...e.blocks,
-          [d]: {
-            ...g,
-            viewType: s
+          [n]: {
+            ...c,
+            viewType: g
           }
         }
       } : e;
@@ -3756,14 +3789,14 @@ function Er(e, t) {
       return e;
   }
 }
-function Tr(e, t, r) {
+function Er(e, t, r) {
   return {
-    blocks: e.reduce((n, i) => (n[i.id] = {
+    blocks: e.reduce((s, i) => (s[i.id] = {
       ...i,
       size: i.defaultSize,
       originalDefaultSize: i.defaultSize
       // Store original size for expand functionality
-    }, n), {}),
+    }, s), {}),
     hiddenBlocks: /* @__PURE__ */ new Set(),
     // Initialize with no hidden blocks
     activeMode: r,
@@ -3781,173 +3814,173 @@ function Cr({
   blocks: t,
   modes: r,
   gridId: o = "default",
-  persist: n = !1,
+  persist: s = !1,
   persistKey: i,
   onModeChange: a,
   onLayoutChange: l
 }) {
-  const { activeMode: p, viewport: w, setMode: b } = at(r), [x, y] = It(
-    Er,
-    Tr(t, w, p)
+  const { activeMode: p, viewport: v, setMode: k } = at(r), [x, b] = It(
+    Tr,
+    Er(t, v, p)
   );
-  V(() => {
-    y({
+  $(() => {
+    b({
       type: "UPDATE_VIEWPORT",
-      payload: { viewport: w }
+      payload: { viewport: v }
     });
-  }, [w]), V(() => {
-    const f = x.activeMode;
-    p !== f && (y({
+  }, [v]), $(() => {
+    const d = x.activeMode;
+    p !== d && (b({
       type: "SWITCH_MODE",
       payload: { mode: p }
-    }), a == null || a(p, f));
+    }), a == null || a(p, d));
   }, [p, x.activeMode, a]);
-  const { saveState: d, clearState: s } = wr({
+  const { saveState: f, clearState: n } = wr({
     gridId: i || o,
-    enabled: n,
+    enabled: s,
     state: x,
-    onStateLoad: (f) => {
-      y({ type: "LOAD_STATE", payload: { state: f } });
+    onStateLoad: (d) => {
+      b({ type: "LOAD_STATE", payload: { state: d } });
     },
     autoSave: !0
-  }), { startResize: g, updateResize: c, endResize: u } = zr(x, y), k = ee(
+  }), { startResize: g, updateResize: c, endResize: u } = zr(x, b), y = ee(
     () => ({
       gridId: o,
       state: {
         ...x,
         activeMode: p,
-        viewport: w
+        viewport: v
       },
-      dispatch: y,
+      dispatch: b,
       // Grid operations
-      resizeBlock: (f, v) => {
-        y({
+      resizeBlock: (d, w) => {
+        b({
           type: "RESIZE_BLOCK",
-          payload: { blockId: f, size: v }
+          payload: { blockId: d, size: w }
         });
       },
-      collapseBlock: (f) => {
-        y({
+      collapseBlock: (d) => {
+        b({
           type: "COLLAPSE_BLOCK",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
-      expandBlock: (f) => {
-        y({
+      expandBlock: (d) => {
+        b({
           type: "EXPAND_BLOCK",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
-      switchMode: (f) => {
-        b(f);
+      switchMode: (d) => {
+        k(d);
       },
       // Block visibility operations
-      hideBlock: (f) => {
-        y({
+      hideBlock: (d) => {
+        b({
           type: "HIDE_BLOCK",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
-      showBlock: (f) => {
-        y({
+      showBlock: (d) => {
+        b({
           type: "SHOW_BLOCK",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
-      toggleBlockVisibility: (f) => {
-        y({
+      toggleBlockVisibility: (d) => {
+        b({
           type: "TOGGLE_BLOCK_VISIBILITY",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
       // Split operations (LayoutService primitives)
-      splitBlock: (f, v, E = {}) => {
-        const { initialSize: I = 1, viewType: L, position: h = "after" } = E, T = `${f}-1`, D = `${f}-2`;
-        return y({
+      splitBlock: (d, w, T = {}) => {
+        const { initialSize: C = 1, viewType: R, position: h = "after" } = T, E = Date.now(), _ = `${d}-${E}-1`, V = `${d}-${E}-2`;
+        return b({
           type: "SPLIT_BLOCK",
           payload: {
-            targetBlockId: f,
-            direction: v,
-            newBlockId: h === "before" ? T : D,
-            firstChildId: T,
-            secondChildId: D,
-            initialSize: I,
-            newViewType: L,
+            targetBlockId: d,
+            direction: w,
+            newBlockId: h === "before" ? _ : V,
+            firstChildId: _,
+            secondChildId: V,
+            initialSize: C,
+            newViewType: R,
             position: h
           }
-        }), h === "before" ? T : D;
+        }), h === "before" ? _ : V;
       },
-      unsplitBlock: (f) => {
-        y({
+      unsplitBlock: (d) => {
+        b({
           type: "UNSPLIT_BLOCK",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
-      canSplit: (f) => {
-        var I;
-        const v = x.blocks[f];
-        if (!v || v.type !== "block" || v.canSplit === !1) return !1;
-        const E = ((I = v.splitConfig) == null ? void 0 : I.minSplitSize) || 200;
-        return !(v.sizeUnit === "px" && (v.defaultSize || 0) < E * 2);
+      canSplit: (d) => {
+        var C;
+        const w = x.blocks[d];
+        if (!w || w.type !== "group" || w.canSplit !== !0) return !1;
+        const T = ((C = w.splitConfig) == null ? void 0 : C.minSplitSize) || 200;
+        return !(w.sizeUnit === "px" && (w.defaultSize || 0) < T * 2);
       },
-      addBlock: (f, v) => {
-        const E = v.id || `block-${Date.now()}`, I = {
-          id: E,
+      addBlock: (d, w) => {
+        const T = w.id || `block-${Date.now()}`, C = {
+          id: T,
           type: "block",
-          parentId: f,
+          parentId: d,
           defaultSize: 1,
           sizeUnit: "fr",
-          ...v
+          ...w
         };
-        return y({
+        return b({
           type: "ADD_BLOCK",
-          payload: { parentId: f, block: I }
-        }), E;
+          payload: { parentId: d, block: C }
+        }), T;
       },
-      removeBlock: (f) => {
-        y({
+      removeBlock: (d) => {
+        b({
           type: "REMOVE_BLOCK",
-          payload: { blockId: f }
+          payload: { blockId: d }
         });
       },
       // View type operations (future ViewRegistry support)
-      setBlockViewType: (f, v) => {
-        y({
+      setBlockViewType: (d, w) => {
+        b({
           type: "SET_BLOCK_VIEW_TYPE",
-          payload: { blockId: f, viewType: v }
+          payload: { blockId: d, viewType: w }
         });
       },
-      getBlockViewType: (f) => {
-        var v;
-        return (v = x.blocks[f]) == null ? void 0 : v.viewType;
+      getBlockViewType: (d) => {
+        var w;
+        return (w = x.blocks[d]) == null ? void 0 : w.viewType;
       },
       // Resize operations (using extracted hook)
       startResize: g,
       updateResize: c,
       endResize: u,
       // Persistence
-      persistState: () => d(x),
+      persistState: () => f(x),
       resetState: () => {
-        y({ type: "RESET_STATE" }), s();
+        b({ type: "RESET_STATE" }), n();
       }
     }),
-    [o, x, p, w, d, s, b, g, c, u]
+    [o, x, p, v, f, n, k, g, c, u]
   );
-  return V(() => {
+  return $(() => {
     if (l) {
-      const f = Object.values(x.blocks);
-      l(f);
+      const d = Object.values(x.blocks);
+      l(d);
     }
-  }, [x.blocks, l]), /* @__PURE__ */ R.jsx(dt.Provider, { value: k, children: e });
+  }, [x.blocks, l]), /* @__PURE__ */ L.jsx(dt.Provider, { value: y, children: e });
 }
-function re() {
+function oe() {
   const e = Re(dt);
   if (!e)
     throw new Error("useGridContext must be used within a GridProvider");
   return e;
 }
-function $e() {
-  const { state: e } = re();
+function Ne() {
+  const { state: e } = oe();
   return e;
 }
 function Ar() {
@@ -3956,18 +3989,18 @@ function Ar() {
     collapseBlock: t,
     expandBlock: r,
     hideBlock: o,
-    showBlock: n,
+    showBlock: s,
     toggleBlockVisibility: i,
     switchMode: a,
     persistState: l,
     resetState: p
-  } = re();
+  } = oe();
   return {
     resizeBlock: e,
     collapseBlock: t,
     expandBlock: r,
     hideBlock: o,
-    showBlock: n,
+    showBlock: s,
     toggleBlockVisibility: i,
     switchMode: a,
     persistState: l,
@@ -3975,7 +4008,7 @@ function Ar() {
   };
 }
 function ut() {
-  const { startResize: e, updateResize: t, endResize: r, state: o } = re();
+  const { startResize: e, updateResize: t, endResize: r, state: o } = oe();
   return {
     startResize: e,
     updateResize: t,
@@ -3986,19 +4019,19 @@ function ut() {
   };
 }
 function Hr(e) {
-  const { state: t } = re();
+  const { state: t } = oe();
   return t.hiddenBlocks.has(e);
 }
 function Fr() {
-  const { hideBlock: e } = re();
-  return e;
-}
-function Yr() {
-  const { showBlock: e } = re();
+  const { hideBlock: e } = oe();
   return e;
 }
 function qr() {
-  const { toggleBlockVisibility: e } = re();
+  const { showBlock: e } = oe();
+  return e;
+}
+function Yr() {
+  const { toggleBlockVisibility: e } = oe();
   return e;
 }
 function Ir({
@@ -4008,61 +4041,61 @@ function Ir({
   direction: o = "row"
 }) {
   const {
-    startResize: n,
+    startResize: s,
     updateResize: i,
     endResize: a,
     isDragging: l,
     activeBlockId: p,
-    activeDividerId: w
-  } = ut(), b = _(() => {
+    activeDividerId: v
+  } = ut(), k = O(() => {
     if (!t.current) return 0;
     const c = t.current.getBoundingClientRect();
     return o === "column" ? c.width : c.height;
-  }, [o, t]), x = _(() => {
-    const c = b();
+  }, [o, t]), x = O(() => {
+    const c = k();
     if (c === 0) return 0;
-    const u = e.filter((E) => E.sizeUnit === "px").reduce((E, I) => E + (I.defaultSize || 0), 0), k = 0, f = e.filter((E) => E.sizeUnit === "fr").reduce((E, I) => E + (I.defaultSize || 1), 0), v = ct(c, u, k);
-    return f > 0 ? v / f : 0;
-  }, [e, b]), y = _((c) => {
-    const u = e.find((k) => k.id === c);
+    const u = e.filter((T) => T.sizeUnit === "px").reduce((T, C) => T + (C.defaultSize || 0), 0), y = 0, d = e.filter((T) => T.sizeUnit === "fr").reduce((T, C) => T + (C.defaultSize || 1), 0), w = ct(c, u, y);
+    return d > 0 ? w / d : 0;
+  }, [e, k]), b = O((c) => {
+    const u = e.find((y) => y.id === c);
     u && u.defaultSize !== void 0 && (r == null || r(c, u.defaultSize));
-  }, [e, r]), d = _((c) => {
-    const u = e.find((k) => k.id === c);
+  }, [e, r]), f = O((c) => {
+    const u = e.find((y) => y.id === c);
     u && u.collapseTo !== void 0 && (r == null || r(c, u.collapseTo));
-  }, [e, r]), s = _((c) => {
-    const u = e.find((k) => k.id === c);
+  }, [e, r]), n = O((c) => {
+    const u = e.find((y) => y.id === c);
     u && u.defaultSize !== void 0 && (r == null || r(c, u.defaultSize));
-  }, [e, r]), g = _((c) => {
-    const u = e.find((k) => k.id === c);
+  }, [e, r]), g = O((c) => {
+    const u = e.find((y) => y.id === c);
     return !u || !u.collapseAt ? !1 : (u.defaultSize || 0) <= u.collapseAt;
   }, [e]);
-  return V(() => {
-    const c = (v) => {
-      v.preventDefault(), i(v);
-    }, u = (v) => {
-      v.preventDefault(), i(v);
-    }, k = () => {
+  return $(() => {
+    const c = (w) => {
+      w.preventDefault(), i(w);
+    }, u = (w) => {
+      w.preventDefault(), i(w);
+    }, y = () => {
       a();
-    }, f = () => {
+    }, d = () => {
       a();
     };
     if (l)
-      return document.addEventListener("mousemove", c), document.addEventListener("mouseup", k), document.addEventListener("touchmove", u), document.addEventListener("touchend", f), () => {
-        document.removeEventListener("mousemove", c), document.removeEventListener("mouseup", k), document.removeEventListener("touchmove", u), document.removeEventListener("touchend", f);
+      return document.addEventListener("mousemove", c), document.addEventListener("mouseup", y), document.addEventListener("touchmove", u), document.addEventListener("touchend", d), () => {
+        document.removeEventListener("mousemove", c), document.removeEventListener("mouseup", y), document.removeEventListener("touchmove", u), document.removeEventListener("touchend", d);
       };
   }, [l, i, a]), {
     // State
     isDragging: l,
     activeBlockId: p,
-    activeDividerId: w,
+    activeDividerId: v,
     // Actions
-    startResize: n,
-    resetBlock: y,
-    collapseBlock: d,
-    expandBlock: s,
+    startResize: s,
+    resetBlock: b,
+    collapseBlock: f,
+    expandBlock: n,
     // Utilities
     isBlockCollapsed: g,
-    getContainerSize: b,
+    getContainerSize: k,
     calculatePixelsPerFr: x
   };
 }
@@ -4071,159 +4104,159 @@ function Rr({
   blocks: t,
   onResizeBlock: r,
   onFocusBlock: o,
-  onCollapseBlock: n,
+  onCollapseBlock: s,
   onExpandBlock: i,
   onSplitBlock: a,
   containerRef: l,
   stepSize: p = 10,
-  largeStepSize: w = 50
+  largeStepSize: v = 50
 }) {
-  const b = _(() => {
+  const k = O(() => {
     const c = document.activeElement;
     return (c == null ? void 0 : c.dataset.blockType) === "block" || (c == null ? void 0 : c.dataset.blockType) === "group" ? c : (c == null ? void 0 : c.closest('[data-block-type="block"], [data-block-type="group"]')) || null;
-  }, []), x = _((c) => {
+  }, []), x = O((c) => {
     if (!c) return null;
     const u = c.dataset.blockId;
-    return t.find((k) => k.id === u) || null;
-  }, [t]), y = _((c, u) => {
+    return t.find((y) => y.id === u) || null;
+  }, [t]), b = O((c, u) => {
     if (!(l != null && l.current)) return null;
-    const k = Array.from(
+    const y = Array.from(
       l.current.querySelectorAll('[data-block-type="block"], [data-block-type="group"]')
-    ), f = c.getBoundingClientRect(), v = {
-      x: f.left + f.width / 2,
-      y: f.top + f.height / 2
-    }, E = k.filter((I) => {
-      if (I === c) return !1;
-      const L = I.getBoundingClientRect(), h = {
-        x: L.left + L.width / 2,
-        y: L.top + L.height / 2
+    ), d = c.getBoundingClientRect(), w = {
+      x: d.left + d.width / 2,
+      y: d.top + d.height / 2
+    }, T = y.filter((C) => {
+      if (C === c) return !1;
+      const R = C.getBoundingClientRect(), h = {
+        x: R.left + R.width / 2,
+        y: R.top + R.height / 2
       };
       switch (u) {
         case "up":
-          return h.y < v.y;
+          return h.y < w.y;
         case "down":
-          return h.y > v.y;
+          return h.y > w.y;
         case "left":
-          return h.x < v.x;
+          return h.x < w.x;
         case "right":
-          return h.x > v.x;
+          return h.x > w.x;
         default:
           return !1;
       }
     });
-    return E.length === 0 ? null : (E.sort((I, L) => {
-      const h = I.getBoundingClientRect(), T = L.getBoundingClientRect(), D = {
+    return T.length === 0 ? null : (T.sort((C, R) => {
+      const h = C.getBoundingClientRect(), E = R.getBoundingClientRect(), _ = {
         x: h.left + h.width / 2,
         y: h.top + h.height / 2
-      }, U = {
-        x: T.left + T.width / 2,
-        y: T.top + T.height / 2
-      }, F = Math.sqrt(
-        Math.pow(D.x - v.x, 2) + Math.pow(D.y - v.y, 2)
-      ), M = Math.sqrt(
-        Math.pow(U.x - v.x, 2) + Math.pow(U.y - v.y, 2)
+      }, V = {
+        x: E.left + E.width / 2,
+        y: E.top + E.height / 2
+      }, W = Math.sqrt(
+        Math.pow(_.x - w.x, 2) + Math.pow(_.y - w.y, 2)
+      ), P = Math.sqrt(
+        Math.pow(V.x - w.x, 2) + Math.pow(V.y - w.y, 2)
       );
-      return F - M;
-    }), E[0]);
-  }, [l]), d = _((c) => {
+      return W - P;
+    }), T[0]);
+  }, [l]), f = O((c) => {
     if (!e) return;
-    const u = b();
+    const u = k();
     if (!u) return;
-    const k = x(u);
-    if (!k) return;
-    const f = c.ctrlKey || c.metaKey, v = c.shiftKey, E = v ? w : p;
-    if (!f && !v)
+    const y = x(u);
+    if (!y) return;
+    const d = c.ctrlKey || c.metaKey, w = c.shiftKey, T = w ? v : p;
+    if (!d && !w)
       switch (c.key) {
         case "ArrowUp":
           c.preventDefault();
-          const I = y(u, "up");
-          I && (I.focus(), o == null || o(I.dataset.blockId || ""));
+          const C = b(u, "up");
+          C && (C.focus(), o == null || o(C.dataset.blockId || ""));
           break;
         case "ArrowDown":
           c.preventDefault();
-          const L = y(u, "down");
-          L && (L.focus(), o == null || o(L.dataset.blockId || ""));
+          const R = b(u, "down");
+          R && (R.focus(), o == null || o(R.dataset.blockId || ""));
           break;
         case "ArrowLeft":
           c.preventDefault();
-          const h = y(u, "left");
+          const h = b(u, "left");
           h && (h.focus(), o == null || o(h.dataset.blockId || ""));
           break;
         case "ArrowRight":
           c.preventDefault();
-          const T = y(u, "right");
-          T && (T.focus(), o == null || o(T.dataset.blockId || ""));
+          const E = b(u, "right");
+          E && (E.focus(), o == null || o(E.dataset.blockId || ""));
           break;
         case "Enter":
         case " ":
-          c.preventDefault(), k.collapsible && (i == null || i(k.id));
+          c.preventDefault(), y.collapsible && (i == null || i(y.id));
           break;
         case "Escape":
           c.preventDefault(), u.blur();
           break;
       }
-    if (f && r)
+    if (d && r)
       switch (c.key) {
         case "ArrowUp":
-          c.preventDefault(), r(k.id, -E);
+          c.preventDefault(), r(y.id, -T);
           break;
         case "ArrowDown":
-          c.preventDefault(), r(k.id, E);
+          c.preventDefault(), r(y.id, T);
           break;
         case "ArrowLeft":
-          c.preventDefault(), r(k.id, -E);
+          c.preventDefault(), r(y.id, -T);
           break;
         case "ArrowRight":
-          c.preventDefault(), r(k.id, E);
+          c.preventDefault(), r(y.id, T);
           break;
       }
-    if (f)
+    if (d)
       switch (c.key) {
         case "Minus":
         case "-":
-          c.preventDefault(), n == null || n(k.id);
+          c.preventDefault(), s == null || s(y.id);
           break;
         case "Plus":
         case "+":
         case "=":
-          c.preventDefault(), i == null || i(k.id);
+          c.preventDefault(), i == null || i(y.id);
           break;
         case "\\":
-          c.preventDefault(), v ? a == null || a(k.id, "horizontal") : a == null || a(k.id, "vertical");
+          c.preventDefault(), w ? a == null || a(y.id, "horizontal") : a == null || a(y.id, "vertical");
           break;
       }
   }, [
     e,
-    b,
+    k,
     x,
-    y,
+    b,
     r,
     o,
-    n,
+    s,
     i,
     a,
     p,
-    w
-  ]), s = _((c) => {
+    v
+  ]), n = O((c) => {
     if (!(l != null && l.current)) return;
     const u = l.current.querySelector(
       `[data-block-id="${c}"]`
     );
     u && (u.focus(), o == null || o(c));
-  }, [l, o]), g = _(() => l != null && l.current ? Array.from(
+  }, [l, o]), g = O(() => l != null && l.current ? Array.from(
     l.current.querySelectorAll(
       '[data-block-type="block"][tabindex], [data-block-type="group"][tabindex]'
     )
   ) : [], [l]);
-  return V(() => {
+  return $(() => {
     if (e)
-      return document.addEventListener("keydown", d), () => {
-        document.removeEventListener("keydown", d);
+      return document.addEventListener("keydown", f), () => {
+        document.removeEventListener("keydown", f);
       };
-  }, [d, e]), {
-    focusBlock: s,
+  }, [f, e]), {
+    focusBlock: n,
     getFocusableBlocks: g,
-    getFocusedBlock: b,
+    getFocusedBlock: k,
     isEnabled: e
   };
 }
@@ -4233,63 +4266,63 @@ const ft = ({
   direction: r,
   size: o = 4,
   // Default hover zone size (like VS Code)
-  className: n,
+  className: s,
   "aria-label": i
 }) => {
-  const a = me(null), l = $e(), { startResize: p, isDragging: w, activeDividerId: b } = ut(), [x, y] = J({
+  const a = me(null), l = Ne(), { startResize: p, isDragging: v, activeDividerId: k } = ut(), [x, b] = J({
     left: 0,
     top: 0,
     width: 0,
     height: 0
-  }), d = l.blocks[e], s = r === "vertical", g = `${e}-${t}-divider`, c = w && b === g, u = _(() => {
-    const f = document.querySelector("[data-grid-id]"), v = document.querySelector(`[data-block-id="${e}"]`);
-    if (!f || !v) return;
-    const E = f.getBoundingClientRect(), I = v.getBoundingClientRect(), L = d == null ? void 0 : d.parentId, h = L ? document.querySelector(`[data-block-id="${L}"]`) : f;
+  }), f = l.blocks[e], n = r === "vertical", g = `${e}-${t}-divider`, c = v && k === g, u = O(() => {
+    const d = document.querySelector("[data-grid-id]"), w = document.querySelector(`[data-block-id="${e}"]`);
+    if (!d || !w) return;
+    const T = d.getBoundingClientRect(), C = w.getBoundingClientRect(), R = f == null ? void 0 : f.parentId, h = R ? document.querySelector(`[data-block-id="${R}"]`) : d;
     if (!h) return;
-    const T = h.getBoundingClientRect();
-    if (s) {
-      const D = t === "start" ? I.left - E.left : I.right - E.left;
-      y({
-        left: D - o / 2,
+    const E = h.getBoundingClientRect();
+    if (n) {
+      const _ = t === "start" ? C.left - T.left : C.right - T.left;
+      b({
+        left: _ - o / 2,
         // Center on edge
-        top: T.top - E.top,
+        top: E.top - T.top,
         // Position relative to parent
         width: o,
-        height: T.height
+        height: E.height
         // Use parent height to constrain divider
       });
     } else {
-      const D = t === "start" ? I.top - E.top : I.bottom - E.top;
-      y({
-        left: T.left - E.left,
+      const _ = t === "start" ? C.top - T.top : C.bottom - T.top;
+      b({
+        left: E.left - T.left,
         // Position relative to parent
-        top: D - o / 2,
+        top: _ - o / 2,
         // Center on edge
-        width: T.width,
+        width: E.width,
         // Use parent width to constrain divider
         height: o
       });
     }
-  }, [e, t, s, o, d == null ? void 0 : d.parentId]);
+  }, [e, t, n, o, f == null ? void 0 : f.parentId]);
   Rt(() => {
-    const f = document.querySelector("[data-grid-id]"), v = document.querySelector(`[data-block-id="${e}"]`);
-    if (!f || !v) return;
+    const d = document.querySelector("[data-grid-id]"), w = document.querySelector(`[data-block-id="${e}"]`);
+    if (!d || !w) return;
     u();
-    const E = new ResizeObserver(() => {
+    const T = new ResizeObserver(() => {
       u();
     });
-    E.observe(f), E.observe(v);
-    const I = d == null ? void 0 : d.parentId, L = I ? document.querySelector(`[data-block-id="${I}"]`) : null;
-    return L && E.observe(L), () => {
-      E.disconnect();
+    T.observe(d), T.observe(w);
+    const C = f == null ? void 0 : f.parentId, R = C ? document.querySelector(`[data-block-id="${C}"]`) : null;
+    return R && T.observe(R), () => {
+      T.disconnect();
     };
-  }, [e, u, d == null ? void 0 : d.parentId]), V(() => {
+  }, [e, u, f == null ? void 0 : f.parentId]), $(() => {
     u();
   }, [l.blocks, u]);
-  const k = _((f) => {
-    f.preventDefault(), p(e, g, f);
+  const y = O((d) => {
+    d.preventDefault(), p(e, g, d);
   }, [e, g, p]);
-  return d ? /* @__PURE__ */ R.jsx(
+  return f ? /* @__PURE__ */ L.jsx(
     "div",
     {
       ref: a,
@@ -4301,8 +4334,8 @@ const ft = ({
         "transition-colors duration-100",
         "hover:bg-[var(--divider-hover-color,rgba(59,130,246,0.5))]",
         c && "bg-[var(--divider-active-color,rgba(59,130,246,0.7))]",
-        s ? "cursor-col-resize" : "cursor-row-resize",
-        n
+        n ? "cursor-col-resize" : "cursor-row-resize",
+        s
       ),
       style: {
         left: `${x.left}px`,
@@ -4319,12 +4352,12 @@ const ft = ({
       "data-divider-direction": r,
       role: "separator",
       "aria-label": i || `Resize ${e}`,
-      "aria-valuenow": d == null ? void 0 : d.defaultSize,
-      "aria-valuemin": d == null ? void 0 : d.minSize,
-      "aria-valuemax": d == null ? void 0 : d.maxSize,
+      "aria-valuenow": f == null ? void 0 : f.defaultSize,
+      "aria-valuemin": f == null ? void 0 : f.minSize,
+      "aria-valuemax": f == null ? void 0 : f.maxSize,
       tabIndex: 0,
-      onMouseDown: k,
-      onTouchStart: k
+      onMouseDown: y,
+      onTouchStart: y
     }
   ) : null;
 };
@@ -4338,27 +4371,27 @@ function Lr(e, t) {
 function jr(e) {
   const t = [];
   return Object.values(e).filter((o) => o.type === "group").forEach((o) => {
-    const n = Object.values(e).filter((l) => l.parentId === o.id).sort((l, p) => (l.order || 0) - (p.order || 0));
-    if (n.length === 0) return;
+    const s = Object.values(e).filter((l) => l.parentId === o.id).sort((l, p) => (l.order || 0) - (p.order || 0));
+    if (s.length === 0) return;
     const a = o.direction === "row" ? "vertical" : "horizontal";
-    n.forEach((l, p) => {
+    s.forEach((l, p) => {
       if (p === 0) return;
-      const w = n[p - 1], b = w.resizable !== !1, x = l.resizable !== !1;
-      if (!b && !x)
+      const v = s[p - 1], k = v.resizable !== !1, x = l.resizable !== !1;
+      if (!k && !x)
         return;
-      const { targetId: y, position: d } = Lr(w, l), s = e[y];
-      s && s.resizable === !1 || t.push({
-        id: `divider-${w.id}-${l.id}`,
-        targetBlockId: y,
-        position: d,
+      const { targetId: b, position: f } = Lr(v, l), n = e[b];
+      n && n.resizable === !1 || t.push({
+        id: `divider-${v.id}-${l.id}`,
+        targetBlockId: b,
+        position: f,
         direction: a
       });
     });
   }), t;
 }
 const Pr = () => {
-  const e = $e(), t = ee(() => jr(e.blocks), [e.blocks]);
-  return t.length === 0 ? null : /* @__PURE__ */ R.jsx(
+  const e = Ne(), t = ee(() => jr(e.blocks), [e.blocks]);
+  return t.length === 0 ? null : /* @__PURE__ */ L.jsx(
     "div",
     {
       className: "pretty-poly-divider-overlay",
@@ -4368,7 +4401,7 @@ const Pr = () => {
         pointerEvents: "none",
         zIndex: 10
       },
-      children: t.map((r) => /* @__PURE__ */ R.jsx(
+      children: t.map((r) => /* @__PURE__ */ L.jsx(
         ft,
         {
           targetId: r.targetBlockId,
@@ -4380,23 +4413,23 @@ const Pr = () => {
     }
   );
 }, pt = Z(({ children: e, className: t, "aria-label": r }, o) => {
-  const n = me(null), {
+  const s = me(null), {
     state: i,
     resizeBlock: a,
     collapseBlock: l,
     expandBlock: p,
-    switchMode: w,
-    persistState: b,
+    switchMode: v,
+    persistState: k,
     resetState: x
-  } = re(), y = i.resize.isDragging;
+  } = oe(), b = i.resize.isDragging;
   Lt(
     o,
     () => ({
       resizeBlock: a,
       collapseBlock: l,
       expandBlock: p,
-      switchMode: w,
-      persistState: b,
+      switchMode: v,
+      persistState: k,
       resetState: x,
       getState: () => i
     }),
@@ -4404,109 +4437,115 @@ const Pr = () => {
       a,
       l,
       p,
-      w,
-      b,
+      v,
+      k,
       x,
       i
     ]
   );
-  const d = ee(() => Object.values(i.blocks).sort((v, E) => (v.order || 0) - (E.order || 0)), [i.blocks]), s = ee(() => d.find((f) => !f.parentId), [d]);
+  const f = ee(() => Object.values(i.blocks).sort((w, T) => (w.order || 0) - (T.order || 0)), [i.blocks]), n = ee(() => f.find((d) => !d.parentId), [f]);
   Ir({
-    blocks: d,
-    containerRef: n,
+    blocks: f,
+    containerRef: s,
     onSizeChange: a,
-    direction: (s == null ? void 0 : s.direction) || "row"
+    direction: (n == null ? void 0 : n.direction) || "row"
   });
-  const { splitBlock: g } = re();
+  const { splitBlock: g } = oe();
   Rr({
     enabled: !0,
-    blocks: d,
-    containerRef: n,
-    onResizeBlock: (f, v) => {
-      const E = i.blocks[f];
-      if (E) {
-        const I = E.defaultSize || 0, L = Math.max(0, I + v);
-        a(f, L);
+    blocks: f,
+    containerRef: s,
+    onResizeBlock: (d, w) => {
+      const T = i.blocks[d];
+      if (T) {
+        const C = T.defaultSize || 0, R = Math.max(0, C + w);
+        a(d, R);
       }
     },
     onCollapseBlock: l,
     onExpandBlock: p,
-    onSplitBlock: (f, v) => {
-      g(f, v);
+    onSplitBlock: (d, w) => {
+      g(d, w);
     }
   });
-  const { gridStyles: c, cssVariables: u, modeStyles: k } = ee(() => {
-    if (!s)
+  const { gridStyles: c, cssVariables: u, modeStyles: y } = ee(() => {
+    if (!n)
       return { gridStyles: "", cssVariables: "", modeStyles: "" };
-    const f = d.reduce((T, D) => {
-      if (D.id === s.id) return T;
-      const U = D.parentId || s.id;
-      return T[U] || (T[U] = []), T[U].push(D), T;
-    }, {}), v = d.filter((T) => T.defaultSize !== void 0).map((T) => {
-      const D = T.sizeUnit === "px" ? `${T.defaultSize}px` : `${T.defaultSize}fr`;
-      return `--${s.id}-${T.id}-size: ${D};`;
+    const d = f.reduce((E, _) => {
+      if (_.id === n.id) return E;
+      const V = _.parentId || n.id;
+      return E[V] || (E[V] = []), E[V].push(_), E;
+    }, {}), w = f.filter((E) => E.defaultSize !== void 0).map((E) => {
+      const _ = E.sizeUnit === "px" ? `${E.defaultSize}px` : `${E.defaultSize}fr`;
+      return `--${n.id}-${E.id}-size: ${_};`;
     }).join(`
-  `), E = () => "", I = (T, D = /* @__PURE__ */ new Set()) => {
-      if (D.has(T))
-        return console.warn(`Circular reference detected for parent: ${T}`), "";
-      const U = new Set(D);
-      U.add(T);
-      const F = f[T] || [];
-      if (F.length === 0) return "";
-      const M = [...F].sort(
-        (A, O) => (A.order || 0) - (O.order || 0)
-      ), B = d.find((A) => A.id === T) || s, G = (B == null ? void 0 : B.direction) || "row", W = M.map((A) => ({
-        id: A.id,
-        sizeUnit: A.sizeUnit || "fr",
-        size: A.defaultSize || 1,
+  `), T = () => "", C = (E, _ = /* @__PURE__ */ new Set()) => {
+      if (_.has(E))
+        return console.warn(`Circular reference detected for parent: ${E}`), "";
+      const V = new Set(_);
+      V.add(E);
+      const W = d[E] || [];
+      if (W.length === 0) return "";
+      const P = [...W].sort(
+        (I, D) => (I.order || 0) - (D.order || 0)
+      ), B = f.find((I) => I.id === E) || n, N = B == null ? void 0 : B.direction, K = P.map((I) => ({
+        id: I.id,
+        sizeUnit: I.sizeUnit || "fr",
+        size: I.defaultSize || 1,
         dividerPosition: "none",
         // Dividers are overlays, not in grid template
         dividerSize: 0
         // Not used since dividers are overlays
-      })), Y = xr(W, s.id, i.hiddenBlocks), C = G === "column" ? "grid-template-rows" : "grid-template-columns";
-      let m = `
-${`[data-block-id="${T}"]`} {
+      })), q = xr(K, n.id, i.hiddenBlocks), te = (B == null ? void 0 : B.hasToolbar) === !0 ? `[data-block-id="${E}"] > [data-split-content]` : `[data-block-id="${E}"]`;
+      let m = "";
+      N ? m = `
+${te} {
   display: grid;
-  ${C}: ${Y};
-  ${G === "column" ? "grid-template-columns: 1fr;" : "grid-template-rows: 1fr;"}
+  ${N === "column" ? "grid-template-rows" : "grid-template-columns"}: ${q};
+  ${N === "column" ? "grid-template-columns: 1fr;" : "grid-template-rows: 1fr;"}
+}` : m = `
+${te} {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
 }`;
-      for (const A of M)
-        A.type === "group" && (m += I(A.id, U));
+      for (const I of P)
+        I.type === "group" && (m += C(I.id, V));
       return m;
-    }, L = I(s.id), h = E();
+    }, R = C(n.id), h = T();
     return {
       cssVariables: `:root {
-  ${v}
+  ${w}
 }`,
-      gridStyles: L,
+      gridStyles: R,
       modeStyles: h
     };
-  }, [d, s, i.hiddenBlocks]);
-  return s ? /* @__PURE__ */ R.jsxs(R.Fragment, { children: [
-    /* @__PURE__ */ R.jsxs("style", { type: "text/css", children: [
+  }, [f, n, i.hiddenBlocks]);
+  return n ? /* @__PURE__ */ L.jsxs(L.Fragment, { children: [
+    /* @__PURE__ */ L.jsxs("style", { type: "text/css", children: [
       u,
       c,
-      k
+      y
     ] }),
-    /* @__PURE__ */ R.jsxs(
+    /* @__PURE__ */ L.jsxs(
       "div",
       {
-        ref: n,
+        ref: s,
         className: le(
           "group relative overflow-hidden",
-          y && "select-none cursor-grabbing pretty-poly-grid--dragging",
+          b && "select-none cursor-grabbing pretty-poly-grid--dragging",
           t
         ),
-        "data-grid-id": s.id,
-        "data-block-id": s.id,
-        "data-block-type": s.type,
+        "data-grid-id": n.id,
+        "data-block-id": n.id,
+        "data-block-type": n.type,
         "data-active-mode": i.activeMode,
         "aria-label": r || "Resizable grid layout",
         role: "application",
         style: { isolation: "isolate" },
         children: [
           e,
-          (i.activeMode === "grid" || i.activeMode === "desktop") && /* @__PURE__ */ R.jsx(Pr, {})
+          (i.activeMode === "grid" || i.activeMode === "desktop") && /* @__PURE__ */ L.jsx(Pr, {})
         ]
       }
     )
@@ -4519,33 +4558,33 @@ const Mr = Z(
     defaultLayout: t = [],
     modes: r,
     persist: o = !1,
-    persistKey: n,
+    persistKey: s,
     onLayoutChange: i,
     onModeChange: a,
     className: l,
     dividers: p = "manual",
-    dividerConfig: w,
-    "aria-label": b
+    dividerConfig: v,
+    "aria-label": k
   }, x) => {
-    const y = t.find((s) => !s.parentId), d = (y == null ? void 0 : y.id) || "root";
-    return /* @__PURE__ */ R.jsx(
+    const b = t.find((n) => !n.parentId), f = (b == null ? void 0 : b.id) || "root";
+    return /* @__PURE__ */ L.jsx(
       Cr,
       {
         blocks: t,
         modes: r,
-        gridId: d,
+        gridId: f,
         persist: o,
-        persistKey: n,
+        persistKey: s,
         onLayoutChange: i,
         onModeChange: a,
-        children: /* @__PURE__ */ R.jsx(
+        children: /* @__PURE__ */ L.jsx(
           pt,
           {
             ref: x,
             className: l,
             dividers: p,
-            dividerConfig: w,
-            "aria-label": b,
+            dividerConfig: v,
+            "aria-label": k,
             children: e
           }
         )
@@ -4555,17 +4594,17 @@ const Mr = Z(
 );
 Mr.displayName = "Grid";
 const mt = Z(
-  ({ scrollMode: e = "vertical", className: t, children: r, "aria-label": o }, n) => {
+  ({ scrollMode: e = "vertical", className: t, children: r, "aria-label": o }, s) => {
     const i = {
       vertical: "overflow-y-auto overflow-x-hidden",
       horizontal: "overflow-x-auto overflow-y-hidden",
       both: "overflow-auto",
       none: "overflow-hidden"
     };
-    return /* @__PURE__ */ R.jsx(
+    return /* @__PURE__ */ L.jsx(
       "div",
       {
-        ref: n,
+        ref: s,
         className: le(
           "pretty-poly-block-content",
           "flex-1",
@@ -4585,10 +4624,10 @@ const mt = Z(
 );
 mt.displayName = "Block.Content";
 const gt = Z(
-  ({ position: e = "top", className: t, children: r, "aria-label": o }, n) => /* @__PURE__ */ R.jsx(
+  ({ position: e = "top", className: t, children: r, "aria-label": o }, s) => /* @__PURE__ */ L.jsx(
     "div",
     {
-      ref: n,
+      ref: s,
       className: le(
         "pretty-poly-block-header",
         "flex-shrink-0",
@@ -4609,8 +4648,8 @@ const gt = Z(
   )
 );
 gt.displayName = "Block.Header";
-const yt = Z(
-  ({ className: e, children: t, "aria-label": r }, o) => /* @__PURE__ */ R.jsx(
+const ht = Z(
+  ({ className: e, children: t, "aria-label": r }, o) => /* @__PURE__ */ L.jsx(
     "div",
     {
       ref: o,
@@ -4632,9 +4671,9 @@ const yt = Z(
     }
   )
 );
-yt.displayName = "Block.Footer";
-const ht = Z(
-  ({ left: e, center: t, right: r, className: o, "aria-label": n }, i) => /* @__PURE__ */ R.jsxs(
+ht.displayName = "Block.Footer";
+const bt = Z(
+  ({ left: e, center: t, right: r, className: o, "aria-label": s }, i) => /* @__PURE__ */ L.jsxs(
     "div",
     {
       ref: i,
@@ -4649,35 +4688,35 @@ const ht = Z(
         // Shadcn background
         o
       ),
-      "aria-label": n || "Toolbar",
+      "aria-label": s || "Toolbar",
       role: "toolbar",
       children: [
-        /* @__PURE__ */ R.jsx("div", { className: "flex items-center space-x-2 flex-shrink-0", children: e }),
-        /* @__PURE__ */ R.jsx("div", { className: "flex items-center justify-center flex-1 px-4", children: t }),
-        /* @__PURE__ */ R.jsx("div", { className: "flex items-center space-x-2 flex-shrink-0", children: r })
+        /* @__PURE__ */ L.jsx("div", { className: "flex items-center space-x-2 flex-shrink-0", children: e }),
+        /* @__PURE__ */ L.jsx("div", { className: "flex items-center justify-center flex-1 px-4", children: t }),
+        /* @__PURE__ */ L.jsx("div", { className: "flex items-center space-x-2 flex-shrink-0", children: r })
       ]
     }
   )
 );
-ht.displayName = "Block.Toolbar";
-const bt = Z(
+bt.displayName = "Block.Toolbar";
+const yt = Z(
   ({
     tabs: e,
     activeTab: t,
     onTabChange: r,
     onTabClose: o,
-    className: n,
+    className: s,
     "aria-label": i,
     allowOverflow: a = !0
   }, l) => {
-    const [p, w] = J(null), b = (d, s) => {
-      s.preventDefault(), d.disabled || r(d.id);
-    }, x = (d, s) => {
-      s.preventDefault(), s.stopPropagation(), o && d.closable && o(d.id);
-    }, y = (d, s) => {
-      (s.key === "Enter" || s.key === " ") && (s.preventDefault(), d.disabled || r(d.id));
+    const [p, v] = J(null), k = (f, n) => {
+      n.preventDefault(), f.disabled || r(f.id);
+    }, x = (f, n) => {
+      n.preventDefault(), n.stopPropagation(), o && f.closable && o(f.id);
+    }, b = (f, n) => {
+      (n.key === "Enter" || n.key === " ") && (n.preventDefault(), f.disabled || r(f.id));
     };
-    return /* @__PURE__ */ R.jsx(
+    return /* @__PURE__ */ L.jsx(
       "div",
       {
         ref: l,
@@ -4687,13 +4726,13 @@ const bt = Z(
           "border-b border-border",
           "bg-card",
           a ? "overflow-x-auto" : "overflow-x-hidden",
-          n
+          s
         ),
         role: "tablist",
         "aria-label": i || "Block tabs",
-        children: /* @__PURE__ */ R.jsx("div", { className: "flex items-center min-w-0", children: e.map((d) => {
-          const s = d.id === t, g = p === d.id, c = d.icon;
-          return /* @__PURE__ */ R.jsxs(
+        children: /* @__PURE__ */ L.jsx("div", { className: "flex items-center min-w-0", children: e.map((f) => {
+          const n = f.id === t, g = p === f.id, c = f.icon;
+          return /* @__PURE__ */ L.jsxs(
             "div",
             {
               className: ae(
@@ -4701,43 +4740,43 @@ const bt = Z(
                 "border-b-2 transition-colors duration-150",
                 "min-w-0 flex-shrink-0",
                 // Prevent shrinking
-                s ? "border-primary text-primary bg-accent" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent",
-                d.disabled && "opacity-50 cursor-not-allowed",
+                n ? "border-primary text-primary bg-accent" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent",
+                f.disabled && "opacity-50 cursor-not-allowed",
                 !a && "flex-1"
                 // Equal width tabs when overflow disabled
               ),
               role: "tab",
-              "aria-selected": s,
-              "aria-disabled": d.disabled,
-              tabIndex: d.disabled ? -1 : 0,
-              onClick: (u) => b(d, u),
-              onKeyDown: (u) => y(d, u),
-              onMouseEnter: () => w(d.id),
-              onMouseLeave: () => w(null),
-              "data-tab-id": d.id,
+              "aria-selected": n,
+              "aria-disabled": f.disabled,
+              tabIndex: f.disabled ? -1 : 0,
+              onClick: (u) => k(f, u),
+              onKeyDown: (u) => b(f, u),
+              onMouseEnter: () => v(f.id),
+              onMouseLeave: () => v(null),
+              "data-tab-id": f.id,
               children: [
-                c && /* @__PURE__ */ R.jsx(c, { className: "w-4 h-4 flex-shrink-0" }),
-                /* @__PURE__ */ R.jsx("span", { className: "truncate min-w-0", children: d.label }),
-                d.closable && o && /* @__PURE__ */ R.jsx(
+                c && /* @__PURE__ */ L.jsx(c, { className: "w-4 h-4 flex-shrink-0" }),
+                /* @__PURE__ */ L.jsx("span", { className: "truncate min-w-0", children: f.label }),
+                f.closable && o && /* @__PURE__ */ L.jsx(
                   "button",
                   {
                     className: ae(
                       "flex-shrink-0 w-4 h-4 rounded-sm hover:bg-muted",
                       "flex items-center justify-center",
                       "transition-colors duration-150",
-                      g || s ? "opacity-100" : "opacity-0"
+                      g || n ? "opacity-100" : "opacity-0"
                     ),
-                    onClick: (u) => x(d, u),
-                    "aria-label": `Close ${d.label} tab`,
+                    onClick: (u) => x(f, u),
+                    "aria-label": `Close ${f.label} tab`,
                     tabIndex: -1,
-                    children: /* @__PURE__ */ R.jsx(
+                    children: /* @__PURE__ */ L.jsx(
                       "svg",
                       {
                         className: "w-3 h-3",
                         fill: "none",
                         viewBox: "0 0 24 24",
                         stroke: "currentColor",
-                        children: /* @__PURE__ */ R.jsx(
+                        children: /* @__PURE__ */ L.jsx(
                           "path",
                           {
                             strokeLinecap: "round",
@@ -4752,16 +4791,16 @@ const bt = Z(
                 )
               ]
             },
-            d.id
+            f.id
           );
         }) })
       }
     );
   }
 );
-bt.displayName = "Block.Tabs";
+yt.displayName = "Block.Tabs";
 const Ge = Z(
-  ({ position: e = "left", width: t = 48, className: r, children: o, "aria-label": n }, i) => /* @__PURE__ */ R.jsx(
+  ({ position: e = "left", width: t = 48, className: r, children: o, "aria-label": s }, i) => /* @__PURE__ */ L.jsx(
     "div",
     {
       ref: i,
@@ -4785,7 +4824,7 @@ const Ge = Z(
       style: { width: `${t}px` },
       "data-sidebar-position": e,
       "data-sidebar-width": t,
-      "aria-label": n || "Sidebar navigation",
+      "aria-label": s || "Sidebar navigation",
       role: "navigation",
       children: o
     }
@@ -4798,22 +4837,22 @@ const wt = Z(
     tooltip: t,
     active: r = !1,
     disabled: o = !1,
-    badge: n,
+    badge: s,
     onClick: i,
     className: a,
     "aria-label": l
   }, p) => {
-    const [w, b] = J(!1), x = () => {
-      t && !o && b(!0);
-    }, y = () => {
-      b(!1);
-    }, d = () => {
+    const [v, k] = J(!1), x = () => {
+      t && !o && k(!0);
+    }, b = () => {
+      k(!1);
+    }, f = () => {
       !o && i && i();
-    }, s = (g) => {
-      (g.key === "Enter" || g.key === " ") && (g.preventDefault(), d());
+    }, n = (g) => {
+      (g.key === "Enter" || g.key === " ") && (g.preventDefault(), f());
     };
-    return /* @__PURE__ */ R.jsxs("div", { className: "relative", children: [
-      /* @__PURE__ */ R.jsxs(
+    return /* @__PURE__ */ L.jsxs("div", { className: "relative", children: [
+      /* @__PURE__ */ L.jsxs(
         "button",
         {
           ref: p,
@@ -4836,15 +4875,15 @@ const wt = Z(
             a
           ),
           disabled: o,
-          onClick: d,
-          onKeyDown: s,
+          onClick: f,
+          onKeyDown: n,
           onMouseEnter: x,
-          onMouseLeave: y,
+          onMouseLeave: b,
           "aria-label": l || t,
           "aria-pressed": r,
           tabIndex: o ? -1 : 0,
           children: [
-            /* @__PURE__ */ R.jsx(
+            /* @__PURE__ */ L.jsx(
               e,
               {
                 className: ae(
@@ -4854,21 +4893,21 @@ const wt = Z(
                 )
               }
             ),
-            n && /* @__PURE__ */ R.jsx("div", { className: "absolute -top-1 -right-1 min-w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center px-1", children: typeof n == "number" && n > 99 ? "99+" : n }),
-            r && /* @__PURE__ */ R.jsx("div", { className: "absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-primary" })
+            s && /* @__PURE__ */ L.jsx("div", { className: "absolute -top-1 -right-1 min-w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center px-1", children: typeof s == "number" && s > 99 ? "99+" : s }),
+            r && /* @__PURE__ */ L.jsx("div", { className: "absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-primary" })
           ]
         }
       ),
-      w && t && /* @__PURE__ */ R.jsx("div", { className: "absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50", children: /* @__PURE__ */ R.jsxs("div", { className: "bg-popover text-popover-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-border", children: [
+      v && t && /* @__PURE__ */ L.jsx("div", { className: "absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50", children: /* @__PURE__ */ L.jsxs("div", { className: "bg-popover text-popover-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-border", children: [
         t,
-        /* @__PURE__ */ R.jsx("div", { className: "absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-popover" })
+        /* @__PURE__ */ L.jsx("div", { className: "absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-popover" })
       ] }) })
     ] });
   }
 );
 wt.displayName = "Block.Sidebar.Item";
 const vt = Z(
-  ({ className: e }, t) => /* @__PURE__ */ R.jsx(
+  ({ className: e }, t) => /* @__PURE__ */ L.jsx(
     "div",
     {
       ref: t,
@@ -4887,10 +4926,10 @@ const vt = Z(
 );
 vt.displayName = "Block.Sidebar.Spacer";
 const kt = Z(
-  ({ direction: e = "column", className: t, children: r, "aria-label": o }, n) => /* @__PURE__ */ R.jsx(
+  ({ direction: e = "column", className: t, children: r, "aria-label": o }, s) => /* @__PURE__ */ L.jsx(
     "div",
     {
-      ref: n,
+      ref: s,
       className: le(
         "pretty-poly-block-layout",
         // Fill parent block completely
@@ -4916,16 +4955,16 @@ const Ue = Z(
     type: t = "block",
     direction: r = "row",
     children: o,
-    className: n,
+    className: s,
     divider: i,
     noDivider: a,
     "aria-label": l
   }, p) => {
-    var k;
-    const { gridId: w } = re(), b = $e(), { collapseBlock: x, expandBlock: y } = Ar(), { supportsFeature: d } = at(), s = b == null ? void 0 : b.blocks[e], g = ((k = b == null ? void 0 : b.hiddenBlocks) == null ? void 0 : k.has(e)) || !1, c = ee(() => s != null && s.collapsible && s.collapseAt ? (s.size ?? s.defaultSize ?? 0) <= s.collapseAt : !1, [s]), u = () => {
-      s != null && s.collapsible && s.collapseAt && ((s.size ?? s.defaultSize ?? 0) <= s.collapseAt ? y(e) : x(e));
+    var y;
+    const { gridId: v } = oe(), k = Ne(), { collapseBlock: x, expandBlock: b } = Ar(), { supportsFeature: f } = at(), n = k == null ? void 0 : k.blocks[e], g = ((y = k == null ? void 0 : k.hiddenBlocks) == null ? void 0 : y.has(e)) || !1, c = ee(() => n != null && n.collapsible && n.collapseAt ? (n.size ?? n.defaultSize ?? 0) <= n.collapseAt : !1, [n]), u = () => {
+      n != null && n.collapsible && n.collapseAt && ((n.size ?? n.defaultSize ?? 0) <= n.collapseAt ? b(e) : x(e));
     };
-    return /* @__PURE__ */ R.jsx(
+    return /* @__PURE__ */ L.jsx(
       "div",
       {
         ref: p,
@@ -4936,34 +4975,34 @@ const Ue = Z(
           "overflow-hidden",
           "transition-opacity duration-150",
           c && "opacity-70",
-          n
+          s
         ),
         style: {
           // Hide block with display: none - removes from grid flow
           // The grid template will be dynamically updated to exclude this block
           display: g ? "none" : void 0
         },
-        "data-grid-id": w,
+        "data-grid-id": v,
         "data-block-id": e,
         "data-block-type": t,
         "data-block-direction": r,
-        "data-block-size-default": s == null ? void 0 : s.defaultSize,
-        "data-block-size-unit": s == null ? void 0 : s.sizeUnit,
-        "data-block-size-min": s == null ? void 0 : s.minSize,
-        "data-block-size-max": s == null ? void 0 : s.maxSize,
-        "data-block-resizable": (s == null ? void 0 : s.resizable) !== !1,
-        "data-block-collapse-at": s == null ? void 0 : s.collapseAt,
-        "data-block-collapse-to": s == null ? void 0 : s.collapseTo,
-        "data-block-divider-position": s == null ? void 0 : s.dividerPosition,
-        "data-block-divider-size": s == null ? void 0 : s.dividerSize,
+        "data-block-size-default": n == null ? void 0 : n.defaultSize,
+        "data-block-size-unit": n == null ? void 0 : n.sizeUnit,
+        "data-block-size-min": n == null ? void 0 : n.minSize,
+        "data-block-size-max": n == null ? void 0 : n.maxSize,
+        "data-block-resizable": (n == null ? void 0 : n.resizable) !== !1,
+        "data-block-collapse-at": n == null ? void 0 : n.collapseAt,
+        "data-block-collapse-to": n == null ? void 0 : n.collapseTo,
+        "data-block-divider-position": n == null ? void 0 : n.dividerPosition,
+        "data-block-divider-size": n == null ? void 0 : n.dividerSize,
         "data-block-divider": i !== void 0 ? JSON.stringify(i) : void 0,
         "data-block-no-divider": a,
         "data-block-hidden": g,
         "aria-label": l,
         "aria-hidden": g,
         role: t === "group" ? "group" : void 0,
-        tabIndex: d("resizing") && !g ? 0 : void 0,
-        onDoubleClick: d("collapse") ? u : void 0,
+        tabIndex: f("resizing") && !g ? 0 : void 0,
+        onDoubleClick: f("collapse") ? u : void 0,
         children: o
       }
     );
@@ -4971,7 +5010,7 @@ const Ue = Z(
 );
 Ue.displayName = "Block";
 const xt = Z(
-  (e, t) => /* @__PURE__ */ R.jsx(Ue, { ref: t, ...e, type: "group" })
+  (e, t) => /* @__PURE__ */ L.jsx(Ue, { ref: t, ...e, type: "group" })
 );
 xt.displayName = "Block.Group";
 Object.assign(Ue, {
@@ -4979,9 +5018,9 @@ Object.assign(Ue, {
   Layout: kt,
   Header: gt,
   Content: mt,
-  Footer: yt,
-  Toolbar: ht,
-  Tabs: bt,
+  Footer: ht,
+  Toolbar: bt,
+  Tabs: yt,
   Sidebar: Ge
 });
 Object.assign(Ge, {
@@ -4990,45 +5029,45 @@ Object.assign(Ge, {
 });
 function Jr(e, t, r) {
   const o = [];
-  let n = e;
+  let s = e;
   const i = t.minSize ?? 0, a = t.maxSize ?? 1 / 0;
-  if (e < i && (o.push(`Size ${e} is below minimum ${i}`), n = i), e > a && (o.push(`Size ${e} exceeds maximum ${a}`), n = a), n = ge(n, i, a), t.sizeUnit === "px" && t.collapsible && r !== void 0) {
-    const l = t.collapseAt ?? 0, p = t.collapseTo ?? 0, w = t.defaultSize ?? n;
-    n = vr(
-      n,
+  if (e < i && (o.push(`Size ${e} is below minimum ${i}`), s = i), e > a && (o.push(`Size ${e} exceeds maximum ${a}`), s = a), s = ge(s, i, a), t.sizeUnit === "px" && t.collapsible && r !== void 0) {
+    const l = t.collapseAt ?? 0, p = t.collapseTo ?? 0, v = t.defaultSize ?? s;
+    s = vr(
+      s,
       r,
       l,
       p,
-      w
+      v
     );
   }
   return {
     isValid: o.length === 0,
-    adjustedValue: n,
+    adjustedValue: s,
     violations: o
   };
 }
-function Zr(e, t, r, o, n = 1) {
+function Zr(e, t, r, o, s = 1) {
   const i = [];
   let a = r, l = o;
-  const p = fe(e.minSize ?? 0, e.sizeUnit, n), w = fe(e.maxSize ?? 1 / 0, e.sizeUnit, n), b = fe(t.minSize ?? 0, t.sizeUnit, n), x = fe(t.maxSize ?? 1 / 0, t.sizeUnit, n), y = fe(e.defaultSize ?? 0, e.sizeUnit, n), d = fe(t.defaultSize ?? 0, t.sizeUnit, n), s = y + r, g = d + o;
-  let c = ge(s, p, w), u = ge(g, b, x);
-  a = c - y, l = u - d;
-  const k = a + l;
-  if (Math.abs(k) > 1e-3) {
-    const E = Math.abs(a) < Math.abs(r), I = Math.abs(l) < Math.abs(o);
-    if (E && !I) {
-      const L = d - a;
-      u = ge(L, b, x), l = u - d;
-    } else if (I && !E) {
-      const L = y - l;
-      c = ge(L, p, w), a = c - y;
+  const p = fe(e.minSize ?? 0, e.sizeUnit, s), v = fe(e.maxSize ?? 1 / 0, e.sizeUnit, s), k = fe(t.minSize ?? 0, t.sizeUnit, s), x = fe(t.maxSize ?? 1 / 0, t.sizeUnit, s), b = fe(e.defaultSize ?? 0, e.sizeUnit, s), f = fe(t.defaultSize ?? 0, t.sizeUnit, s), n = b + r, g = f + o;
+  let c = ge(n, p, v), u = ge(g, k, x);
+  a = c - b, l = u - f;
+  const y = a + l;
+  if (Math.abs(y) > 1e-3) {
+    const T = Math.abs(a) < Math.abs(r), C = Math.abs(l) < Math.abs(o);
+    if (T && !C) {
+      const R = f - a;
+      u = ge(R, k, x), l = u - f;
+    } else if (C && !T) {
+      const R = b - l;
+      c = ge(R, p, v), a = c - b;
     }
     i.push("Zero-sum constraint violated, deltas adjusted");
   }
-  const f = a + l;
+  const d = a + l;
   return {
-    isValid: Math.abs(f) <= 1e-3,
+    isValid: Math.abs(d) <= 1e-3,
     adjustedTargetDelta: a,
     adjustedAdjacentDelta: l,
     violations: i
@@ -5048,8 +5087,8 @@ function fe(e, t, r) {
   }
 }
 function Xr(e, t) {
-  const r = [], o = e.filter((i) => i.sizeUnit === "px").reduce((i, a) => i + (t[a.id] ?? a.defaultSize ?? 0), 0), n = e.filter((i) => i.sizeUnit === "fr").reduce((i, a) => i + (t[a.id] ?? a.defaultSize ?? 0), 0);
-  return o < 0 && r.push("Total fixed size cannot be negative"), n <= 0 && e.some((i) => i.sizeUnit === "fr") && r.push("Total fr units must be positive"), e.forEach((i) => {
+  const r = [], o = e.filter((i) => i.sizeUnit === "px").reduce((i, a) => i + (t[a.id] ?? a.defaultSize ?? 0), 0), s = e.filter((i) => i.sizeUnit === "fr").reduce((i, a) => i + (t[a.id] ?? a.defaultSize ?? 0), 0);
+  return o < 0 && r.push("Total fixed size cannot be negative"), s <= 0 && e.some((i) => i.sizeUnit === "fr") && r.push("Total fr units must be positive"), e.forEach((i) => {
     const a = t[i.id] ?? i.defaultSize ?? 0, l = i.minSize ?? 0, p = i.maxSize ?? 1 / 0;
     l > p && r.push(`Block ${i.id}: minSize (${l}) > maxSize (${p})`), (a < l || a > p) && r.push(`Block ${i.id}: size ${a} violates constraints [${l}, ${p}]`);
   }), {
@@ -5090,7 +5129,7 @@ class _r {
    */
   getAllViews(t = !0) {
     const r = Array.from(this.views.values());
-    return t ? r.sort((o, n) => (o.order ?? 0) - (n.order ?? 0)) : r;
+    return t ? r.sort((o, s) => (o.order ?? 0) - (s.order ?? 0)) : r;
   }
   /**
    * Get views filtered by category
@@ -5145,30 +5184,30 @@ function Le() {
 }
 function Qr(e) {
   const t = Le(), [r, o] = J(() => t.getView(e));
-  return V(() => t.subscribe(() => {
+  return $(() => t.subscribe(() => {
     o(t.getView(e));
   }), [t, e]), r;
 }
 function eo(e) {
   const t = Le(), [r, o] = J(() => e != null && e.category ? t.getViewsByCategory(e.category) : t.getAllViews((e == null ? void 0 : e.sorted) ?? !0));
-  return V(() => {
-    const n = () => {
+  return $(() => {
+    const s = () => {
       e != null && e.category ? o(t.getViewsByCategory(e.category)) : o(t.getAllViews((e == null ? void 0 : e.sorted) ?? !0));
     };
-    return t.subscribe(n);
+    return t.subscribe(s);
   }, [t, e == null ? void 0 : e.category, e == null ? void 0 : e.sorted]), r;
 }
 function to({ children: e, registry: t }) {
   const [r] = J(() => t ?? new _r());
-  return /* @__PURE__ */ R.jsx(St.Provider, { value: r, children: e });
+  return /* @__PURE__ */ L.jsx(St.Provider, { value: r, children: e });
 }
 function ro(e) {
   const t = Le();
-  V(() => t.registerViews(e), [t, e]);
+  $(() => t.registerViews(e), [t, e]);
 }
 function oo(e) {
   const t = Le();
-  V(() => t.registerView(e), [t, e]);
+  $(() => t.registerView(e), [t, e]);
 }
 class Or {
   constructor() {
@@ -5211,10 +5250,10 @@ class Or {
     if (!o)
       return console.warn(`Command not found: ${t}`), { success: !1, error: new Error(`Command not found: ${t}`) };
     try {
-      const n = await o.handler(...r);
-      return this.notifyExecution(t, n), { success: !0, result: n };
-    } catch (n) {
-      return console.error(`Error executing command ${t}:`, n), { success: !1, error: n };
+      const s = await o.handler(...r);
+      return this.notifyExecution(t, s), { success: !0, result: s };
+    } catch (s) {
+      return console.error(`Error executing command ${t}:`, s), { success: !1, error: s };
     }
   }
   /**
@@ -5228,10 +5267,10 @@ class Or {
    */
   getAllCommands(t = !0) {
     const r = Array.from(this.commands.values());
-    return t ? r.sort((o, n) => {
-      const i = o.category || "", a = n.category || "";
+    return t ? r.sort((o, s) => {
+      const i = o.category || "", a = s.category || "";
       if (i !== a) return i.localeCompare(a);
-      const l = o.title || o.id, p = n.title || n.id;
+      const l = o.title || o.id, p = s.title || s.id;
       return l.localeCompare(p);
     }) : r;
   }
@@ -5311,7 +5350,7 @@ class Or {
   }
   notifyExecution(t, r) {
     var o;
-    (o = this.executionListeners.get(t)) == null || o.forEach((n) => n(r));
+    (o = this.executionListeners.get(t)) == null || o.forEach((s) => s(r));
   }
   notifyRegistrationChange() {
     this.registrationListeners.forEach((t) => t());
@@ -5326,40 +5365,40 @@ function we() {
 }
 function no(e) {
   const t = we(), [r, o] = J(() => t.getCommand(e));
-  return V(() => {
-    const n = () => {
+  return $(() => {
+    const s = () => {
       o(t.getCommand(e));
     };
-    return t.onDidChangeCommands(n);
+    return t.onDidChangeCommands(s);
   }, [t, e]), r;
 }
 function so(e) {
   const t = we(), [r, o] = J(() => e != null && e.category ? t.getCommandsByCategory(e.category) : t.getAllCommands((e == null ? void 0 : e.sorted) ?? !0));
-  return V(() => {
-    const n = () => {
+  return $(() => {
+    const s = () => {
       e != null && e.category ? o(t.getCommandsByCategory(e.category)) : o(t.getAllCommands((e == null ? void 0 : e.sorted) ?? !0));
     };
-    return t.onDidChangeCommands(n);
+    return t.onDidChangeCommands(s);
   }, [t, e == null ? void 0 : e.category, e == null ? void 0 : e.sorted]), r;
 }
 function io(e) {
   const t = we();
-  return _(
+  return O(
     (...r) => t.executeCommand(e, ...r),
     [t, e]
   );
 }
 function ao(e) {
   const t = we();
-  V(() => t.registerCommands(e), [t, e]);
+  $(() => t.registerCommands(e), [t, e]);
 }
 function lo(e) {
   const t = we();
-  V(() => t.registerCommand(e), [t, e]);
+  $(() => t.registerCommand(e), [t, e]);
 }
 function co(e = !0) {
   const t = we();
-  V(() => {
+  $(() => {
     if (!e) return;
     const r = (o) => {
       t.handleKeyboardEvent(o);
@@ -5375,15 +5414,15 @@ function uo({
   enableKeyboardShortcuts: r = !0
 }) {
   const [o] = J(() => t ?? new Or());
-  return V(() => {
+  return $(() => {
     if (!r) return;
-    const n = (i) => {
+    const s = (i) => {
       o.handleKeyboardEvent(i);
     };
-    return window.addEventListener("keydown", n), () => {
-      window.removeEventListener("keydown", n);
+    return window.addEventListener("keydown", s), () => {
+      window.removeEventListener("keydown", s);
     };
-  }, [o, r]), /* @__PURE__ */ R.jsx(zt.Provider, { value: o, children: e });
+  }, [o, r]), /* @__PURE__ */ L.jsx(zt.Provider, { value: o, children: e });
 }
 class Dr {
   constructor() {
@@ -5482,13 +5521,13 @@ class Dr {
   /**
    * Create a layout configuration from current state
    */
-  createLayoutFromCurrentState(t, r, o, n) {
+  createLayoutFromCurrentState(t, r, o, s) {
     return {
       id: t,
       name: r,
       blocks: [...o],
       viewTypes: this.getAllViewTypes(),
-      metadata: n
+      metadata: s
     };
   }
   /**
@@ -5531,8 +5570,8 @@ class Dr {
     try {
       const r = JSON.parse(t);
       let o = 0;
-      for (const n of r)
-        n.id && n.name && n.blocks && n.viewTypes && (this.saveLayout(n), o++);
+      for (const s of r)
+        s.id && s.name && s.blocks && s.viewTypes && (this.saveLayout(s), o++);
       return o;
     } catch (r) {
       return console.error("Error importing layouts:", r), 0;
@@ -5546,29 +5585,29 @@ class Dr {
     this.layoutListeners.forEach((t) => t());
   }
 }
-const Et = Ie(null);
+const Tt = Ie(null);
 function ve() {
-  const e = Re(Et);
+  const e = Re(Tt);
   if (!e)
     throw new Error("useLayoutService must be used within LayoutServiceProvider");
   return e;
 }
 function fo(e) {
   const t = ve(), [r, o] = J(() => t.getBlockViewType(e));
-  return V(() => {
-    const n = (a) => {
+  return $(() => {
+    const s = (a) => {
       o(a[e]);
     };
-    return t.onViewTypesChange(n);
+    return t.onViewTypesChange(s);
   }, [t, e]), r;
 }
 function po() {
   const e = ve(), [t, r] = J(() => e.getAllViewTypes());
-  return V(() => e.onViewTypesChange(r), [e]), t;
+  return $(() => e.onViewTypesChange(r), [e]), t;
 }
 function mo() {
   const e = ve();
-  return _(
+  return O(
     (t, r) => {
       e.setBlockViewType(t, r);
     },
@@ -5577,85 +5616,85 @@ function mo() {
 }
 function go() {
   const e = ve(), [t, r] = J(() => e.getAllLayouts());
-  return V(() => {
+  return $(() => {
     const o = () => {
       r(e.getAllLayouts());
     };
     return e.onLayoutsChange(o);
   }, [e]), t;
 }
-function yo() {
+function ho() {
   const e = ve();
-  return _(
-    (t, r, o, n) => {
-      const i = e.createLayoutFromCurrentState(t, r, o, n);
+  return O(
+    (t, r, o, s) => {
+      const i = e.createLayoutFromCurrentState(t, r, o, s);
       e.saveLayout(i);
     },
     [e]
   );
 }
-function ho() {
+function bo() {
   const e = ve();
-  return _(
+  return O(
     (t) => e.applyLayout(t),
     [e]
   );
 }
-function bo({
+function yo({
   children: e,
   service: t,
   initialViewTypes: r
 }) {
   const [o] = J(() => {
-    const n = t ?? new Dr();
-    return r && n.setViewTypes(r), n;
+    const s = t ?? new Dr();
+    return r && s.setViewTypes(r), s;
   });
-  return /* @__PURE__ */ R.jsx(Et.Provider, { value: o, children: e });
+  return /* @__PURE__ */ L.jsx(Tt.Provider, { value: o, children: e });
 }
 export {
   Ue as Block,
   mt as BlockContent,
-  yt as BlockFooter,
+  ht as BlockFooter,
   xt as BlockGroup,
   gt as BlockHeader,
   kt as BlockLayout,
   Ge as BlockSidebar,
   wt as BlockSidebarItem,
   vt as BlockSidebarSpacer,
-  bt as BlockTabs,
-  ht as BlockToolbar,
+  yt as BlockTabs,
+  bt as BlockToolbar,
   Or as CommandService,
   uo as CommandServiceProvider,
   ft as Divider,
   Mr as Grid,
   Cr as GridProvider,
   Dr as LayoutService,
-  bo as LayoutServiceProvider,
+  yo as LayoutServiceProvider,
   _r as ViewRegistry,
   to as ViewRegistryProvider,
   vr as applyCollapseLogic,
   kr as calculateConstrainedSize,
   ge as clamp,
   le as cn,
-  br as createCustomAdapter,
+  yr as createCustomAdapter,
   mr as defaultModes,
   Wr as findAdjacentBlock,
   Ur as frToPx,
   xr as generateGridTemplate,
-  Nr as getAllGridStates,
+  $r as getAllGridStates,
   ct as getFlexSpacePx,
   Me as getStorageAdapter,
   Gr as isCollapsed,
   Kr as isZeroSum,
-  yr as loadGridState,
-  ye as localStorageAdapter,
+  hr as loadGridState,
+  he as localStorageAdapter,
   Ae as memoryStorageAdapter,
-  $r as pxPerFr,
+  Nr as pxPerFr,
   Sr as pxToFr,
-  hr as removeGridState,
+  br as removeGridState,
   gr as saveGridState,
   lt as sessionStorageAdapter,
-  ho as useApplyLayout,
+  bo as useApplyLayout,
   fo as useBlockViewType,
   no as useCommand,
   co as useCommandKeyboardShortcuts,
@@ -5663,12 +5702,12 @@ export {
   so as useCommands,
   io as useExecuteCommand,
   Ar as useGridActions,
-  re as useGridContext,
+  oe as useGridContext,
   Rr as useGridKeyboard,
   at as useGridMode,
   wr as useGridPersistence,
   Ir as useGridResize,
-  $e as useGridState,
+  Ne as useGridState,
   Fr as useHideBlock,
   Hr as useIsBlockHidden,
   ve as useLayoutService,
@@ -5677,10 +5716,10 @@ export {
   ao as useRegisterCommands,
   oo as useRegisterView,
   ro as useRegisterViews,
-  yo as useSaveLayout,
+  ho as useSaveLayout,
   mo as useSetBlockViewType,
-  Yr as useShowBlock,
-  qr as useToggleBlockVisibility,
+  qr as useShowBlock,
+  Yr as useToggleBlockVisibility,
   Qr as useViewDescriptor,
   Le as useViewRegistry,
   po as useViewTypes,

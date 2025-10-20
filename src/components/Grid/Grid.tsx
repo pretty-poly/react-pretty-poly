@@ -175,7 +175,7 @@ const GridInternal = forwardRef<
 
       // Generate grid template for this group
       const parentBlock = blocks.find((b) => b.id === parentId) || rootBlock;
-      const direction = parentBlock?.direction || "row";
+      const direction = parentBlock?.direction;
 
       // Generate grid template from blocks (dividers are overlays, not part of the grid)
       const blocksForTemplate = sortedBlocks.map((block) => ({
@@ -188,23 +188,32 @@ const GridInternal = forwardRef<
 
       const template = generateGridTemplate(blocksForTemplate, rootBlock.id, state.hiddenBlocks);
 
-      const templateProperty =
-        direction === "column" ? "grid-template-rows" : "grid-template-columns";
+      // Check if parent has toolbar - if so, target the split-content div
+      const hasToolbar = parentBlock?.hasToolbar === true;
+      const selector = hasToolbar
+        ? `[data-block-id="${parentId}"] > [data-split-content]`
+        : `[data-block-id="${parentId}"]`;
 
-      // Simple selector - just target the block group by ID and type
-      // Grid-scoped to prevent collisions across multiple grids
-      const selector = `[data-block-id="${parentId}"]`;
+      let groupStyle = "";
 
-      let groupStyle = `
+      // Handle undefined direction (single-child splittable group)
+      if (!direction) {
+        groupStyle = `
+${selector} {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}`;
+      } else {
+        // Handle defined direction (split group)
+        const templateProperty = direction === "column" ? "grid-template-rows" : "grid-template-columns";
+        groupStyle = `
 ${selector} {
   display: grid;
   ${templateProperty}: ${template};
-  ${
-    direction === "column"
-      ? "grid-template-columns: 1fr;"
-      : "grid-template-rows: 1fr;"
-  }
+  ${direction === "column" ? "grid-template-columns: 1fr;" : "grid-template-rows: 1fr;"}
 }`;
+      }
 
       // Generate styles for child groups recursively
       for (const childBlock of sortedBlocks) {

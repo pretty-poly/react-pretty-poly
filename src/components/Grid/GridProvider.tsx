@@ -193,49 +193,117 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
     case "SPLIT_BLOCK": {
       const { targetBlockId, direction, firstChildId, secondChildId, initialSize = 1 } = action.payload;
       const targetBlock = state.blocks[targetBlockId];
-      if (!targetBlock) return state;
 
-      // Transform target block into a group
-      const groupBlock: BlockConfig = {
-        ...targetBlock,
-        type: "group",
-        direction: direction === "horizontal" ? "column" : "row",
-        children: [firstChildId, secondChildId],
-        viewType: undefined, // Groups don't have view types
-      };
+      // Validate target exists and is a group
+      if (!targetBlock) {
+        console.warn(`Cannot split: block ${targetBlockId} not found`);
+        return state;
+      }
 
-      // Create first child (inherits original view type)
-      const firstChild: BlockConfig = {
-        id: firstChildId,
-        type: "block",
-        parentId: targetBlockId,
-        order: 0,
-        defaultSize: initialSize,
-        sizeUnit: "fr",
-        viewType: targetBlock.viewType,
-        viewState: targetBlock.viewState,
-      };
+      if (targetBlock.type !== "group") {
+        console.warn(`Cannot split: block ${targetBlockId} is not a group`);
+        return state;
+      }
 
-      // Create second child (empty, user will assign content)
-      const secondChild: BlockConfig = {
-        id: secondChildId,
-        type: "block",
-        parentId: targetBlockId,
-        order: 1,
-        defaultSize: initialSize,
-        sizeUnit: "fr",
-        viewType: action.payload.newViewType,
-      };
+      // Validate canSplit flag
+      if (targetBlock.canSplit !== true) {
+        console.warn(`Cannot split: block ${targetBlockId} does not have canSplit enabled`);
+        return state;
+      }
 
-      return {
-        ...state,
-        blocks: {
-          ...state.blocks,
-          [targetBlockId]: groupBlock,
-          [firstChildId]: firstChild,
-          [secondChildId]: secondChild,
-        },
-      };
+      const splitDirection = direction === "horizontal" ? "column" : "row";
+
+      // Determine view type for new panes
+      const newViewType = action.payload.newViewType || targetBlock.defaultViewType;
+
+      // Case 1: Group with undefined direction - set direction and REPLACE children
+      if (!targetBlock.direction) {
+        const existingChildren = targetBlock.children || [];
+        const oldChildId = existingChildren[0];
+        const oldChild = oldChildId ? state.blocks[oldChildId] : undefined;
+
+        // Update group: set direction and replace children
+        const updatedGroup: BlockConfig = {
+          ...targetBlock,
+          direction: splitDirection,
+          children: [firstChildId, secondChildId],
+        };
+
+        // First child inherits content from original child
+        const firstChild: BlockConfig = {
+          id: firstChildId,
+          type: "block",
+          parentId: targetBlockId,
+          order: 0,
+          defaultSize: initialSize,
+          sizeUnit: "fr",
+          viewType: oldChild?.viewType,
+          viewState: oldChild?.viewState,
+        };
+
+        // Second child gets default or specified view type
+        const secondChild: BlockConfig = {
+          id: secondChildId,
+          type: "block",
+          parentId: targetBlockId,
+          order: 1,
+          defaultSize: initialSize,
+          sizeUnit: "fr",
+          viewType: newViewType,
+        };
+
+        // Delete old children from state
+        const newBlocks = { ...state.blocks };
+        existingChildren.forEach(childId => {
+          delete newBlocks[childId];
+        });
+
+        // Add updated blocks
+        return {
+          ...state,
+          blocks: {
+            ...newBlocks,
+            [targetBlockId]: updatedGroup,
+            [firstChildId]: firstChild,
+            [secondChildId]: secondChild,
+          },
+        };
+      }
+
+      // Case 2: Group with defined direction - add to existing children
+      if (targetBlock.direction) {
+        // Check if directions match
+        if (targetBlock.direction !== splitDirection) {
+          console.warn(`Cannot split group ${targetBlockId}: direction mismatch (has ${targetBlock.direction}, requested ${splitDirection})`);
+          return state;
+        }
+
+        const updatedGroup: BlockConfig = {
+          ...targetBlock,
+          children: [...(targetBlock.children || []), secondChildId],
+        };
+
+        const newChild: BlockConfig = {
+          id: secondChildId,
+          type: "block",
+          parentId: targetBlockId,
+          order: (targetBlock.children?.length || 0),
+          defaultSize: initialSize,
+          sizeUnit: "fr",
+          viewType: newViewType,
+        };
+
+        return {
+          ...state,
+          blocks: {
+            ...state.blocks,
+            [targetBlockId]: updatedGroup,
+            [secondChildId]: newChild,
+          },
+        };
+      }
+
+      return state;
     }
 
     case "UNSPLIT_BLOCK": {
@@ -509,8 +577,11 @@ export function GridProvider({
       // Split operations (LayoutService primitives)
       splitBlock: (blockId: string, direction: 'horizontal' | 'vertical', options = {}) => {
         const { initialSize = 1, viewType, position = 'after' } = options;
-        const firstChildId = `${blockId}-1`;
-        const secondChildId = `${blockId}-2`;
+
+        // Generate unique IDs using timestamp to prevent collisions
+        const timestamp = Date.now();
+        const firstChildId = `${blockId}-${timestamp}-1`;
+        const secondChildId = `${blockId}-${timestamp}-2`;
 
         dispatch({
           type: "SPLIT_BLOCK",
@@ -539,12 +610,14 @@ export function GridProvider({
 
       canSplit: (blockId: string) => {
         const block = state.blocks[blockId];
-        if (!block || block.type !== "block") return false;
 
-        // Check if block has canSplit flag
-        if (block.canSplit === false) return false;
+        // Only groups can be split
+        if (!block || block.type !== "group") return false;
 
-        // Check minimum size constraints
+        // Check if group has canSplit flag enabled
+        if (block.canSplit !== true) return false;
+
+        // Check minimum size constraints if specified
         const minSplitSize = block.splitConfig?.minSplitSize || 200;
         if (block.sizeUnit === "px" && (block.defaultSize || 0) < minSplitSize * 2) {
           return false;
@@ -788,11 +861,12 @@ export function useToggleBlockVisibility(): (blockId: string) => void {
  */
 // eslint-disable-next-line react-refresh/only-export-components
 export function useSplitBlock() {
-  const { splitBlock, unsplitBlock, canSplit } = useGridContext();
+  const { splitBlock, unsplitBlock, canSplit, state } = useGridContext();
   return {
     splitBlock,
     unsplitBlock,
     canSplit,
+    state,
   };
 }
 
