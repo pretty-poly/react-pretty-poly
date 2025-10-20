@@ -54,6 +54,7 @@ export interface BlockConfig {
   canSplit?: boolean
   hasToolbar?: boolean    // Render toolbar for split controls
   defaultViewType?: string // Default view type for new split panes
+  emptyViewType?: string  // View type to show when container is empty (defaults to defaultViewType + '-empty')
   toolbarSize?: number    // Toolbar height (default: auto)
   splitConfig?: {
     horizontal?: boolean  // Can split horizontally

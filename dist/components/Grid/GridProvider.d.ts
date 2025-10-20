@@ -78,6 +78,7 @@ export declare function useBlockState(blockId: string): {
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
+    emptyViewType?: string;
     toolbarSize?: number;
     splitConfig?: {
         horizontal?: boolean;
@@ -115,6 +116,7 @@ export declare function useParentBlockState(blockId: string): {
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
+    emptyViewType?: string;
     toolbarSize?: number;
     splitConfig?: {
         horizontal?: boolean;

@@ -457,58 +457,28 @@ export default function ViewRegistryDemo() {
   ];
 
   return (
-    <div className="h-screen flex flex-col">
-      {/* Info Banner */}
-      <div className="bg-blue-50 dark:bg-blue-950 border-b border-blue-200 dark:border-blue-800 p-4">
-        <h1 className="text-xl font-bold mb-2">
-          View Registry Demo (Pretty Poly 2.0)
-        </h1>
-        <p className="text-sm text-muted-foreground mb-2">
-          This demonstrates the <strong>ViewRegistry</strong> primitive - the
-          foundation for polymorphic UIs. Each block can display any registered
-          view type, inspired by Blender's Area concept.
-        </p>
-        <div className="flex gap-4 text-xs">
-          <div>
-            <strong>✨ Try this:</strong> Use the dropdowns to change what each
-            block displays
-          </div>
-          <div>
-            <strong>📦 Registered:</strong> {VIEW_TYPES.length} view types
-          </div>
-        </div>
-      </div>
-
-      {/* Grid with Dynamic Blocks */}
-      <div className="flex-1">
-        <Grid id="view-registry-demo" defaultLayout={blocks}>
-          <DynamicBlock
-            id="topLeft"
-            viewType={viewTypes.topLeft}
-            onViewTypeChange={(type) => handleViewTypeChange("topLeft", type)}
-          />
-          <DynamicBlock
-            id="topRight"
-            viewType={viewTypes.topRight}
-            onViewTypeChange={(type) => handleViewTypeChange("topRight", type)}
-          />
-          <DynamicBlock
-            id="bottomLeft"
-            viewType={viewTypes.bottomLeft}
-            onViewTypeChange={(type) =>
-              handleViewTypeChange("bottomLeft", type)
-            }
-          />
-          <DynamicBlock
-            id="bottomRight"
-            viewType={viewTypes.bottomRight}
-            onViewTypeChange={(type) =>
-              handleViewTypeChange("bottomRight", type)
-            }
-          />
-        </Grid>
-      </div>
-    </div>
+    <Grid id="view-registry-demo" defaultLayout={blocks} className="h-dvh">
+      <DynamicBlock
+        id="topLeft"
+        viewType={viewTypes.topLeft}
+        onViewTypeChange={(type) => handleViewTypeChange("topLeft", type)}
+      />
+      <DynamicBlock
+        id="topRight"
+        viewType={viewTypes.topRight}
+        onViewTypeChange={(type) => handleViewTypeChange("topRight", type)}
+      />
+      <DynamicBlock
+        id="bottomLeft"
+        viewType={viewTypes.bottomLeft}
+        onViewTypeChange={(type) => handleViewTypeChange("bottomLeft", type)}
+      />
+      <DynamicBlock
+        id="bottomRight"
+        viewType={viewTypes.bottomRight}
+        onViewTypeChange={(type) => handleViewTypeChange("bottomRight", type)}
+      />
+    </Grid>
   );
 }
 

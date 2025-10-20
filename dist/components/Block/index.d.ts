@@ -12,4 +12,6 @@ export { BlockSplitContainer } from './BlockSplitContainer';
 export type { BlockSplitContainerProps, ToolbarRenderProps } from './BlockSplitContainer';
 export { BlockTreeRenderer } from './BlockTreeRenderer';
 export type { BlockTreeRendererProps } from './BlockTreeRenderer';
+export { BlockCloseButton } from './BlockCloseButton';
+export type { BlockCloseButtonProps } from './BlockCloseButton';
 //# sourceMappingURL=index.d.ts.map

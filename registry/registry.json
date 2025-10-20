@@ -52,6 +52,10 @@
           "type": "registry:component"
         },
         {
+          "path": "components/grid/block-close-button.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "components/divider/divider.tsx",
           "type": "registry:component"
         },
@@ -81,6 +85,10 @@
         },
         {
           "path": "hooks/use-block-split-direction.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-remove-block.ts",
           "type": "registry:hook"
         },
         {

@@ -12,13 +12,18 @@ import { Grid } from "@/components/grid/grid";
 import { Block } from "@/components/grid/block";
 import { BlockContent } from "@/components/grid/block-content";
 import { BlockLayout } from "@/components/grid/block-layout";
+import { BlockHeader } from "@/components/grid/block-header";
+import { BlockToolbar } from "@/components/grid/block-toolbar";
+import { BlockCloseButton } from "@/components/grid/block-close-button";
 import { BlockTreeRenderer } from "@/components/grid/block-tree-renderer";
 import { useGridContext } from "@/components/grid/grid-provider";
+import { useRemoveBlock } from "@/hooks/use-remove-block";
 import {
   SplitSquareVertical,
   SplitSquareHorizontal,
   Terminal,
   FileText,
+  X,
 } from "lucide-react";
 import type { BlockConfig } from "@/lib/grid-types";
 
@@ -84,9 +89,25 @@ const initialBlocks: BlockConfig[] = [
 // ============================================================================
 
 function WelcomePane({ blockId }: { blockId: string }) {
+  const { removeBlock, canRemove } = useRemoveBlock();
+
   return (
     <Block id={blockId}>
       <BlockLayout>
+        <BlockHeader>
+          <BlockToolbar
+            left={<h2 className="text-sm font-semibold">Welcome</h2>}
+            right={
+              canRemove(blockId) && (
+                <BlockCloseButton
+                  icon={X}
+                  onClick={() => removeBlock(blockId)}
+                  title="Close Pane"
+                />
+              )
+            }
+          />
+        </BlockHeader>
         <BlockContent className="p-6 overflow-auto">
           <div className="max-w-3xl mx-auto space-y-6">
             <div>
@@ -255,9 +276,25 @@ function WelcomePane({ blockId }: { blockId: string }) {
 }
 
 function EditorPane({ blockId }: { blockId: string }) {
+  const { removeBlock, canRemove } = useRemoveBlock();
+
   return (
     <Block id={blockId}>
       <BlockLayout>
+        <BlockHeader>
+          <BlockToolbar
+            left={<h2 className="text-sm font-semibold">Editor</h2>}
+            right={
+              canRemove(blockId) && (
+                <BlockCloseButton
+                  icon={X}
+                  onClick={() => removeBlock(blockId)}
+                  title="Close Pane"
+                />
+              )
+            }
+          />
+        </BlockHeader>
         <BlockContent className="p-6 overflow-auto">
           <div className="max-w-3xl mx-auto space-y-4">
             <div>
@@ -310,9 +347,25 @@ function EditorPane({ blockId }: { blockId: string }) {
 }
 
 function TerminalPane({ blockId }: { blockId: string }) {
+  const { removeBlock, canRemove } = useRemoveBlock();
+
   return (
     <Block id={blockId}>
       <BlockLayout>
+        <BlockHeader>
+          <BlockToolbar
+            left={<h2 className="text-sm font-semibold text-green-400">Terminal</h2>}
+            right={
+              canRemove(blockId) && (
+                <BlockCloseButton
+                  icon={X}
+                  onClick={() => removeBlock(blockId)}
+                  title="Close Pane"
+                />
+              )
+            }
+          />
+        </BlockHeader>
         <BlockContent className="p-4 overflow-auto bg-black dark:bg-gray-950 font-mono text-sm">
           <div className="text-green-400">
             <div>$ pretty-poly --version</div>
@@ -346,6 +399,54 @@ function TerminalPane({ blockId }: { blockId: string }) {
 }
 
 // ============================================================================
+// Empty State Components
+// ============================================================================
+
+function EditorEmptyState({ blockId }: { blockId: string }) {
+  return (
+    <Block id={blockId}>
+      <BlockLayout>
+        <BlockContent className="flex flex-col items-center justify-center h-full gap-4 p-6">
+          <FileText className="w-16 h-16 text-muted-foreground" />
+          <div className="text-center space-y-2">
+            <h3 className="font-semibold text-lg">No Editor Panes</h3>
+            <p className="text-sm text-muted-foreground max-w-md">
+              All editor panes have been closed. Click "Split Right" or "Split
+              Down" in the toolbar above to create new editor panes.
+            </p>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Block ID: <code className="px-1 py-0.5 rounded bg-muted">{blockId}</code>
+          </div>
+        </BlockContent>
+      </BlockLayout>
+    </Block>
+  );
+}
+
+function TerminalEmptyState({ blockId }: { blockId: string }) {
+  return (
+    <Block id={blockId}>
+      <BlockLayout>
+        <BlockContent className="flex flex-col items-center justify-center h-full gap-4 p-6 bg-black dark:bg-gray-950">
+          <Terminal className="w-16 h-16 text-green-400/50" />
+          <div className="text-center space-y-2">
+            <h3 className="font-semibold text-lg text-green-400">No Terminal Panes</h3>
+            <p className="text-sm text-green-400/70 max-w-md">
+              All terminal panes have been closed. Click "Split Right" or "Split
+              Down" in the toolbar above to create new terminal panes.
+            </p>
+          </div>
+          <div className="text-xs text-green-400/50">
+            Block ID: <code className="px-1 py-0.5 rounded bg-gray-800">{blockId}</code>
+          </div>
+        </BlockContent>
+      </BlockLayout>
+    </Block>
+  );
+}
+
+// ============================================================================
 // Main Demo Component
 // ============================================================================
 
@@ -356,6 +457,15 @@ function BlockSplitDemoContent() {
     <BlockTreeRenderer
       blockId="root"
       renderBlock={(block, blockId) => {
+        // Check viewType first (for empty states)
+        if (block.viewType === "editor-empty") {
+          return <EditorEmptyState blockId={blockId} />;
+        }
+        if (block.viewType === "terminal-empty") {
+          return <TerminalEmptyState blockId={blockId} />;
+        }
+
+        // Then check parent/block ID for normal panes
         const parentBlock = block.parentId ? state.blocks[block.parentId] : null;
         const isEditorPane = parentBlock?.id === "editor-area";
         const isTerminalPane = parentBlock?.id === "terminal-area";
