@@ -1,50 +1,50 @@
-import { forwardRef } from 'react'
-import { cn } from "@/lib/utils"
-import { useGridContext } from "@/components/grid/grid-provider"
-import { useBlockSplitDirection } from "@/hooks/use-block-split-direction"
+import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+import { useGridContext } from "@/components/grid/grid-provider";
+import { useBlockSplitDirection } from "@/hooks/use-block-split-direction";
 
 export interface BlockSplitContainerProps {
-  blockId: string
-  children: React.ReactNode
+  blockId: string;
+  children: React.ReactNode;
 
   // Label configuration
-  label?: React.ReactNode
-  icon?: React.ComponentType<{ className?: string }>
+  label?: React.ReactNode;
+  icon?: React.ComponentType<{ className?: string }>;
 
   // Split button configuration
-  showSplitButtons?: boolean
+  showSplitButtons?: boolean;
   splitButtonLabels?: {
-    vertical?: string
-    horizontal?: string
-  }
+    vertical?: string;
+    horizontal?: string;
+  };
   splitButtonIcons?: {
-    vertical?: React.ComponentType<{ className?: string }>
-    horizontal?: React.ComponentType<{ className?: string }>
-  }
+    vertical?: React.ComponentType<{ className?: string }>;
+    horizontal?: React.ComponentType<{ className?: string }>;
+  };
 
   // Callbacks
-  onBeforeSplit?: (direction: 'horizontal' | 'vertical') => boolean | void
+  onBeforeSplit?: (direction: "horizontal" | "vertical") => boolean | void;
 
   // Styling
-  className?: string
-  toolbarClassName?: string
-  contentClassName?: string
+  className?: string;
+  toolbarClassName?: string;
+  contentClassName?: string;
 
   // Advanced: Custom toolbar renderer
-  renderToolbar?: (props: ToolbarRenderProps) => React.ReactNode
+  renderToolbar?: (props: ToolbarRenderProps) => React.ReactNode;
 
   // Accessibility
-  'aria-label'?: string
+  "aria-label"?: string;
 }
 
 export interface ToolbarRenderProps {
-  blockId: string
-  canSplitVertical: boolean
-  canSplitHorizontal: boolean
-  handleSplitVertical: () => void
-  handleSplitHorizontal: () => void
-  label?: React.ReactNode
-  icon?: React.ComponentType<{ className?: string }>
+  blockId: string;
+  canSplitVertical: boolean;
+  canSplitHorizontal: boolean;
+  handleSplitVertical: () => void;
+  handleSplitHorizontal: () => void;
+  label?: React.ReactNode;
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
 /**
@@ -66,7 +66,10 @@ export interface ToolbarRenderProps {
  * </BlockSplitContainer>
  * ```
  */
-export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContainerProps>(
+export const BlockSplitContainer = forwardRef<
+  HTMLDivElement,
+  BlockSplitContainerProps
+>(
   (
     {
       blockId,
@@ -75,8 +78,8 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
       icon: Icon,
       showSplitButtons = true,
       splitButtonLabels = {
-        vertical: 'Split Right',
-        horizontal: 'Split Down'
+        vertical: "Split Right",
+        horizontal: "Split Down",
       },
       splitButtonIcons,
       onBeforeSplit,
@@ -84,31 +87,32 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
       toolbarClassName,
       contentClassName,
       renderToolbar,
-      'aria-label': ariaLabel
+      "aria-label": ariaLabel,
     },
     ref
   ) => {
-    const { splitBlock } = useGridContext()
-    const { canSplitVertical, canSplitHorizontal } = useBlockSplitDirection(blockId)
+    const { splitBlock } = useGridContext();
+    const { canSplitVertical, canSplitHorizontal } =
+      useBlockSplitDirection(blockId);
 
-    const VerticalIcon = splitButtonIcons?.vertical
-    const HorizontalIcon = splitButtonIcons?.horizontal
+    const VerticalIcon = splitButtonIcons?.vertical;
+    const HorizontalIcon = splitButtonIcons?.horizontal;
 
     const handleSplitVertical = () => {
       if (onBeforeSplit) {
-        const result = onBeforeSplit('vertical')
-        if (result === false) return
+        const result = onBeforeSplit("vertical");
+        if (result === false) return;
       }
-      splitBlock(blockId, 'vertical')
-    }
+      splitBlock(blockId, "vertical");
+    };
 
     const handleSplitHorizontal = () => {
       if (onBeforeSplit) {
-        const result = onBeforeSplit('horizontal')
-        if (result === false) return
+        const result = onBeforeSplit("horizontal");
+        if (result === false) return;
       }
-      splitBlock(blockId, 'horizontal')
-    }
+      splitBlock(blockId, "horizontal");
+    };
 
     const toolbarProps: ToolbarRenderProps = {
       blockId,
@@ -117,8 +121,8 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
       handleSplitVertical,
       handleSplitHorizontal,
       label,
-      icon: Icon
-    }
+      icon: Icon,
+    };
 
     return (
       <div
@@ -126,7 +130,10 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
         data-block-id={blockId}
         data-block-type="group"
         data-has-toolbar="true"
-        className={cn('relative w-full h-full flex flex-col min-h-0', className)}
+        className={cn(
+          "relative w-full h-full flex flex-col min-h-0",
+          className
+        )}
         aria-label={ariaLabel}
       >
         {/* Toolbar */}
@@ -135,7 +142,7 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
         ) : (
           <div
             className={cn(
-              'flex-none border-b border-border bg-card',
+              "flex-none border-b border-t border-border bg-card",
               toolbarClassName
             )}
           >
@@ -143,11 +150,7 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
               {/* Label Section */}
               <div className="flex items-center gap-2">
                 {Icon && <Icon className="w-4 h-4 text-muted-foreground" />}
-                {label && (
-                  <div className="font-semibold text-sm">
-                    {label}
-                  </div>
-                )}
+                {label && <div className="font-semibold text-sm">{label}</div>}
               </div>
 
               {/* Split Buttons */}
@@ -161,7 +164,9 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
                       aria-label={splitButtonLabels.vertical}
                     >
                       {VerticalIcon && <VerticalIcon className="w-3 h-3" />}
-                      <span className="hidden sm:inline">{splitButtonLabels.vertical}</span>
+                      <span className="hidden sm:inline">
+                        {splitButtonLabels.vertical}
+                      </span>
                     </button>
                   )}
                   {canSplitHorizontal && (
@@ -172,7 +177,9 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
                       aria-label={splitButtonLabels.horizontal}
                     >
                       {HorizontalIcon && <HorizontalIcon className="w-3 h-3" />}
-                      <span className="hidden sm:inline">{splitButtonLabels.horizontal}</span>
+                      <span className="hidden sm:inline">
+                        {splitButtonLabels.horizontal}
+                      </span>
                     </button>
                   )}
                 </div>
@@ -184,13 +191,16 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
         {/* Content Area - Critical data-split-content attribute for divider positioning */}
         <div
           data-split-content
-          className={cn('flex-1 relative min-h-0', contentClassName)}
+          className={cn(
+            "relative min-h-0 divide-x divide-border",
+            contentClassName
+          )}
         >
           {children}
         </div>
       </div>
-    )
+    );
   }
-)
+);
 
-BlockSplitContainer.displayName = 'BlockSplitContainer'
+BlockSplitContainer.displayName = "BlockSplitContainer";

@@ -10,19 +10,20 @@
  */
 
 import React, { useState } from "react";
+import { Grid } from "@/components/grid/grid";
+import { Block } from "@/components/grid/block";
+import { BlockContent } from "@/components/grid/block-content";
+import { BlockHeader } from "@/components/grid/block-header";
+import { BlockLayout } from "@/components/grid/block-layout";
+import { BlockToolbar } from "@/components/grid/block-toolbar";
 import {
-  Grid,
-  Block,
-  BlockContent,
-  BlockHeader,
-  BlockToolbar,
   ViewRegistryProvider,
   useViewRegistry,
   useRegisterViews,
-  type BlockConfig,
   type ViewDescriptor,
   type ViewProps,
 } from "@pretty-poly/react";
+import type { BlockConfig } from "@/lib/grid-types";
 import {
   FileText,
   Image,
@@ -352,20 +353,22 @@ function DynamicBlock({ id, viewType, onViewTypeChange }: DynamicBlockProps) {
 
   return (
     <Block id={id}>
-      <BlockHeader>
-        <BlockToolbar
-          left={
-            <ViewSwitcher
-              blockId={id}
-              currentViewType={viewType}
-              onViewTypeChange={onViewTypeChange}
-            />
-          }
-        />
-      </BlockHeader>
-      <BlockContent>
-        <ViewComponent viewId={viewType} blockId={id} />
-      </BlockContent>
+      <BlockLayout>
+        <BlockHeader>
+          <BlockToolbar
+            left={
+              <ViewSwitcher
+                blockId={id}
+                currentViewType={viewType}
+                onViewTypeChange={onViewTypeChange}
+              />
+            }
+          />
+        </BlockHeader>
+        <BlockContent>
+          <ViewComponent viewId={viewType} blockId={id} />
+        </BlockContent>
+      </BlockLayout>
     </Block>
   );
 }
@@ -412,6 +415,8 @@ export default function ViewRegistryDemo() {
       direction: "row",
       parentId: "root",
       order: 0,
+      defaultSize: 1,
+      sizeUnit: "fr",
       children: ["topLeft", "topRight"],
     },
     {
@@ -420,6 +425,8 @@ export default function ViewRegistryDemo() {
       direction: "row",
       parentId: "root",
       order: 1,
+      defaultSize: 1,
+      sizeUnit: "fr",
       children: ["bottomLeft", "bottomRight"],
     },
     {
@@ -458,26 +465,45 @@ export default function ViewRegistryDemo() {
 
   return (
     <Grid id="view-registry-demo" defaultLayout={blocks} className="h-dvh">
-      <DynamicBlock
-        id="topLeft"
-        viewType={viewTypes.topLeft}
-        onViewTypeChange={(type) => handleViewTypeChange("topLeft", type)}
-      />
-      <DynamicBlock
-        id="topRight"
-        viewType={viewTypes.topRight}
-        onViewTypeChange={(type) => handleViewTypeChange("topRight", type)}
-      />
-      <DynamicBlock
-        id="bottomLeft"
-        viewType={viewTypes.bottomLeft}
-        onViewTypeChange={(type) => handleViewTypeChange("bottomLeft", type)}
-      />
-      <DynamicBlock
-        id="bottomRight"
-        viewType={viewTypes.bottomRight}
-        onViewTypeChange={(type) => handleViewTypeChange("bottomRight", type)}
-      />
+      {/* Top Row - contains topLeft and topRight */}
+      <div
+        data-grid-id="view-registry-demo"
+        data-block-id="topRow"
+        data-block-type="group"
+        data-block-direction="row"
+        className="contents"
+      >
+        <DynamicBlock
+          id="topLeft"
+          viewType={viewTypes.topLeft}
+          onViewTypeChange={(type) => handleViewTypeChange("topLeft", type)}
+        />
+        <DynamicBlock
+          id="topRight"
+          viewType={viewTypes.topRight}
+          onViewTypeChange={(type) => handleViewTypeChange("topRight", type)}
+        />
+      </div>
+
+      {/* Bottom Row - contains bottomLeft and bottomRight */}
+      <div
+        data-grid-id="view-registry-demo"
+        data-block-id="bottomRow"
+        data-block-type="group"
+        data-block-direction="row"
+        className="contents"
+      >
+        <DynamicBlock
+          id="bottomLeft"
+          viewType={viewTypes.bottomLeft}
+          onViewTypeChange={(type) => handleViewTypeChange("bottomLeft", type)}
+        />
+        <DynamicBlock
+          id="bottomRight"
+          viewType={viewTypes.bottomRight}
+          onViewTypeChange={(type) => handleViewTypeChange("bottomRight", type)}
+        />
+      </div>
     </Grid>
   );
 }

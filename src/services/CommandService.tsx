@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 
 /**
@@ -13,7 +14,7 @@ export interface Command {
   id: string
 
   /** Handler function to execute when command is triggered */
-  handler: (...args: any[]) => any | Promise<any>
+  handler: (...args: unknown[]) => unknown | Promise<unknown>
 
   /** Display title for menus/palette */
   title?: string
@@ -40,7 +41,7 @@ export interface Command {
 export interface CommandExecutionResult {
   success: boolean
   error?: Error
-  result?: any
+  result?: unknown
 }
 
 /**
@@ -49,7 +50,7 @@ export interface CommandExecutionResult {
  */
 export class CommandService {
   private commands = new Map<string, Command>()
-  private executionListeners = new Map<string, Set<(result: any) => void>>()
+  private executionListeners = new Map<string, Set<(result: unknown) => void>>()
   private registrationListeners = new Set<() => void>()
   private keybindingMap = new Map<string, string>() // normalized key -> command id
 
@@ -95,7 +96,7 @@ export class CommandService {
   /**
    * Execute a command by ID
    */
-  async executeCommand(id: string, ...args: any[]): Promise<CommandExecutionResult> {
+  async executeCommand(id: string, ...args: unknown[]): Promise<CommandExecutionResult> {
     const command = this.commands.get(id)
 
     if (!command) {
@@ -173,7 +174,7 @@ export class CommandService {
    * Subscribe to command execution events
    * @returns Unsubscribe function
    */
-  onDidExecuteCommand(commandId: string, listener: (result: any) => void): () => void {
+  onDidExecuteCommand(commandId: string, listener: (result: unknown) => void): () => void {
     if (!this.executionListeners.has(commandId)) {
       this.executionListeners.set(commandId, new Set())
     }
@@ -262,7 +263,7 @@ export class CommandService {
     return parts.sort().join('+')
   }
 
-  private notifyExecution(commandId: string, result: any): void {
+  private notifyExecution(commandId: string, result: unknown): void {
     this.executionListeners.get(commandId)?.forEach(listener => listener(result))
   }
 
@@ -342,11 +343,11 @@ export function useCommands(options?: {
  * Hook to execute a command
  * Returns a memoized callback that executes the command
  */
-export function useExecuteCommand(commandId: string): (...args: any[]) => Promise<CommandExecutionResult> {
+export function useExecuteCommand(commandId: string): (...args: unknown[]) => Promise<CommandExecutionResult> {
   const service = useCommandService()
 
   return useCallback(
-    (...args: any[]) => service.executeCommand(commandId, ...args),
+    (...args: unknown[]) => service.executeCommand(commandId, ...args),
     [service, commandId]
   )
 }

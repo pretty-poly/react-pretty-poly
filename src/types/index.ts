@@ -48,7 +48,7 @@ export interface BlockConfig {
 
   // View type (for ViewRegistry - future support)
   viewType?: string
-  viewState?: any  // View-specific state
+  viewState?: unknown  // View-specific state
 
   // Split configuration
   canSplit?: boolean
@@ -246,7 +246,7 @@ export interface BlockProps {
   divider?: boolean | DividerConfig
   noDivider?: boolean
 
-  // Mode-specific configurations
+  // Mode-specific configurations (any is required here to allow arbitrary props to pass through)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [modeName: string]: any
 

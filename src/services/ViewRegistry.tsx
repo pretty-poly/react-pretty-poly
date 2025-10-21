@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react'
 
 /**
@@ -47,7 +48,7 @@ export interface ViewProps {
   onFocus?: () => void
 
   /** Additional props can be passed through */
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /**
