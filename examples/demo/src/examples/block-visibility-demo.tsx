@@ -161,7 +161,7 @@ function DemoBlocks() {
                     <code className="bg-white dark:bg-gray-800 px-1 rounded">
                       display: none
                     </code>
-                    , which removes them from the grid's auto-placement flow.
+                    , which removes them from the grid&apos;s auto-placement flow.
                   </p>
                 </div>
                 <div>

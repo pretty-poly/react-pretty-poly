@@ -164,8 +164,8 @@ function WelcomePane({ blockId }: { blockId: string }) {
                 </h2>
                 <ol className="list-decimal pl-5 space-y-2 text-sm text-blue-800 dark:text-blue-200">
                   <li>
-                    <strong>Split the Editor Area</strong>: Click "Split Right"
-                    or "Split Down" in the toolbar above to create additional
+                    <strong>Split the Editor Area</strong>: Click &quot;Split Right&quot;
+                    or &quot;Split Down&quot; in the toolbar above to create additional
                     editor panes
                   </li>
                   <li>
@@ -240,7 +240,7 @@ function WelcomePane({ blockId }: { blockId: string }) {
                       <code className="px-1 py-0.5 rounded bg-green-100 dark:bg-green-900">
                         defaultViewType
                       </code>{" "}
-                      from container config (e.g., "editor" or "terminal")
+                      from container config (e.g., &quot;editor&quot; or &quot;terminal&quot;)
                     </p>
                   </div>
                 </div>
@@ -411,8 +411,8 @@ function EditorEmptyState({ blockId }: { blockId: string }) {
           <div className="text-center space-y-2">
             <h3 className="font-semibold text-lg">No Editor Panes</h3>
             <p className="text-sm text-muted-foreground max-w-md">
-              All editor panes have been closed. Click "Split Right" or "Split
-              Down" in the toolbar above to create new editor panes.
+              All editor panes have been closed. Click &quot;Split Right&quot; or &quot;Split
+              Down&quot; in the toolbar above to create new editor panes.
             </p>
           </div>
           <div className="text-xs text-muted-foreground">
@@ -433,8 +433,8 @@ function TerminalEmptyState({ blockId }: { blockId: string }) {
           <div className="text-center space-y-2">
             <h3 className="font-semibold text-lg text-green-400">No Terminal Panes</h3>
             <p className="text-sm text-green-400/70 max-w-md">
-              All terminal panes have been closed. Click "Split Right" or "Split
-              Down" in the toolbar above to create new terminal panes.
+              All terminal panes have been closed. Click &quot;Split Right&quot; or &quot;Split
+              Down&quot; in the toolbar above to create new terminal panes.
             </p>
           </div>
           <div className="text-xs text-green-400/50">

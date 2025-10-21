@@ -341,7 +341,7 @@ function DynamicBlock({ id, viewType, onViewTypeChange }: DynamicBlockProps) {
       <Block id={id}>
         <BlockContent>
           <div className="p-4 text-red-500">
-            Error: View type "{viewType}" not found in registry!
+            Error: View type &quot;{viewType}&quot; not found in registry!
           </div>
         </BlockContent>
       </Block>

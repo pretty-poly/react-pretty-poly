@@ -38,7 +38,6 @@ export default defineConfig([
       ...reactPlugin.configs['jsx-runtime'].rules,
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
-      'react/no-unescaped-entities': 'off',
       'react/jsx-no-comment-textnodes': 'off',
 
       // Allow exporting variants/constants from component files

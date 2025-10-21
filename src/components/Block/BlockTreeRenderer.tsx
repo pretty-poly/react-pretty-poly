@@ -86,7 +86,7 @@ export function BlockTreeRenderer({
   renderSplitContainer,
   renderGroup,
   className
-}: BlockTreeRendererProps): JSX.Element | null {
+}: BlockTreeRendererProps): React.ReactElement | null {
   const state = useGridState()
 
   if (!state || !state.blocks) {
@@ -173,7 +173,7 @@ export function BlockTreeRenderer({
       className={className || 'relative w-full h-full'}
     >
       <div className="p-4 text-muted-foreground">
-        Block "{blockId}" - No render function provided
+        Block &quot;{blockId}&quot; - No render function provided
       </div>
     </div>
   )

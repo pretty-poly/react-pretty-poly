@@ -229,7 +229,7 @@ const FixedSidebar: React.FC = () => {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-5 mt-6">
                 <h4 className="font-semibold text-blue-900 mb-2">Try It Yourself</h4>
                 <p className="text-sm text-blue-800">
-                  Try to resize the left sidebar by hovering over its right edge - you won't see any
+                  Try to resize the left sidebar by hovering over its right edge - you won&apos;t see any
                   divider or resize handle! However, you can resize the properties panel on the right
                   by dragging the divider between the main content and the panel.
                 </p>

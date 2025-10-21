@@ -14,7 +14,7 @@ export interface UseGridPersistenceOptions {
   enabled:
     | boolean
     | "localStorage"
-    | "sessionS torage"
+    | "sessionStorage"
     | ((state: GridState) => void);
   state: GridState;
   onStateLoad?: (state: Partial<GridState>) => void;

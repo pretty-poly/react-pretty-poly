@@ -36,7 +36,6 @@ export default [
       ...reactPlugin.configs['jsx-runtime'].rules,
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
-      'react/no-unescaped-entities': 'off',
 
       // TypeScript
       '@typescript-eslint/no-explicit-any': 'warn',
