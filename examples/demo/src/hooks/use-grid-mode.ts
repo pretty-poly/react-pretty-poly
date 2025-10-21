@@ -65,7 +65,7 @@ export function useGridMode(modes: ResponsiveModes = defaultModes) {
     }
 
     // Find the best matching mode
-    const matchingModes = Object.entries(modes).filter(([_key, config]) => {
+    const matchingModes = Object.entries(modes).filter(([_, config]) => {
       // If mode has a custom matcher, use it
       if (config.matcher) {
         return config.matcher(viewport)

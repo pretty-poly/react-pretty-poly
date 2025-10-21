@@ -256,7 +256,7 @@ function WelcomePane({ blockId }: { blockId: string }) {
                 sections simultaneously.
               </p>
 
-              {[...Array(15)].map((_, i) => (
+              {[...Array(15) as undefined[]].map((_, i) => (
                 <div key={i} className="p-4 border rounded bg-card">
                   <h3 className="font-semibold mb-2">Content Block {i + 1}</h3>
                   <p className="text-sm text-muted-foreground">
@@ -334,7 +334,7 @@ function EditorPane({ blockId }: { blockId: string }) {
             </div>
 
             {/* Add scrollable content */}
-            {[...Array(10)].map((_, i) => (
+            {[...Array(10) as undefined[]].map((_, i) => (
               <div key={i} className="p-3 border rounded bg-muted/50">
                 <p className="text-sm">Editor content line {i + 1}</p>
               </div>
@@ -386,7 +386,7 @@ function TerminalPane({ blockId }: { blockId: string }) {
             </div>
 
             {/* Add scrollable terminal content */}
-            {[...Array(20)].map((_, i) => (
+            {[...Array(20) as undefined[]].map((_, i) => (
               <div key={i} className="mt-2 text-gray-500">
                 [LOG] Terminal output line {i + 1}
               </div>

@@ -181,7 +181,7 @@ export function LayoutPreview({ layout }: LayoutPreviewProps) {
 
         {/* Mixer panel (bottom) */}
         <div className="bg-slate-800 rounded p-1.5 flex gap-1 overflow-hidden">
-          {[...Array(7)].map((_, i) => (
+          {[...Array(7) as undefined[]].map((_, i) => (
             <div key={i} className="flex flex-col gap-0.5 w-6">
               <div className="h-full bg-gradient-to-t from-green-500/50 via-yellow-500/30 to-transparent rounded-sm"></div>
               <div className="h-1 bg-slate-600 rounded-sm"></div>

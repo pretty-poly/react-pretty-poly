@@ -69,7 +69,9 @@ function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   })
 
   const handleExecute = (commandId: string) => {
-    commandService.executeCommand(commandId)
+    void commandService.executeCommand(commandId).catch((error: unknown) => {
+      console.error('Failed to execute command:', error)
+    })
     onClose()
   }
 
@@ -455,7 +457,11 @@ function CommandButton({ commandId, variant = 'default' }: CommandButtonProps) {
 
   return (
     <button
-      onClick={() => commandService.executeCommand(commandId)}
+      onClick={() => {
+        void commandService.executeCommand(commandId).catch((error: unknown) => {
+          console.error('Failed to execute command:', error)
+        })
+      }}
       className={
         variant === 'ghost'
           ? 'px-2 py-1 text-xs hover:bg-accent rounded flex items-center gap-1'

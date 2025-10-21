@@ -190,7 +190,11 @@ function PrimitivesDemoInternal() {
               return (
                 <button
                   key={view.id}
-                  onClick={() => commandService.executeCommand(`view.switchTo${view.title}`)}
+                  onClick={() => {
+                    void commandService.executeCommand(`view.switchTo${view.title}`).catch((error: unknown) => {
+                      console.error('Failed to switch view:', error)
+                    })
+                  }}
                   className={`px-3 py-1.5 rounded border flex items-center gap-1.5 text-sm transition-colors ${
                     mainViewType === view.id
                       ? 'bg-primary text-primary-foreground border-primary'
@@ -206,7 +210,11 @@ function PrimitivesDemoInternal() {
 
           <div className="flex gap-2 items-center">
             <button
-              onClick={() => commandService.executeCommand('workspace.save')}
+              onClick={() => {
+                void commandService.executeCommand('workspace.save').catch((error: unknown) => {
+                  console.error('Failed to save workspace:', error)
+                })
+              }}
               className="px-3 py-1.5 rounded border flex items-center gap-1.5 text-sm hover:bg-accent"
             >
               <Save className="w-3.5 h-3.5" />
