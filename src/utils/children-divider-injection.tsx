@@ -4,6 +4,14 @@ import { shouldGenerateDivider, generateDividerConfig } from './divider-auto-det
 
 type ComponentType = { displayName?: string; name?: string }
 
+type BlockElementProps = {
+  id?: string
+  children?: React.ReactNode
+  divider?: boolean | DividerConfig
+  noDivider?: boolean
+  [key: string]: unknown
+}
+
 /**
  * Extract block props from a React element
  */
@@ -12,7 +20,7 @@ function extractBlockProps(element: React.ReactElement): {
   divider?: boolean | DividerConfig
   noDivider?: boolean
 } | null {
-  const props = element.props
+  const props = element.props as BlockElementProps
   if (!props.id) return null
 
   return {
@@ -239,8 +247,9 @@ export function processChildrenRecursively(
 
     if (isBlockGroup) {
       // Recursively process the group's children
+      const childProps = child.props as BlockElementProps
       const result = injectAutomaticDividers(
-        child.props.children,
+        childProps.children,
         dividers,
         dividerConfig,
         blocks,
@@ -248,7 +257,7 @@ export function processChildrenRecursively(
       )
 
       // Store template items for this group
-      const groupId = child.props.id
+      const groupId = childProps.id
       if (groupId) {
         templateItemsByGroup[groupId] = result.templateItems
       }
@@ -267,12 +276,13 @@ export function processChildrenRecursively(
 
       // Return the group with processed children
       return cloneElement(child, {
-        ...child.props,
+        ...(child.props as Record<string, unknown>),
         children: nestedResult.children
       })
     } else if (isBlock) {
       // For regular blocks, check if they have nested groups in their children
-      const hasNestedGroups = Children.toArray(child.props.children).some(grandChild => {
+      const childProps = child.props as BlockElementProps
+      const hasNestedGroups = Children.toArray(childProps.children).some(grandChild => {
         if (!isValidElement(grandChild)) return false
         const grandChildDisplayName = (grandChild.type as ComponentType)?.displayName || (grandChild.type as ComponentType)?.name
         return grandChildDisplayName === 'Block.Group' || grandChildDisplayName === 'BlockGroup'
@@ -280,7 +290,7 @@ export function processChildrenRecursively(
 
       if (hasNestedGroups) {
         const nestedResult = processChildrenRecursively(
-          child.props.children,
+          childProps.children,
           dividers,
           dividerConfig,
           blocks,
@@ -291,7 +301,7 @@ export function processChildrenRecursively(
         Object.assign(templateItemsByGroup, nestedResult.templateItemsByGroup)
 
         return cloneElement(child, {
-          ...child.props,
+          ...(child.props as Record<string, unknown>),
           children: nestedResult.children
         })
       }

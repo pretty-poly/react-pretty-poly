@@ -147,7 +147,7 @@ export default function ExampleSelector() {
     window.history.pushState({}, "", newUrl);
   };
 
-  const goBack = () => {
+  const _goBack = () => {
     // Use browser back to navigate, popstate listener will handle state updates
     window.history.back();
   };

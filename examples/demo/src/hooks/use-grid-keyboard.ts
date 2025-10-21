@@ -65,9 +65,9 @@ export function useGridKeyboard({
   ): HTMLElement | null => {
     if (!containerRef?.current) return null
 
-    const allBlocks = Array.from(
-      containerRef.current.querySelectorAll('[data-block-type="block"], [data-block-type="group"]')
-    ) as HTMLElement[]
+    const allBlocks: HTMLElement[] = Array.from(
+      containerRef.current.querySelectorAll<HTMLElement>('[data-block-type="block"], [data-block-type="group"]')
+    )
 
     const currentRect = currentBlock.getBoundingClientRect()
     const currentCenter = {
@@ -149,7 +149,7 @@ export function useGridKeyboard({
     // Navigation (arrow keys without modifiers)
     if (!isCtrlOrCmd && !isShift) {
       switch (event.key) {
-        case 'ArrowUp':
+        case 'ArrowUp': {
           event.preventDefault()
           const upBlock = findNextBlock(focusedBlock, 'up')
           if (upBlock) {
@@ -157,8 +157,9 @@ export function useGridKeyboard({
             onFocusBlock?.(upBlock.dataset.blockId || '')
           }
           break
+        }
 
-        case 'ArrowDown':
+        case 'ArrowDown': {
           event.preventDefault()
           const downBlock = findNextBlock(focusedBlock, 'down')
           if (downBlock) {
@@ -166,8 +167,9 @@ export function useGridKeyboard({
             onFocusBlock?.(downBlock.dataset.blockId || '')
           }
           break
+        }
 
-        case 'ArrowLeft':
+        case 'ArrowLeft': {
           event.preventDefault()
           const leftBlock = findNextBlock(focusedBlock, 'left')
           if (leftBlock) {
@@ -175,8 +177,9 @@ export function useGridKeyboard({
             onFocusBlock?.(leftBlock.dataset.blockId || '')
           }
           break
+        }
 
-        case 'ArrowRight':
+        case 'ArrowRight': {
           event.preventDefault()
           const rightBlock = findNextBlock(focusedBlock, 'right')
           if (rightBlock) {
@@ -184,6 +187,7 @@ export function useGridKeyboard({
             onFocusBlock?.(rightBlock.dataset.blockId || '')
           }
           break
+        }
 
         case 'Enter':
         case ' ':
@@ -294,10 +298,10 @@ export function useGridKeyboard({
     if (!containerRef?.current) return []
 
     return Array.from(
-      containerRef.current.querySelectorAll(
+      containerRef.current.querySelectorAll<HTMLElement>(
         '[data-block-type="block"][tabindex], [data-block-type="group"][tabindex]'
       )
-    ) as HTMLElement[]
+    )
   }, [containerRef])
 
   // Set up keyboard event listeners

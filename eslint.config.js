@@ -5,7 +5,15 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
   js.configs.recommended,
-  ...typescript.configs.recommended,
+  ...typescript.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   {
     files: ['src/**/*.{ts,tsx}'],
     plugins: {
@@ -27,7 +35,6 @@ export default [
       }],
 
       // Core JS
-      'no-case-declarations': 'off', // Allow let/const in case blocks (common pattern)
       'prefer-const': 'error',
 
       // React Hooks
@@ -40,6 +47,15 @@ export default [
         allowExportNames: ['renderWithGrid', 'renderWithProviders']
       }],
     }
+  },
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    ...typescript.configs.disableTypeChecked,
+  },
+  {
+    // Test files - disable type checking since they're excluded from tsconfig
+    files: ['**/*.test.ts', '**/*.test.tsx', 'src/test/**/*.ts', 'src/test/**/*.tsx'],
+    ...typescript.configs.disableTypeChecked,
   },
   {
     // Ignore patterns

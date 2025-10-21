@@ -1,4 +1,4 @@
-import { ResponsiveModes, LayoutMode, ViewportInfo } from '../types';
+import { ResponsiveModes, ViewportInfo } from '../types';
 
 /**
  * Default responsive mode configurations
@@ -11,13 +11,13 @@ export declare function useGridMode(modes?: ResponsiveModes): {
     viewport: ViewportInfo;
     activeMode: string;
     currentModeConfig: {
-        type: LayoutMode;
+        type: import('..').LayoutMode;
         breakpoint?: number;
         minWidth?: number;
         maxWidth?: number;
         matcher?: (viewport: ViewportInfo) => boolean;
     };
-    currentLayoutType: LayoutMode;
+    currentLayoutType: import('..').LayoutMode;
     setMode: (modeName: string | null) => void;
     isMode: (modeName: string) => boolean;
     availableModes: string[];

@@ -19,7 +19,6 @@ import {
   PanelLeftOpen,
   PanelRightClose,
   PanelRightOpen,
-  Layers,
 } from "lucide-react";
 import type { BlockConfig } from "@/lib/grid-types";
 
@@ -63,7 +62,7 @@ function ToggleButton({
   blockId,
   label,
   icon: Icon,
-  align = "left",
+  align: _align = "left",
 }: {
   blockId: string;
   label: string;

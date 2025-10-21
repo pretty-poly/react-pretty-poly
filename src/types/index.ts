@@ -246,10 +246,6 @@ export interface BlockProps {
   divider?: boolean | DividerConfig
   noDivider?: boolean
 
-  // Mode-specific configurations (any is required here to allow arbitrary props to pass through)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [modeName: string]: any
-
   // Accessibility
   "aria-label"?: string
 }

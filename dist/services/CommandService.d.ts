@@ -10,7 +10,7 @@ export interface Command {
     /** Unique identifier for this command */
     id: string;
     /** Handler function to execute when command is triggered */
-    handler: (...args: any[]) => any | Promise<any>;
+    handler: (...args: unknown[]) => Promise<unknown> | void;
     /** Display title for menus/palette */
     title?: string;
     /** Category for organization */
@@ -32,7 +32,7 @@ export interface Command {
 export interface CommandExecutionResult {
     success: boolean;
     error?: Error;
-    result?: any;
+    result?: unknown;
 }
 /**
  * CommandService manages command registration and execution
@@ -56,7 +56,7 @@ export declare class CommandService {
     /**
      * Execute a command by ID
      */
-    executeCommand(id: string, ...args: any[]): Promise<CommandExecutionResult>;
+    executeCommand(id: string, ...args: unknown[]): Promise<CommandExecutionResult>;
     /**
      * Get a specific command by ID
      */
@@ -81,7 +81,7 @@ export declare class CommandService {
      * Subscribe to command execution events
      * @returns Unsubscribe function
      */
-    onDidExecuteCommand(commandId: string, listener: (result: any) => void): () => void;
+    onDidExecuteCommand(commandId: string, listener: (result: unknown) => void): () => void;
     /**
      * Subscribe to command registration changes
      * @returns Unsubscribe function
@@ -132,7 +132,7 @@ export declare function useCommands(options?: {
  * Hook to execute a command
  * Returns a memoized callback that executes the command
  */
-export declare function useExecuteCommand(commandId: string): (...args: any[]) => Promise<CommandExecutionResult>;
+export declare function useExecuteCommand(commandId: string): (...args: unknown[]) => Promise<CommandExecutionResult>;
 /**
  * Hook to register commands on component mount
  * Automatically unregisters when component unmounts

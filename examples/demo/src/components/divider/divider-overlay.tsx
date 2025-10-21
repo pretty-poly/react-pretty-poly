@@ -60,7 +60,7 @@ function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
       dividers.push({
         id: `divider-${previousChild.id}-${child.id}`,
         targetBlockId: targetId,
-        position: position as 'start' | 'end',
+        position,
         direction: dividerDirection
       })
     })

@@ -47,12 +47,13 @@ export interface BlockConfig {
 
   // View type (for ViewRegistry - future support)
   viewType?: string
-  viewState?: any  // View-specific state
+  viewState?: unknown  // View-specific state
 
   // Split configuration
   canSplit?: boolean
   hasToolbar?: boolean    // Render toolbar for split controls
   defaultViewType?: string // Default view type for new split panes
+  emptyViewType?: string  // View type to show when container is empty (defaults to defaultViewType + '-empty')
   toolbarSize?: number    // Toolbar height (default: auto)
   splitConfig?: {
     horizontal?: boolean  // Can split horizontally
@@ -243,10 +244,6 @@ export interface BlockProps {
   // Divider configuration (new automatic system)
   divider?: boolean | DividerConfig
   noDivider?: boolean
-
-  // Mode-specific configurations
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [modeName: string]: any
 
   // Accessibility
   "aria-label"?: string

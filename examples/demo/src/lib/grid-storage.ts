@@ -8,7 +8,7 @@ const STORAGE_KEY_PREFIX = 'pretty-poly-grid-'
 
 export interface StorageAdapter {
   save: (key: string, data: unknown) => void
-  load: (key: string) => unknown | null
+  load: (key: string) => unknown
   remove: (key: string) => void
   clear: () => void
 }
@@ -28,7 +28,7 @@ export const localStorageAdapter: StorageAdapter = {
   load: (key: string) => {
     try {
       const stored = localStorage.getItem(key)
-      return stored ? JSON.parse(stored) : null
+      return stored ? JSON.parse(stored) as unknown : null
     } catch (error) {
       console.warn('Failed to load from localStorage:', error)
       return null
@@ -75,7 +75,7 @@ export const sessionStorageAdapter: StorageAdapter = {
   load: (key: string) => {
     try {
       const stored = sessionStorage.getItem(key)
-      return stored ? JSON.parse(stored) : null
+      return stored ? JSON.parse(stored) as unknown : null
     } catch (error) {
       console.warn('Failed to load from sessionStorage:', error)
       return null

@@ -35,7 +35,7 @@ export interface ViewProps {
     /** Callback when view receives focus */
     onFocus?: () => void;
     /** Additional props can be passed through */
-    [key: string]: any;
+    [key: string]: unknown;
 }
 /**
  * ViewRegistry manages the registration and lookup of view types

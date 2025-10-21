@@ -7,20 +7,17 @@
  * - LayoutService: Manage which views are where + save/load workspaces
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Grid,
   Block,
   BlockContent,
-  BlockHeader,
-  BlockToolbar,
   ViewRegistryProvider,
   CommandServiceProvider,
   LayoutServiceProvider,
   useViewRegistry,
   useCommandService,
   useLayoutService,
-  useRegisterViews,
   useRegisterCommands,
   useSetBlockViewType,
   useBlockViewType,
@@ -99,10 +96,10 @@ function PrimitivesDemoInternal() {
   }, [registry])
 
   // Grid layout - simple single block
-  const blocks: BlockConfig[] = [
+  const blocks: BlockConfig[] = React.useMemo(() => [
     { id: 'root', type: 'group', direction: 'row', children: ['main'] },
     { id: 'main', type: 'block', parentId: 'root', order: 0, defaultSize: 1, sizeUnit: 'fr' },
-  ]
+  ], [])
 
   // Register commands that use LayoutService to change views
   const commands: Command[] = React.useMemo(

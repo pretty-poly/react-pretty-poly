@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint src --fix",
     "preview": "vite preview",
     "update:grid": "npx shadcn@latest add ../../public/r/grid-system.json --overwrite",
     "test:e2e": "playwright test",
@@ -16,7 +17,8 @@
     "test:e2e:chromium": "playwright test --project=chromium-desktop",
     "test:e2e:firefox": "playwright test --project=firefox-desktop",
     "test:e2e:webkit": "playwright test --project=webkit-desktop",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@pretty-poly/react": "file:../..",

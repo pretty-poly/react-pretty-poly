@@ -74,7 +74,7 @@ export declare function useBlockState(blockId: string): {
     order?: number;
     children?: string[];
     viewType?: string;
-    viewState?: any;
+    viewState?: unknown;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
@@ -112,7 +112,7 @@ export declare function useParentBlockState(blockId: string): {
     order?: number;
     children?: string[];
     viewType?: string;
-    viewState?: any;
+    viewState?: unknown;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;

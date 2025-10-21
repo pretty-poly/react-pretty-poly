@@ -28,15 +28,16 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
         hiddenBlocks: new Set([...state.hiddenBlocks, action.payload.blockId]),
       };
 
-    case "SHOW_BLOCK":
+    case "SHOW_BLOCK": {
       const newHiddenBlocks = new Set(state.hiddenBlocks);
       newHiddenBlocks.delete(action.payload.blockId);
       return {
         ...state,
         hiddenBlocks: newHiddenBlocks,
       };
+    }
 
-    case "TOGGLE_BLOCK_VISIBILITY":
+    case "TOGGLE_BLOCK_VISIBILITY": {
       const isHidden = state.hiddenBlocks.has(action.payload.blockId);
       const toggledHiddenBlocks = new Set(state.hiddenBlocks);
       if (isHidden) {
@@ -48,8 +49,9 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
         ...state,
         hiddenBlocks: toggledHiddenBlocks,
       };
+    }
 
-    case "RESIZE_BLOCK":
+    case "RESIZE_BLOCK": {
       const block = state.blocks[action.payload.blockId];
       if (!block) return state;
 
@@ -64,8 +66,9 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           },
         },
       };
+    }
 
-    case "COLLAPSE_BLOCK":
+    case "COLLAPSE_BLOCK": {
       const collapseBlock = state.blocks[action.payload.blockId];
       if (!collapseBlock) return state;
 
@@ -88,8 +91,9 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           },
         },
       };
+    }
 
-    case "EXPAND_BLOCK":
+    case "EXPAND_BLOCK": {
       const expandBlock = state.blocks[action.payload.blockId];
       if (!expandBlock) return state;
 
@@ -107,6 +111,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           },
         },
       };
+    }
 
     case "SET_ACTIVE_DIVIDER":
       return {
@@ -134,7 +139,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
         viewport: state.viewport,
       };
 
-    case "RESET_STATE":
+    case "RESET_STATE": {
       // Reset block sizes to their original defaults
       const resetBlocks = Object.fromEntries(
         Object.entries(state.blocks).map(([id, block]) => [
@@ -156,6 +161,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           initialSize: 0,
         },
       };
+    }
 
     case "START_RESIZE":
       return {

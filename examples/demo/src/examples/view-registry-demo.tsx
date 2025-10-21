@@ -19,7 +19,6 @@ import { BlockToolbar } from "@/components/grid/block-toolbar";
 import {
   ViewRegistryProvider,
   useViewRegistry,
-  useRegisterViews,
   type ViewDescriptor,
   type ViewProps,
 } from "@pretty-poly/react";
@@ -310,7 +309,7 @@ function ViewSwitcher({
         className="px-2 py-1 text-sm border rounded bg-background cursor-pointer hover:bg-accent"
       >
         {allViews.map((view) => {
-          const ViewIcon = view.icon as LucideIcon | undefined;
+          const _ViewIcon = view.icon as LucideIcon | undefined;
           return (
             <option key={view.id} value={view.id}>
               {view.title}

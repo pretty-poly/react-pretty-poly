@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import type { ResponsiveModes, LayoutMode, ViewportInfo } from "@/lib/grid-types"
+import type { ResponsiveModes, ViewportInfo } from "@/lib/grid-types"
 
 /**
  * Default responsive mode configurations
@@ -65,7 +65,7 @@ export function useGridMode(modes: ResponsiveModes = defaultModes) {
     }
 
     // Find the best matching mode
-    const matchingModes = Object.entries(modes).filter(([_, config]) => {
+    const matchingModes = Object.entries(modes).filter(([_key, config]) => {
       // If mode has a custom matcher, use it
       if (config.matcher) {
         return config.matcher(viewport)
@@ -192,7 +192,7 @@ export function useGridMode(modes: ResponsiveModes = defaultModes) {
     viewport,
     activeMode,
     currentModeConfig,
-    currentLayoutType: currentLayoutType as LayoutMode,
+    currentLayoutType,
 
     // Mode management
     setMode,

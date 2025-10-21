@@ -14,7 +14,7 @@ export interface Command {
   id: string
 
   /** Handler function to execute when command is triggered */
-  handler: (...args: unknown[]) => unknown | Promise<unknown>
+  handler: (...args: unknown[]) => Promise<unknown> | void
 
   /** Display title for menus/palette */
   title?: string
@@ -205,7 +205,9 @@ export class CommandService {
     if (commandId) {
       event.preventDefault()
       event.stopPropagation()
-      this.executeCommand(commandId)
+      void this.executeCommand(commandId).catch((error: unknown) => {
+        console.error(`Error executing command ${commandId}:`, error)
+      })
       return true
     }
 

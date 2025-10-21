@@ -23,7 +23,7 @@ export interface BlockConfig {
     order?: number;
     children?: string[];
     viewType?: string;
-    viewState?: any;
+    viewState?: unknown;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
@@ -247,7 +247,6 @@ export interface BlockProps {
     resizable?: boolean;
     divider?: boolean | DividerConfig;
     noDivider?: boolean;
-    [modeName: string]: any;
     "aria-label"?: string;
 }
 export interface DividerConfig {

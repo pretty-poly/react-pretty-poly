@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import type { ResponsiveModes, LayoutMode, ViewportInfo } from '../types'
+import type { ResponsiveModes, ViewportInfo } from '../types'
 
 /**
  * Default responsive mode configurations
@@ -192,7 +192,7 @@ export function useGridMode(modes: ResponsiveModes = defaultModes) {
     viewport,
     activeMode,
     currentModeConfig,
-    currentLayoutType: currentLayoutType as LayoutMode,
+    currentLayoutType,
 
     // Mode management
     setMode,
