@@ -275,10 +275,12 @@ export function processChildrenRecursively(
       Object.assign(templateItemsByGroup, nestedResult.templateItemsByGroup)
 
       // Return the group with processed children
+      // React 19 has stricter cloneElement types - we need to assert the props type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
       return cloneElement(child, {
         ...(child.props as Record<string, unknown>),
         children: nestedResult.children
-      })
+      } as Partial<unknown> & { children: React.ReactNode })
     } else if (isBlock) {
       // For regular blocks, check if they have nested groups in their children
       const childProps = child.props as BlockElementProps
@@ -300,10 +302,12 @@ export function processChildrenRecursively(
         // Merge nested template items
         Object.assign(templateItemsByGroup, nestedResult.templateItemsByGroup)
 
+        // React 19 has stricter cloneElement types - we need to assert the props type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
         return cloneElement(child, {
           ...(child.props as Record<string, unknown>),
           children: nestedResult.children
-        })
+        } as Partial<unknown> & { children: React.ReactNode })
       }
     }
 

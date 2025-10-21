@@ -701,7 +701,6 @@ export function GridProvider({
 /**
  * Hook to access grid context
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useGridContext(): GridContextValue {
   const context = useContext(GridContext);
   if (!context) {
@@ -713,7 +712,6 @@ export function useGridContext(): GridContextValue {
 /**
  * Hook to access grid state
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useGridState() {
   const { state } = useGridContext();
   return state;
@@ -722,7 +720,6 @@ export function useGridState() {
 /**
  * Hook to access grid actions
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useGridActions() {
   const {
     resizeBlock,
@@ -751,7 +748,6 @@ export function useGridActions() {
 /**
  * Hook to access resize operations
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useGridResize() {
   const { startResize, updateResize, endResize, state } = useGridContext();
   return {
@@ -769,7 +765,6 @@ export function useGridResize() {
  * @param blockId - The ID of the block to access
  * @returns Block state with calculated isCollapsed property
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useBlockState(blockId: string) {
   const { state } = useGridContext();
   const block = state.blocks[blockId];
@@ -795,7 +790,6 @@ export function useBlockState(blockId: string) {
  * @param blockId - The ID of the child block whose parent you want to access
  * @returns Parent block state with calculated isCollapsed property, or null if no parent
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useParentBlockState(blockId: string) {
   const { state } = useGridContext();
   const block = state.blocks[blockId];
@@ -826,7 +820,6 @@ export function useParentBlockState(blockId: string) {
  * @param blockId - The ID of the block to check
  * @returns True if the block is hidden
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useIsBlockHidden(blockId: string): boolean {
   const { state } = useGridContext();
   return state.hiddenBlocks.has(blockId);
@@ -836,7 +829,6 @@ export function useIsBlockHidden(blockId: string): boolean {
  * Hook to hide a block
  * Returns a memoized callback
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useHideBlock(): (blockId: string) => void {
   const { hideBlock } = useGridContext();
   return hideBlock;
@@ -846,7 +838,6 @@ export function useHideBlock(): (blockId: string) => void {
  * Hook to show a block
  * Returns a memoized callback
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useShowBlock(): (blockId: string) => void {
   const { showBlock } = useGridContext();
   return showBlock;
@@ -856,7 +847,6 @@ export function useShowBlock(): (blockId: string) => void {
  * Hook to toggle block visibility
  * Returns a memoized callback
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useToggleBlockVisibility(): (blockId: string) => void {
   const { toggleBlockVisibility } = useGridContext();
   return toggleBlockVisibility;
@@ -865,7 +855,6 @@ export function useToggleBlockVisibility(): (blockId: string) => void {
 /**
  * Hook to access split operations
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useSplitBlock() {
   const { splitBlock, unsplitBlock, canSplit, state } = useGridContext();
   return {
@@ -880,7 +869,6 @@ export function useSplitBlock() {
  * Hook to split a block
  * Returns a memoized callback
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useSplit(): (blockId: string, direction: 'horizontal' | 'vertical', options?: {
   initialSize?: number;
   viewType?: string;
@@ -894,7 +882,6 @@ export function useSplit(): (blockId: string, direction: 'horizontal' | 'vertica
  * Hook to check if a block can be split
  * Returns a memoized callback
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useCanSplit(): (blockId: string) => boolean {
   const { canSplit } = useGridContext();
   return canSplit;
@@ -903,7 +890,6 @@ export function useCanSplit(): (blockId: string) => boolean {
 /**
  * Hook to access view type operations
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function useBlockViewType(blockId: string) {
   const { getBlockViewType, setBlockViewType } = useGridContext();
   return {

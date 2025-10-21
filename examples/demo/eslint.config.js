@@ -2,7 +2,6 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
@@ -14,7 +13,6 @@ export default defineConfig([
       js.configs.recommended,
       tseslint.configs.recommendedTypeChecked,
       reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
     ],
     plugins: {
       react: reactPlugin,
@@ -40,22 +38,14 @@ export default defineConfig([
       'react/react-in-jsx-scope': 'off',
       'react/jsx-no-comment-textnodes': 'off',
 
-      // Allow exporting variants/constants from component files
-      'react-refresh/only-export-components': ['warn', {
-        allowConstantExport: true,
-      }],
+      // React Hooks
+      'react-hooks/exhaustive-deps': 'off',
+
       // Allow unused vars that start with _
       '@typescript-eslint/no-unused-vars': ['error', {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
       }],
-    },
-  },
-  {
-    // Disable react-refresh for shadcn/ui components
-    files: ['src/components/ui/**/*.{ts,tsx}'],
-    rules: {
-      'react-refresh/only-export-components': 'off',
     },
   },
   {

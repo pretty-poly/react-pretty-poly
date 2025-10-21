@@ -34,7 +34,7 @@ export function useGridPersistence({
   saveDelay = 500,
 }: UseGridPersistenceOptions) {
   const storageAdapter = useRef<StorageAdapter | null>(null);
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const lastSavedState = useRef<string>("");
   const hasLoadedRef = useRef<boolean>(false);
 
@@ -76,7 +76,6 @@ export function useGridPersistence({
       onStateLoad?.(loadedState);
       hasLoadedRef.current = true;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridId, enabled]); // onStateLoad is intentionally stable (not expected to change)
 
   /**

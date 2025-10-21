@@ -9,7 +9,7 @@ export interface UseGridKeyboardOptions {
   onCollapseBlock?: (blockId: string) => void
   onExpandBlock?: (blockId: string) => void
   onSplitBlock?: (blockId: string, direction: 'horizontal' | 'vertical') => void
-  containerRef?: React.RefObject<HTMLElement>
+  containerRef?: React.RefObject<HTMLElement | null>
   stepSize?: number
   largeStepSize?: number
 }

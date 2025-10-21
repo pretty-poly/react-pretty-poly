@@ -5,7 +5,7 @@ import { getFlexSpacePx } from "@/lib/grid-calculations"
 
 export interface UseGridResizeOptions {
   blocks: BlockConfig[]
-  containerRef: React.RefObject<HTMLElement>
+  containerRef: React.RefObject<HTMLElement | null>
   onSizeChange?: (blockId: string, newSize: number) => void
   direction?: Direction
 }
