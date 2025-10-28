@@ -60,7 +60,7 @@ export interface BlockTreeRendererProps {
  * />
  * ```
  */
-export declare function BlockTreeRenderer({ blockId, renderBlock, getSplitContainerProps, renderSplitContainer, renderGroup, className }: BlockTreeRendererProps): JSX.Element | null;
+export declare function BlockTreeRenderer({ blockId, renderBlock, getSplitContainerProps, renderSplitContainer, renderGroup, className }: BlockTreeRendererProps): React.ReactElement | null;
 export declare namespace BlockTreeRenderer {
     var displayName: string;
 }

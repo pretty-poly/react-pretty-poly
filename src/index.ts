@@ -31,8 +31,16 @@ export {
   BlockSidebarSpacer,
   BlockSplitContainer,
   BlockTreeRenderer,
+  NewTabDropdown,
+  ViewRenderer,
 } from "./components/Block";
-export type { BlockSplitContainerProps, ToolbarRenderProps, BlockTreeRendererProps } from "./components/Block";
+export type {
+  BlockSplitContainerProps,
+  ToolbarRenderProps,
+  BlockTreeRendererProps,
+  NewTabDropdownProps,
+  ViewRendererProps,
+} from "./components/Block";
 export { Divider } from "./components/Divider";
 
 // Hooks

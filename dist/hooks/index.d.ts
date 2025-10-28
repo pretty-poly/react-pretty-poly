@@ -10,4 +10,5 @@ export { useGridKeyboard } from './useGridKeyboard';
 export type { UseGridKeyboardOptions } from './useGridKeyboard';
 export { useBlockSplitDirection } from './useBlockSplitDirection';
 export { useRemoveBlock } from './useRemoveBlock';
+export { useBlockTabs } from './useBlockTabs';
 //# sourceMappingURL=index.d.ts.map

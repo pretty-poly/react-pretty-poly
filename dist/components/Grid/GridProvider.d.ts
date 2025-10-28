@@ -68,6 +68,7 @@ export declare function useBlockState(blockId: string): {
     collapsible?: boolean;
     collapseAt?: number;
     collapseTo?: number;
+    isHidden?: boolean;
     dividerPosition?: import('../..').DividerPosition;
     dividerSize?: number;
     parentId?: string;
@@ -75,6 +76,8 @@ export declare function useBlockState(blockId: string): {
     children?: string[];
     viewType?: string;
     viewState?: unknown;
+    tabState?: import('../../types').TabState;
+    tabConfig?: import('../../types').TabConfig;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
@@ -106,6 +109,7 @@ export declare function useParentBlockState(blockId: string): {
     collapsible?: boolean;
     collapseAt?: number;
     collapseTo?: number;
+    isHidden?: boolean;
     dividerPosition?: import('../..').DividerPosition;
     dividerSize?: number;
     parentId?: string;
@@ -113,6 +117,8 @@ export declare function useParentBlockState(blockId: string): {
     children?: string[];
     viewType?: string;
     viewState?: unknown;
+    tabState?: import('../../types').TabState;
+    tabConfig?: import('../../types').TabConfig;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;

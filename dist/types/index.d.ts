@@ -17,6 +17,7 @@ export interface BlockConfig {
     collapsible?: boolean;
     collapseAt?: number;
     collapseTo?: number;
+    isHidden?: boolean;
     dividerPosition?: DividerPosition;
     dividerSize?: number;
     parentId?: string;
@@ -24,6 +25,8 @@ export interface BlockConfig {
     children?: string[];
     viewType?: string;
     viewState?: unknown;
+    tabState?: TabState;
+    tabConfig?: TabConfig;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
@@ -108,6 +111,13 @@ export interface GridContextValue {
     removeBlock: (blockId: string) => void;
     setBlockViewType: (blockId: string, viewType: string) => void;
     getBlockViewType: (blockId: string) => string | undefined;
+    openTab: (blockId: string, tab: Omit<Tab, 'id'>) => string;
+    closeTab: (blockId: string, tabId: string) => void;
+    setActiveTab: (blockId: string, tabId: string) => void;
+    updateTab: (blockId: string, tabId: string, updates: Partial<Tab>) => void;
+    reorderTabs: (blockId: string, fromIndex: number, toIndex: number) => void;
+    navigateTabHistory: (blockId: string, direction: 'forward' | 'back') => void;
+    getTabState: (blockId: string) => TabState | undefined;
     startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void;
     updateResize: (event: MouseEvent | TouchEvent) => void;
     endResize: () => void;
@@ -224,6 +234,50 @@ export type GridAction = {
         blockId: string;
         viewType: string;
     };
+} | {
+    type: "OPEN_TAB";
+    payload: {
+        blockId: string;
+        tab: Omit<Tab, 'id'>;
+    };
+} | {
+    type: "CLOSE_TAB";
+    payload: {
+        blockId: string;
+        tabId: string;
+    };
+} | {
+    type: "SET_ACTIVE_TAB";
+    payload: {
+        blockId: string;
+        tabId: string;
+    };
+} | {
+    type: "UPDATE_TAB";
+    payload: {
+        blockId: string;
+        tabId: string;
+        updates: Partial<Tab>;
+    };
+} | {
+    type: "REORDER_TABS";
+    payload: {
+        blockId: string;
+        fromIndex: number;
+        toIndex: number;
+    };
+} | {
+    type: "NAVIGATE_TAB_HISTORY";
+    payload: {
+        blockId: string;
+        direction: 'forward' | 'back';
+    };
+} | {
+    type: "SET_TAB_SCROLL_OFFSET";
+    payload: {
+        blockId: string;
+        offset: number;
+    };
 };
 export interface GridProps {
     children: React.ReactNode;
@@ -320,6 +374,28 @@ export interface Tab {
     }>;
     closable?: boolean;
     disabled?: boolean;
+    viewType?: string;
+    viewState?: unknown;
+    isDirty?: boolean;
+    isPinned?: boolean;
+    metadata?: unknown;
+}
+export interface TabState {
+    tabs: Tab[];
+    activeTabId: string;
+    history: string[];
+    historyIndex: number;
+    scrollOffset: number;
+}
+export interface TabConfig {
+    enabled?: boolean;
+    allowMultiple?: boolean;
+    maxTabs?: number;
+    showNavigation?: boolean;
+    showActions?: boolean;
+    persistence?: 'none' | 'sessionStorage' | 'localStorage';
+    defaultViewType?: string;
+    closeConfirmation?: boolean;
 }
 export interface BlockTabsProps {
     tabs: Tab[];

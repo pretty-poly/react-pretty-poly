@@ -20,6 +20,7 @@ import PrimitivesDemo from "../examples/primitives-demo";
 import BlockVisibilityDemo from "../examples/block-visibility-demo";
 import BlockSplitDemo from "../examples/block-split-demo";
 import TabbedEditorDemo from "../examples/tabbed-editor-demo";
+import TabbedViewsDemo from "../examples/tabbed-views-demo";
 
 interface ExampleInfo {
   name: string;
@@ -29,6 +30,13 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "🎨 Tabbed Views + Registry (PHASE 3!)",
+    description:
+      "🚀 Phase 3: Tabs + ViewRegistry integration! Create tabs with different view types from dropdown menu.",
+    component: TabbedViewsDemo,
+    key: "tabbed-views-demo",
+  },
   {
     name: "📝 Tabbed Editor (NEW!)",
     description:

@@ -14,4 +14,8 @@ export { BlockTreeRenderer } from './BlockTreeRenderer';
 export type { BlockTreeRendererProps } from './BlockTreeRenderer';
 export { BlockCloseButton } from './BlockCloseButton';
 export type { BlockCloseButtonProps } from './BlockCloseButton';
+export { NewTabDropdown } from './NewTabDropdown';
+export type { NewTabDropdownProps } from './NewTabDropdown';
+export { ViewRenderer } from './ViewRenderer';
+export type { ViewRendererProps } from './ViewRenderer';
 //# sourceMappingURL=index.d.ts.map
