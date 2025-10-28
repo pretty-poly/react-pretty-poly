@@ -16,3 +16,5 @@ export type { UseGridKeyboardOptions } from './useGridKeyboard'
 export { useBlockSplitDirection } from './useBlockSplitDirection'
 
 export { useRemoveBlock } from './useRemoveBlock'
+
+export { useBlockTabs } from './useBlockTabs'

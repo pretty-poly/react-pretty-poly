@@ -19,6 +19,7 @@ import { CommandServiceDemoWrapper } from "../examples/command-service-demo";
 import PrimitivesDemo from "../examples/primitives-demo";
 import BlockVisibilityDemo from "../examples/block-visibility-demo";
 import BlockSplitDemo from "../examples/block-split-demo";
+import TabbedEditorDemo from "../examples/tabbed-editor-demo";
 
 interface ExampleInfo {
   name: string;
@@ -28,6 +29,13 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "📝 Tabbed Editor (NEW!)",
+    description:
+      "🎯 VS Code/Zed-style tabs: Multiple files with navigation history, dirty tracking, and pinning!",
+    component: TabbedEditorDemo,
+    key: "tabbed-editor-demo",
+  },
   {
     name: "✂️ Block Splitting (NEW!)",
     description:

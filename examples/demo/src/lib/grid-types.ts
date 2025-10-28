@@ -52,6 +52,10 @@ export interface BlockConfig {
   viewType?: string
   viewState?: unknown  // View-specific state
 
+  // Tab configuration and state
+  tabState?: TabState     // Current tab state (managed by reducer)
+  tabConfig?: TabConfig   // Tab behavior configuration
+
   // Split configuration
   canSplit?: boolean
   hasToolbar?: boolean    // Render toolbar for split controls
@@ -160,6 +164,15 @@ export interface GridContextValue {
   setBlockViewType: (blockId: string, viewType: string) => void
   getBlockViewType: (blockId: string) => string | undefined
 
+  // Tab operations
+  openTab: (blockId: string, tab: Omit<Tab, 'id'>) => string  // Returns new tab ID
+  closeTab: (blockId: string, tabId: string) => void
+  setActiveTab: (blockId: string, tabId: string) => void
+  updateTab: (blockId: string, tabId: string, updates: Partial<Tab>) => void
+  reorderTabs: (blockId: string, fromIndex: number, toIndex: number) => void
+  navigateTabHistory: (blockId: string, direction: 'forward' | 'back') => void
+  getTabState: (blockId: string) => TabState | undefined
+
   // Resize operations
   startResize: (blockId: string, dividerId: string, event: React.MouseEvent | React.TouchEvent) => void
   updateResize: (event: MouseEvent | TouchEvent) => void
@@ -207,6 +220,37 @@ export type GridAction =
   | { type: "SET_BLOCK_VIEW_TYPE"; payload: {
       blockId: string
       viewType: string
+    }}
+  // Tab operations
+  | { type: "OPEN_TAB"; payload: {
+      blockId: string
+      tab: Omit<Tab, 'id'>  // ID will be auto-generated
+    }}
+  | { type: "CLOSE_TAB"; payload: {
+      blockId: string
+      tabId: string
+    }}
+  | { type: "SET_ACTIVE_TAB"; payload: {
+      blockId: string
+      tabId: string
+    }}
+  | { type: "UPDATE_TAB"; payload: {
+      blockId: string
+      tabId: string
+      updates: Partial<Tab>
+    }}
+  | { type: "REORDER_TABS"; payload: {
+      blockId: string
+      fromIndex: number
+      toIndex: number
+    }}
+  | { type: "NAVIGATE_TAB_HISTORY"; payload: {
+      blockId: string
+      direction: 'forward' | 'back'
+    }}
+  | { type: "SET_TAB_SCROLL_OFFSET"; payload: {
+      blockId: string
+      offset: number
     }}
 
 // Component props
@@ -326,12 +370,41 @@ export interface BlockToolbarProps {
   'aria-label'?: string
 }
 
+// Tab interface for advanced tabbed editor support
 export interface Tab {
   id: string
   label: string
   icon?: React.ComponentType<{ className?: string }>
   closable?: boolean
   disabled?: boolean
+
+  // Advanced tab features
+  viewType?: string        // Links to ViewRegistry for dynamic view instantiation
+  viewState?: unknown      // View-specific state data
+  isDirty?: boolean        // Indicates unsaved changes
+  isPinned?: boolean       // Pinned tabs persist and can't be easily closed
+  metadata?: unknown       // Custom metadata for extensions
+}
+
+// Tab state management for a block
+export interface TabState {
+  tabs: Tab[]              // All open tabs in the block
+  activeTabId: string      // Currently active/visible tab
+  history: string[]        // Tab navigation history (tab IDs)
+  historyIndex: number     // Current position in history
+  scrollOffset: number     // Tab bar horizontal scroll position
+}
+
+// Tab configuration for blocks
+export interface TabConfig {
+  enabled?: boolean              // Enable tabbed interface (default: false)
+  allowMultiple?: boolean        // Allow multiple tabs (default: true)
+  maxTabs?: number               // Maximum number of tabs allowed (default: unlimited)
+  showNavigation?: boolean       // Show forward/back navigation buttons (default: true)
+  showActions?: boolean          // Show action buttons (new tab, split, etc.) (default: true)
+  persistence?: 'none' | 'sessionStorage' | 'localStorage'  // Tab state persistence (default: 'none')
+  defaultViewType?: string       // Default view type for new tabs
+  closeConfirmation?: boolean    // Confirm before closing dirty tabs (default: false)
 }
 
 export interface BlockTabsProps {

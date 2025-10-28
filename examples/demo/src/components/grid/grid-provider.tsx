@@ -12,6 +12,7 @@ import type {
   BlockConfig,
   ResponsiveModes,
   ViewportInfo,
+  Tab,
 } from "@/lib/grid-types";
 import { useGridMode } from "@/hooks/use-grid-mode";
 import { useGridPersistence } from "@/hooks/use-grid-persistence";
@@ -412,6 +413,276 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
       };
     }
 
+    case "OPEN_TAB": {
+      const { blockId, tab } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block) return state;
+
+      // Generate unique tab ID
+      const timestamp = Date.now();
+      const random = Math.random().toString(36).substring(2, 9);
+      const newTabId = `tab-${timestamp}-${random}`;
+
+      const newTab = { ...tab, id: newTabId };
+      const currentTabState = block.tabState;
+
+      // Initialize tab state if it doesn't exist
+      if (!currentTabState) {
+        return {
+          ...state,
+          blocks: {
+            ...state.blocks,
+            [blockId]: {
+              ...block,
+              tabState: {
+                tabs: [newTab],
+                activeTabId: newTabId,
+                history: [newTabId],
+                historyIndex: 0,
+                scrollOffset: 0,
+              },
+            },
+          },
+        };
+      }
+
+      // Add tab to existing state
+      const newTabs = [...currentTabState.tabs, newTab];
+      const newHistory = [
+        ...currentTabState.history.slice(0, currentTabState.historyIndex + 1),
+        newTabId,
+      ];
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...currentTabState,
+              tabs: newTabs,
+              activeTabId: newTabId,
+              history: newHistory,
+              historyIndex: newHistory.length - 1,
+            },
+          },
+        },
+      };
+    }
+
+    case "CLOSE_TAB": {
+      const { blockId, tabId } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const tabIndex = tabState.tabs.findIndex((t) => t.id === tabId);
+      if (tabIndex === -1) return state;
+
+      const newTabs = tabState.tabs.filter((t) => t.id !== tabId);
+
+      // If closing the last tab, clear tab state
+      if (newTabs.length === 0) {
+        return {
+          ...state,
+          blocks: {
+            ...state.blocks,
+            [blockId]: {
+              ...block,
+              tabState: undefined,
+            },
+          },
+        };
+      }
+
+      // Determine new active tab
+      let newActiveTabId = tabState.activeTabId;
+      if (tabId === tabState.activeTabId) {
+        // Try to activate the next tab, or the previous one
+        const newActiveIndex = tabIndex < newTabs.length ? tabIndex : tabIndex - 1;
+        newActiveTabId = newTabs[newActiveIndex].id;
+      }
+
+      // Update history to remove closed tab
+      const newHistory = tabState.history.filter((id) => id !== tabId);
+      let newHistoryIndex = tabState.historyIndex;
+
+      // Adjust history index if needed
+      if (newHistoryIndex >= newHistory.length) {
+        newHistoryIndex = Math.max(0, newHistory.length - 1);
+      }
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              tabs: newTabs,
+              activeTabId: newActiveTabId,
+              history: newHistory,
+              historyIndex: newHistoryIndex,
+            },
+          },
+        },
+      };
+    }
+
+    case "SET_ACTIVE_TAB": {
+      const { blockId, tabId } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const tabExists = tabState.tabs.some((t) => t.id === tabId);
+      if (!tabExists) return state;
+
+      // Add to history if different from current
+      let newHistory = tabState.history;
+      let newHistoryIndex = tabState.historyIndex;
+
+      if (tabId !== tabState.activeTabId) {
+        // Truncate history from current position and add new tab
+        newHistory = [
+          ...tabState.history.slice(0, tabState.historyIndex + 1),
+          tabId,
+        ];
+        newHistoryIndex = newHistory.length - 1;
+      }
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              activeTabId: tabId,
+              history: newHistory,
+              historyIndex: newHistoryIndex,
+            },
+          },
+        },
+      };
+    }
+
+    case "UPDATE_TAB": {
+      const { blockId, tabId, updates } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const tabIndex = tabState.tabs.findIndex((t) => t.id === tabId);
+      if (tabIndex === -1) return state;
+
+      const updatedTabs = [...tabState.tabs];
+      updatedTabs[tabIndex] = { ...updatedTabs[tabIndex], ...updates };
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              tabs: updatedTabs,
+            },
+          },
+        },
+      };
+    }
+
+    case "REORDER_TABS": {
+      const { blockId, fromIndex, toIndex } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      if (
+        fromIndex < 0 ||
+        fromIndex >= tabState.tabs.length ||
+        toIndex < 0 ||
+        toIndex >= tabState.tabs.length
+      ) {
+        return state;
+      }
+
+      const newTabs = [...tabState.tabs];
+      const [movedTab] = newTabs.splice(fromIndex, 1);
+      newTabs.splice(toIndex, 0, movedTab);
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              tabs: newTabs,
+            },
+          },
+        },
+      };
+    }
+
+    case "NAVIGATE_TAB_HISTORY": {
+      const { blockId, direction } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const newHistoryIndex =
+        direction === "forward"
+          ? Math.min(tabState.historyIndex + 1, tabState.history.length - 1)
+          : Math.max(tabState.historyIndex - 1, 0);
+
+      // No change if already at the end/start
+      if (newHistoryIndex === tabState.historyIndex) return state;
+
+      const newActiveTabId = tabState.history[newHistoryIndex];
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              activeTabId: newActiveTabId,
+              historyIndex: newHistoryIndex,
+            },
+          },
+        },
+      };
+    }
+
+    case "SET_TAB_SCROLL_OFFSET": {
+      const { blockId, offset } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...block.tabState,
+              scrollOffset: offset,
+            },
+          },
+        },
+      };
+    }
+
     default:
       return state;
   }
@@ -671,6 +942,60 @@ export function GridProvider({
 
       getBlockViewType: (blockId: string) => {
         return state.blocks[blockId]?.viewType;
+      },
+
+      // Tab operations
+      openTab: (blockId: string, tab: Omit<Tab, 'id'>) => {
+        // Generate ID here and return it
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substring(2, 9);
+        const newTabId = `tab-${timestamp}-${random}`;
+
+        dispatch({
+          type: "OPEN_TAB",
+          payload: { blockId, tab },
+        });
+
+        return newTabId;
+      },
+
+      closeTab: (blockId: string, tabId: string) => {
+        dispatch({
+          type: "CLOSE_TAB",
+          payload: { blockId, tabId },
+        });
+      },
+
+      setActiveTab: (blockId: string, tabId: string) => {
+        dispatch({
+          type: "SET_ACTIVE_TAB",
+          payload: { blockId, tabId },
+        });
+      },
+
+      updateTab: (blockId: string, tabId: string, updates: Partial<Tab>) => {
+        dispatch({
+          type: "UPDATE_TAB",
+          payload: { blockId, tabId, updates },
+        });
+      },
+
+      reorderTabs: (blockId: string, fromIndex: number, toIndex: number) => {
+        dispatch({
+          type: "REORDER_TABS",
+          payload: { blockId, fromIndex, toIndex },
+        });
+      },
+
+      navigateTabHistory: (blockId: string, direction: 'forward' | 'back') => {
+        dispatch({
+          type: "NAVIGATE_TAB_HISTORY",
+          payload: { blockId, direction },
+        });
+      },
+
+      getTabState: (blockId: string) => {
+        return state.blocks[blockId]?.tabState;
       },
 
       // Resize operations (using extracted hook)

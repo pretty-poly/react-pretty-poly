@@ -136,6 +136,17 @@ export function useGridKeyboard({
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (!enabled) return
 
+    // Don't handle shortcuts when user is typing in an input field
+    const activeElement = document.activeElement as HTMLElement
+    const isTyping = activeElement && (
+      activeElement.tagName === 'INPUT' ||
+      activeElement.tagName === 'TEXTAREA' ||
+      activeElement.tagName === 'SELECT' ||
+      activeElement.isContentEditable
+    )
+
+    if (isTyping) return
+
     const focusedBlock = getFocusedBlock()
     if (!focusedBlock) return
 
