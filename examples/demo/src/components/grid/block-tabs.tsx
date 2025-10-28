@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useState, useRef, useEffect, useCallback } from 'react'
 import { clsx } from 'clsx'
 
 export interface Tab {
@@ -50,6 +50,10 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
     actions,
   }, ref) => {
     const [hoveredTab, setHoveredTab] = useState<string | null>(null)
+    const [showScrollControls, setShowScrollControls] = useState(false)
+    const [canScrollLeft, setCanScrollLeft] = useState(false)
+    const [canScrollRight, setCanScrollRight] = useState(false)
+    const tabsContainerRef = useRef<HTMLDivElement>(null)
 
     const handleTabClick = (tab: Tab, event: React.MouseEvent) => {
       event.preventDefault()
@@ -74,6 +78,68 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
         }
       }
     }
+
+    // Check if tabs overflow and update scroll button states
+    const updateScrollState = useCallback(() => {
+      const container = tabsContainerRef.current
+      if (!container) return
+
+      const hasOverflow = container.scrollWidth > container.clientWidth
+      setShowScrollControls(hasOverflow && allowOverflow)
+
+      if (hasOverflow) {
+        const scrollLeft = container.scrollLeft
+        const maxScroll = container.scrollWidth - container.clientWidth
+
+        setCanScrollLeft(scrollLeft > 1) // Small threshold for floating point
+        setCanScrollRight(scrollLeft < maxScroll - 1)
+      } else {
+        setCanScrollLeft(false)
+        setCanScrollRight(false)
+      }
+    }, [allowOverflow])
+
+    // Scroll tabs left/right
+    const scrollTabs = useCallback((direction: 'left' | 'right') => {
+      const container = tabsContainerRef.current
+      if (!container) return
+
+      const scrollAmount = 200 // Scroll by 200px
+      const newScrollLeft = direction === 'left'
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount
+
+      container.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      })
+    }, [])
+
+    // Set up scroll and resize observers
+    useEffect(() => {
+      const container = tabsContainerRef.current
+      if (!container) return
+
+      // Initial check
+      updateScrollState()
+
+      // Listen for scroll events
+      container.addEventListener('scroll', updateScrollState)
+
+      // Listen for resize events
+      const resizeObserver = new ResizeObserver(updateScrollState)
+      resizeObserver.observe(container)
+
+      return () => {
+        container.removeEventListener('scroll', updateScrollState)
+        resizeObserver.disconnect()
+      }
+    }, [updateScrollState])
+
+    // Re-check when tabs change
+    useEffect(() => {
+      updateScrollState()
+    }, [tabs, updateScrollState])
 
     return (
       <div
@@ -122,11 +188,39 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
           </div>
         )}
 
+        {/* Scroll left button */}
+        {showScrollControls && (
+          <button
+            onClick={() => scrollTabs('left')}
+            disabled={!canScrollLeft}
+            className={clsx(
+              'flex-shrink-0 p-1.5 hover:bg-gray-100 transition-colors',
+              !canScrollLeft && 'opacity-30 cursor-not-allowed'
+            )}
+            aria-label="Scroll tabs left"
+            title="Scroll left"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+
         {/* Tabs container */}
-        <div className={clsx(
-          'flex items-center min-w-0 flex-1',
-          allowOverflow ? 'overflow-x-auto' : 'overflow-x-hidden'
-        )}>
+        <div
+          ref={tabsContainerRef}
+          className={clsx(
+            'flex items-center min-w-0 flex-1 relative',
+            allowOverflow ? 'overflow-x-auto' : 'overflow-x-hidden',
+            // Hide scrollbar for cleaner look
+            '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
+          )}
+        >
+          {/* Left gradient overlay */}
+          {showScrollControls && canScrollLeft && (
+            <div className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none bg-gradient-to-r from-white to-transparent z-10" />
+          )}
+
           {tabs.map((tab) => {
             const isActive = tab.id === activeTab
             const isHovered = hoveredTab === tab.id
@@ -221,7 +315,30 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
               </div>
             )
           })}
+
+          {/* Right gradient overlay */}
+          {showScrollControls && canScrollRight && (
+            <div className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none bg-gradient-to-l from-white to-transparent z-10" />
+          )}
         </div>
+
+        {/* Scroll right button */}
+        {showScrollControls && (
+          <button
+            onClick={() => scrollTabs('right')}
+            disabled={!canScrollRight}
+            className={clsx(
+              'flex-shrink-0 p-1.5 hover:bg-gray-100 transition-colors',
+              !canScrollRight && 'opacity-30 cursor-not-allowed'
+            )}
+            aria-label="Scroll tabs right"
+            title="Scroll right"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
 
         {/* Actions section */}
         {actions && (

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Grid } from '@/components/grid/grid'
 import { Block } from '@/components/grid/block'
 import { BlockLayout } from '@/components/grid/block-layout'
@@ -32,7 +32,7 @@ function EditorView({ content, onChange, isDirty }: {
 }
 
 export default function TabbedEditorDemo() {
-  // Tab state
+  // Tab state - start with several tabs to demonstrate scrolling
   const [tabs, setTabs] = useState([
     {
       id: 'tab-1',
@@ -41,7 +41,43 @@ export default function TabbedEditorDemo() {
       closable: true,
       isDirty: false,
       isPinned: false,
-      content: '# Welcome\n\nThis is a demo of the tabbed editor interface.',
+      content: '# Welcome\n\nThis is a demo of the tabbed editor interface with scrollable tabs!',
+    },
+    {
+      id: 'tab-2',
+      label: 'README.md',
+      icon: File,
+      closable: true,
+      isDirty: false,
+      isPinned: true,
+      content: '# README\n\nThis tab is pinned.',
+    },
+    {
+      id: 'tab-3',
+      label: 'Components.tsx',
+      icon: File,
+      closable: true,
+      isDirty: false,
+      isPinned: false,
+      content: '// React component code here',
+    },
+    {
+      id: 'tab-4',
+      label: 'utils.ts',
+      icon: File,
+      closable: true,
+      isDirty: false,
+      isPinned: false,
+      content: '// Utility functions',
+    },
+    {
+      id: 'tab-5',
+      label: 'styles.css',
+      icon: File,
+      closable: true,
+      isDirty: false,
+      isPinned: false,
+      content: '/* CSS styles */',
     },
   ])
   const [activeTabId, setActiveTabId] = useState('tab-1')
@@ -147,6 +183,36 @@ export default function TabbedEditorDemo() {
         : tab
     ))
   }
+
+  // Keyboard shortcuts for tab switching
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey
+
+      // Ctrl/Cmd + Tab - Next tab
+      // Ctrl/Cmd + Shift + Tab - Previous tab
+      if (isCtrlOrCmd && e.key === 'Tab') {
+        e.preventDefault()
+
+        const currentIndex = tabs.findIndex(t => t.id === activeTabId)
+        if (currentIndex === -1) return
+
+        let newIndex: number
+        if (e.shiftKey) {
+          // Previous tab
+          newIndex = currentIndex === 0 ? tabs.length - 1 : currentIndex - 1
+        } else {
+          // Next tab
+          newIndex = currentIndex === tabs.length - 1 ? 0 : currentIndex + 1
+        }
+
+        handleTabChange(tabs[newIndex].id)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [tabs, activeTabId])
 
   const activeTab = tabs.find(t => t.id === activeTabId)
 
