@@ -436,7 +436,10 @@ function createInitialState(
 
   return {
     blocks: blocksMap,
-    hiddenBlocks: new Set<string>(),  // Initialize with no hidden blocks
+    // Initialize hidden blocks from BlockConfig.isHidden property
+    hiddenBlocks: new Set<string>(
+      blocks.filter(block => block.isHidden).map(block => block.id)
+    ),
     activeMode,
     viewport,
     resize: {

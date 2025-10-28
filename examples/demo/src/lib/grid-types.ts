@@ -36,6 +36,9 @@ export interface BlockConfig {
   collapseAt?: number
   collapseTo?: number
 
+  // Visibility behavior
+  isHidden?: boolean  // Start block in hidden state
+
   // Divider configuration
   dividerPosition?: DividerPosition
   dividerSize?: number

@@ -84,6 +84,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "rollup-plugin-visualizer": "^6.0.4",
+    "shadcn": "^3.5.0",
     "size-limit": "^11.2.0",
     "tailwindcss": "^4.1.13",
     "tailwindcss-animate": "^1.0.7",
