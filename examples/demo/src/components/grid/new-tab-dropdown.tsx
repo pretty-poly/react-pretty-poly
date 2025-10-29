@@ -23,7 +23,9 @@ export function NewTabDropdown({
   const registry = useViewRegistry()
   const { openTab } = useGridContext()
   const [isOpen, setIsOpen] = useState(false)
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 })
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const allViews = registry.getAllViews(true)
   const categories = registry.getCategories()
@@ -79,10 +81,22 @@ export function NewTabDropdown({
 
   const nonEmptyCategories = viewsByCategory.filter(group => group.views.length > 0)
 
+  const handleToggle = () => {
+    if (!isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect()
+      setMenuPosition({
+        top: rect.bottom + 4,
+        left: rect.right - 200, // Align right edge of menu with button
+      })
+    }
+    setIsOpen(!isOpen)
+  }
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={buttonRef}
+        onClick={handleToggle}
         className={cn(
           'px-2 py-1 text-sm font-medium rounded hover:bg-accent transition-colors',
           'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
@@ -98,11 +112,16 @@ export function NewTabDropdown({
       {isOpen && (
         <div
           className={cn(
-            'absolute top-full right-0 mt-1 min-w-[200px] max-h-[400px]',
-            'bg-popover border rounded-md shadow-md overflow-y-auto z-50'
+            'fixed min-w-[200px] max-h-[400px]',
+            'bg-popover text-popover-foreground border rounded-md shadow-lg overflow-y-auto',
+            'z-[9999]' // Very high z-index to appear above everything
           )}
           role="menu"
           aria-orientation="vertical"
+          style={{
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`,
+          }}
         >
           {nonEmptyCategories.length === 0 ? (
             <div className="px-3 py-2 text-sm text-muted-foreground text-center">

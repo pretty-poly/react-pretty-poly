@@ -167,19 +167,23 @@ interface ViewConfig {
 - [x] Add view icons in tab bar from ViewDescriptor.icon *(2025-10-28)*
 - [ ] Document ViewRegistry + Tabs integration patterns in README *(Deferred to future update)*
 
-### Phase 4: Advanced Features
+### Phase 4: Advanced Features ⏸️ DEFERRED
 - [ ] Tab drag & drop reordering
-- [ ] Tab history navigation
-- [ ] Keyboard shortcuts via `useGridKeyboard`
+- [ ] Tab history navigation (✅ Basic implementation exists)
+- [ ] Keyboard shortcuts via `useGridKeyboard` (✅ Basic implementation exists)
 - [ ] Tab persistence to localStorage
-- [ ] Dirty state tracking
+- [ ] Dirty state tracking (✅ Basic implementation exists)
 
-### Phase 5: Split View Support
-- [ ] Implement split block logic
-- [ ] Create SplitButton component
-- [ ] Handle split state in reducer
-- [ ] Update layout calculations
-- [ ] Test with multiple splits
+*Note: Phase 4 features are deferred in favor of Phase 5 split integration. Basic versions of some features already exist from earlier phases.*
+
+### Phase 5: Split View Support ✅ COMPLETED
+- [x] Implement split block logic *(2025-10-29)*
+- [x] Create SplitButton component *(2025-10-29)*
+- [x] Handle split state in reducer *(2025-10-29)*
+- [x] Update layout calculations *(2025-10-29)*
+- [x] Test with multiple splits *(2025-10-29)*
+- [x] Fix tab persistence when splitting *(2025-10-29)*
+- [x] Fix dropdown positioning in split panes *(2025-10-29)*
 
 ## 🧪 Demo Implementation
 
@@ -664,6 +668,69 @@ The integration proves the architecture works perfectly:
 - Phase 4: Advanced features (drag & drop, tab persistence)
 - Phase 5: Split view support
 - Future: Document integration patterns in README
+
+**Phase 5: Split View Support - COMPLETED** ✅
+
+*Date: 2025-10-29*
+
+Successfully integrated tabbed interface with split block system! The architecture proved to be fully compatible - tabs "just work" with splits as predicted.
+
+**Implementation:**
+1. **Created split-tabs-demo.tsx** - Complete VS Code-style editor groups demo
+   - Combined BlockSplitContainer with BlockTabs
+   - 6 view types registered (Welcome, Text Editor, Code Editor, Image Gallery, Terminal, Empty Pane)
+   - Each split pane has independent tab management
+   - NewTabDropdown creates tabs within each pane
+
+**Critical Fixes:**
+1. **Tab Persistence During Split** (`GridProvider.tsx:249`)
+   - Problem: Tabs disappeared when splitting (jarring UX)
+   - Solution: Added `tabState: oldChild?.tabState` to preserve tabs in first child
+   - Result: Original pane keeps all tabs, new pane starts empty ✅
+
+2. **Dropdown Positioning in Split Panes** (`new-tab-dropdown.tsx`)
+   - Problem: Context menus hidden/clipped after splitting
+   - Solution: Changed from absolute to fixed positioning with calculated coords
+   - Implementation: Uses `getBoundingClientRect()` to position relative to button
+   - Added `z-index: 9999` to appear above all split panes
+   - Result: Dropdown appears correctly positioned anywhere ✅
+
+**Features Validated:**
+- ✅ Split blocks work with tabs (horizontal & vertical splits)
+- ✅ Each pane has independent tab bar and tab state
+- ✅ Tab persistence when splitting blocks
+- ✅ NewTabDropdown works in all panes
+- ✅ Multiple splits with independent tab management
+- ✅ All Phase 1-3 features work in split panes (navigation, scroll, keyboard, pin, dirty)
+- ✅ ViewRegistry integration works perfectly
+- ✅ VS Code-style editor groups pattern achieved
+
+**Files Modified:**
+1. `src/components/Grid/GridProvider.tsx` - Added tab state persistence
+2. `examples/demo/src/components/grid/grid-provider.tsx` - Mirror changes
+3. `examples/demo/src/components/grid/new-tab-dropdown.tsx` - Fixed positioning
+4. `examples/demo/src/examples/split-tabs-demo.tsx` - Created demo
+5. `examples/demo/src/components/ExampleSelector.tsx` - Added to menu
+6. `docs/TABBED_INTERFACE_PLAN.md` - Updated status
+
+**Architecture Win:**
+The prediction was correct - the composable architecture meant tabs + splits "just worked" with minimal integration effort. The two systems are completely independent:
+- BlockSplitContainer manages pane layout
+- BlockTabs manages tabs within each pane
+- No cross-dependencies or conflicts
+- Exactly matches VS Code's editor groups pattern
+
+**Browser Testing:**
+- Tested at http://localhost:5173/?example=split-tabs-demo
+- Verified split + tab creation in multiple panes
+- Confirmed tab persistence after splitting
+- Validated dropdown positioning in all panes
+- Screenshots captured verifying both fixes
+
+**Next Steps:**
+- Phase 4: Optional advanced features (if needed in future)
+- Documentation updates for README
+- Consider Playwright E2E test suite
 
 ---
 

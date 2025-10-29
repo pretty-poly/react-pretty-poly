@@ -236,7 +236,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           children: [firstChildId, secondChildId],
         };
 
-        // First child inherits content from original child
+        // First child inherits content from original child (including tabs!)
         const firstChild: BlockConfig = {
           id: firstChildId,
           type: "block",
@@ -246,6 +246,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
           sizeUnit: "fr",
           viewType: oldChild?.viewType,
           viewState: oldChild?.viewState,
+          tabState: oldChild?.tabState,  // Preserve tabs when splitting
         };
 
         // Second child gets default or specified view type

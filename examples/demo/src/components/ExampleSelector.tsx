@@ -21,6 +21,7 @@ import BlockVisibilityDemo from "../examples/block-visibility-demo";
 import BlockSplitDemo from "../examples/block-split-demo";
 import TabbedEditorDemo from "../examples/tabbed-editor-demo";
 import TabbedViewsDemo from "../examples/tabbed-views-demo";
+import SplitTabsDemo from "../examples/split-tabs-demo";
 
 interface ExampleInfo {
   name: string;
@@ -30,6 +31,13 @@ interface ExampleInfo {
 }
 
 const examples: ExampleInfo[] = [
+  {
+    name: "🚀 Split + Tabs Integration (PHASE 5!)",
+    description:
+      "✨ Phase 5: VS Code-style interface! Split panes + tabbed interface - each pane has independent tabs!",
+    component: SplitTabsDemo,
+    key: "split-tabs-demo",
+  },
   {
     name: "🎨 Tabbed Views + Registry (PHASE 3!)",
     description:
