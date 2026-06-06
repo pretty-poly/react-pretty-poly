@@ -20,16 +20,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Library specific */
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "./dist",
+    /* Registry source */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "examples", "src/dev.tsx", "src/example-selector.tsx", "src/**/*.test.tsx", "src/test", "src/__tests__"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["components/**/*", "hooks/**/*", "lib/**/*"],
+  "exclude": ["node_modules", "dist", "examples"]
 }

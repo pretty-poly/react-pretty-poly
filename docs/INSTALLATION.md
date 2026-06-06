@@ -1,274 +1,77 @@
 # PrettyPoly Installation Guide
 
-PrettyPoly follows the shadcn/ui philosophy: **copy components into your project** rather than installing from npm. This gives you full control over the code and ensures Tailwind CSS can properly generate all necessary classes.
+PrettyPoly follows the shadcn model: copy source into your project. The public GitHub repository is the registry, so there is no npm package, registry server, or generated JSON payload to host.
 
-## Why Copy Instead of Install?
+## Requirements
 
-When you install from npm and import components, Tailwind cannot scan the component files (they're in `node_modules`), so it won't generate the CSS classes used by the components. By copying the components into your project:
+- Public internet access to `github.com/pretty-poly/react-pretty-poly`.
+- `shadcn@4.10.0` or newer.
+- A `components.json` with aliases for `components`, `hooks`, `lib`, and `utils`.
+- An existing shadcn `cn` helper at the configured `utils` path, usually `@/lib/utils`.
 
-1. ✅ Tailwind scans the component code and generates all needed classes
-2. ✅ You have full control to customize components
-3. ✅ No version conflicts or dependency issues
-4. ✅ TypeScript types are included directly
+## Install
 
-## Installation Methods
-
-### Method 1: Using shadcn CLI (Recommended)
-
-The PrettyPoly component registry is compatible with the official shadcn CLI.
-
-#### Step 1: Initialize your project
-
-If you haven't already set up shadcn in your project:
+Initialize shadcn if the project has not already done so:
 
 ```bash
 npx shadcn@latest init
 ```
 
-This will create a `components.json` configuration file.
-
-#### Step 2: Add PrettyPoly components
+Install the core grid system:
 
 ```bash
-# Add the complete Grid system from a local checkout
-npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-system.json
-
-# Optional: Add sidebar components
-npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-sidebar.json
-
-# Optional: Add tab components
-npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-tabs.json
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.3.0
 ```
 
-There is not a canonical hosted registry URL yet. Use the generated local files above, or host `public/r/` on your own static host with CORS enabled. The unversioned files in `public/r/` are also generated for local testing, but copied installs should prefer the versioned `public/r/v0.3/` paths.
-
-The CLI will:
-- Copy all component files to your `components/` directory
-- Install required dependencies (`clsx`, `tailwind-merge`)
-- Update your Tailwind config with necessary animations
-- Create all utility files and hooks
-
-### Method 2: Manual Copy
-
-If you prefer manual control, you can copy files directly from the repository.
-
-#### Required Files
-
-**Minimum Grid System:**
-```
-src/
-├── components/
-│   ├── grid/
-│   │   ├── grid.tsx
-│   │   ├── grid-provider.tsx
-│   │   ├── block.tsx
-│   │   ├── block-content.tsx
-│   │   ├── block-header.tsx
-│   │   ├── block-footer.tsx
-│   │   ├── block-toolbar.tsx
-│   │   └── block-layout.tsx
-│   └── divider/
-│       ├── divider.tsx
-│       └── divider-overlay.tsx
-├── hooks/
-│   ├── use-grid-resize.ts
-│   ├── use-grid-resize-operations.ts
-│   ├── use-grid-mode.ts
-│   ├── use-grid-persistence.ts
-│   └── use-grid-keyboard.ts
-├── lib/
-│   ├── utils.ts (cn function)
-│   ├── grid-calculations.ts
-│   ├── grid-constraints.ts
-│   ├── grid-storage.ts
-│   └── grid-types.ts
-
-```
-
-#### Import Path Updates
-
-After copying, update imports from `@pretty-poly/react` to your local paths:
-
-```tsx
-// Before (npm package)
-import { Grid, Block, BlockContent } from '@pretty-poly/react'
-
-// After (copied components)
-import { Grid } from '@/components/grid/grid'
-import { Block } from '@/components/grid/block'
-import { BlockContent } from '@/components/grid/block-content'
-```
-
-## Dependencies
-
-PrettyPoly has minimal dependencies:
+Install optional feature sets as needed:
 
 ```bash
-npm install clsx tailwind-merge
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.3.0
 ```
 
-**Peer dependencies:**
-- `react` >=18.0.0 <20.0.0
-- `react-dom` >=18.0.0 <20.0.0
-- `tailwindcss` ^4.0.0
+The tag is intentional. Use tagged installs for reproducibility, and update tags explicitly when adopting a newer PrettyPoly release.
 
-## Tailwind Configuration
+## What Gets Copied
 
-### Required Animations
+- `grid-system`: `components/grid`, `components/divider`, grid hooks, and grid utilities.
+- `grid-sidebar`: optional block sidebar components.
+- `grid-primitives`: ViewRegistry, CommandService, and LayoutService primitives.
+- `grid-tabs`: BlockTabs, NewTabDropdown, and ViewRenderer.
 
-Add these to your `tailwind.config.js`:
+Files are written through shadcn target placeholders such as `@components/`, `@hooks/`, and `@lib/`, so they land in the directories configured by the consuming project.
 
-```js
-export default {
-  theme: {
-    extend: {
-      animation: {
-        'grid-divider-fade': 'grid-divider-fade 200ms ease-out',
-        'grid-divider-slide': 'grid-divider-slide 150ms cubic-bezier(0.4, 0, 0.2, 1)'
-      },
-      keyframes: {
-        'grid-divider-fade': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' }
-        },
-        'grid-divider-slide': {
-          '0%': { transform: 'translateY(-4px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' }
-        }
-      }
-    }
-  }
-}
-```
-
-### Content Paths
-
-Ensure Tailwind scans your copied components:
-
-```js
-export default {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx}',
-    './src/components/grid/**/*.{js,ts,jsx,tsx}', // PrettyPoly components
-    './src/components/divider/**/*.{js,ts,jsx,tsx}',
-  ],
-  // ... rest of config
-}
-```
-
-## TypeScript Configuration
-
-Ensure your `tsconfig.json` has path aliases configured:
-
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/lib/*": ["./src/lib/*"]
-    }
-  }
-}
-```
-
-For Vite projects, also configure `vite.config.ts`:
-
-```ts
-import path from 'path'
-
-export default defineConfig({
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
-})
-```
-
-## Verification
-
-After installation, verify everything works:
+## Usage
 
 ```tsx
-import { Grid, Block, BlockContent, BlockHeader } from '@/components/grid'
-import type { BlockConfig } from '@/lib/grid-types'
+import { Grid } from "@/components/grid/grid"
+import { Block } from "@/components/grid/block"
+import type { BlockConfig } from "@/lib/grid-types"
 
 const layout: BlockConfig[] = [
-  { id: 'root', type: 'group', direction: 'row', order: 0 },
-  { id: 'sidebar', type: 'block', defaultSize: 250, sizeUnit: 'px', parentId: 'root', order: 0 },
-  { id: 'main', type: 'block', defaultSize: 1, sizeUnit: 'fr', parentId: 'root', order: 1 },
+  { id: "root", type: "group", direction: "row", order: 0 },
+  { id: "sidebar", type: "block", defaultSize: 250, sizeUnit: "px", parentId: "root", order: 0 },
+  { id: "main", type: "block", defaultSize: 1, sizeUnit: "fr", parentId: "root", order: 1 },
 ]
 
-function App() {
+export function Example() {
   return (
     <Grid defaultLayout={layout} dividers="auto" className="h-screen">
-      <Block id="sidebar">
-        <BlockHeader>Sidebar</BlockHeader>
-        <BlockContent>Sidebar content</BlockContent>
-      </Block>
-      <Block id="main">
-        <BlockHeader>Main</BlockHeader>
-        <BlockContent>Main content</BlockContent>
-      </Block>
+      <Block id="sidebar">Sidebar</Block>
+      <Block id="main">Main</Block>
     </Grid>
   )
 }
 ```
 
-## Component Groups
+## Verification
 
-PrettyPoly components are organized into groups:
+After installing or updating PrettyPoly in a consuming project:
 
-### `grid-system` (Required)
-The core grid layout system with resizable panels. Includes:
-- Grid container and provider
-- Block components
-- Divider system
-- All hooks and utilities
-- Core types
+```bash
+npm run type-check
+npm run build
+```
 
-### `grid-sidebar` (Optional)
-Sidebar navigation components for use within blocks:
-- BlockSidebar
-- BlockSidebarItem
-- BlockSidebarSpacer
-
-### `grid-tabs` (Optional)
-Tab interface components for use within blocks:
-- BlockTabs
-
-## Next Steps
-
-- See [USAGE.md](./USAGE.md) for API documentation
-- Check out [examples/demo](../examples/demo) for complete examples
-- Read [IMPROVEMENT_PLAN.md](./IMPROVEMENT_PLAN.md) for upcoming features
-
-## Troubleshooting
-
-### Tailwind classes not working
-
-Make sure:
-1. Component files are copied to your project (not imported from npm)
-2. Tailwind `content` config includes the component directories
-
-### Import errors
-
-Check that:
-1. Path aliases are configured in both `tsconfig.json` and `vite.config.ts`
-2. Import paths use `@/` prefix consistently
-3. All required files were copied
-
-### TypeScript errors
-
-Ensure:
-1. `grid-types.ts` is in your `lib/` directory
-2. Your `tsconfig.json` includes the component directories
-3. Dependencies are installed (`clsx`, `tailwind-merge`)
-
-## Support
-
-- GitHub Issues: https://github.com/pretty-poly/react-pretty-poly/issues
-- Documentation: https://github.com/pretty-poly/react-pretty-poly/tree/main/docs
+If imports fail, check the consuming project’s `components.json` aliases first. PrettyPoly source imports use the standard `@/components`, `@/hooks`, and `@/lib` style after installation.

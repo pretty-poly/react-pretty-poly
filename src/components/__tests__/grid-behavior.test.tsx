@@ -1,14 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { Block } from '../Block/Block'
-import { Divider } from '../Divider/Divider'
+import { Block } from '@/components/grid/block'
+import { Divider } from '@/components/divider/divider'
 import {
   GridProvider,
   createInitialState,
   gridStateReducer,
   useGridState,
-} from '../Grid/GridProvider'
-import type { BlockConfig, ViewportInfo } from '../../types'
+} from '@/components/grid/grid-provider'
+import type { BlockConfig, ViewportInfo } from '@/lib/grid-types'
 
 const viewport: ViewportInfo = {
   width: 1024,

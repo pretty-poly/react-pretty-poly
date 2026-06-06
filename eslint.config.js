@@ -18,7 +18,7 @@ export default [
     },
   },
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['components/**/*.{ts,tsx}', 'hooks/**/*.{ts,tsx}', 'lib/**/*.{ts,tsx}'],
     plugins: {
       'react': reactPlugin,
       'react-hooks': reactHooks,
@@ -68,6 +68,9 @@ export default [
     // Ignore patterns
     ignores: [
       'dist/**',
+      'examples/**',
+      'public/r/**',
+      'src/**',
       'node_modules/**',
       '*.config.js',
       '*.config.ts',

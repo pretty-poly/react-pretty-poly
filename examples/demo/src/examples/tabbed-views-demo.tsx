@@ -22,7 +22,7 @@ import {
   useRegisterViews,
   type ViewDescriptor,
   type ViewProps,
-} from "@pretty-poly/react";
+} from "@/lib/view-registry";
 import type { BlockConfig } from "@/lib/grid-types";
 import { useGridContext } from "@/components/grid/grid-provider";
 import {

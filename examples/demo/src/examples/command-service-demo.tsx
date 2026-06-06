@@ -11,19 +11,19 @@
  */
 
 import { useState } from 'react'
+import { Grid } from "@/components/grid/grid";
+import { Block } from "@/components/grid/block";
+import { BlockContent } from "@/components/grid/block-content";
+import { BlockHeader } from "@/components/grid/block-header";
+import { BlockToolbar } from "@/components/grid/block-toolbar";
 import {
-  Grid,
-  Block,
-  BlockContent,
-  BlockHeader,
-  BlockToolbar,
   CommandServiceProvider,
   useCommandService,
   useRegisterCommands,
   useCommands,
-  type BlockConfig,
   type Command,
-} from '@pretty-poly/react'
+} from '@/lib/command-service'
+import type { BlockConfig } from '@/lib/grid-types'
 import {
   Maximize2,
   Minimize2,

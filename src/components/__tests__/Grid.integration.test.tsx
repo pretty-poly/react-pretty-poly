@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Grid, Block } from '../..'
+import { Grid } from '@/components/grid/grid'
+import { Block } from '@/components/grid/block'
 import { mockGetBoundingClientRect, setViewportSize } from '../../test/test-utils'
-import type { BlockConfig, ResponsiveModes } from '../../types'
+import type { BlockConfig, ResponsiveModes } from '@/lib/grid-types'
 
 const basicLayout: BlockConfig[] = [
   {

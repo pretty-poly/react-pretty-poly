@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Grid, Block } from '../..'
-import type { BlockConfig } from '../../types'
+import { Grid } from '@/components/grid/grid'
+import { Block } from '@/components/grid/block'
+import type { BlockConfig } from '@/lib/grid-types'
 
 const testLayout: BlockConfig[] = [
   {

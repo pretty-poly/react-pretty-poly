@@ -15,10 +15,6 @@ export default defineConfig({
     // Dedupe React to prevent multiple copies
     dedupe: ['react', 'react-dom'],
   },
-  optimizeDeps: {
-    // Force optimization of linked package
-    include: ['@pretty-poly/react'],
-  },
   server: {
     fs: {
       // Allow serving files from the linked package

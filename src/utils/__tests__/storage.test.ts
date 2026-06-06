@@ -10,8 +10,8 @@ import {
   getAllGridStates,
   createCustomAdapter,
   mergePersistedGridState
-} from '../storage'
-import type { GridState } from '../../types'
+} from '@/lib/grid-storage'
+import type { GridState } from '@/lib/grid-types'
 
 const mockGridState: GridState = {
   blocks: {

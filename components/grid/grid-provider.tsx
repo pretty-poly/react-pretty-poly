@@ -1,0 +1,1323 @@
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useMemo,
+} from "react";
+import type {
+  GridState,
+  GridAction,
+  GridContextValue,
+  BlockConfig,
+  ResponsiveModes,
+  ViewportInfo,
+  Tab,
+  EnsureBlockVisibleOptions,
+} from "@/lib/grid-types";
+import { useGridMode } from "@/hooks/use-grid-mode";
+import { useGridPersistence } from "@/hooks/use-grid-persistence";
+import { useGridResizeOperations } from "@/hooks/use-grid-resize-operations";
+import { mergePersistedGridState } from "@/lib/grid-storage";
+
+function getBlockSize(block: BlockConfig): number {
+  return block.size ?? block.defaultSize ?? 0;
+}
+
+function getCollapseThreshold(block: BlockConfig): number {
+  return block.collapseAt ?? block.collapseTo ?? 0;
+}
+
+function isBlockCollapsed(block: BlockConfig): boolean {
+  if (!block.collapsible) return false;
+  return getBlockSize(block) <= getCollapseThreshold(block);
+}
+
+function resizeBlockConfig(block: BlockConfig, size: number): BlockConfig {
+  return {
+    ...block,
+    defaultSize: size,
+    size,
+    originalDefaultSize: isBlockCollapsed({ ...block, defaultSize: size, size })
+      ? block.originalDefaultSize
+      : size,
+  };
+}
+
+function collapseBlockConfig(block: BlockConfig): BlockConfig {
+  const currentSize = getBlockSize(block);
+  const currentExpandedSize = isBlockCollapsed(block)
+    ? block.originalDefaultSize ?? block.defaultSize ?? currentSize
+    : currentSize;
+  const collapseSize = block.collapseTo ?? 0;
+
+  return {
+    ...block,
+    originalDefaultSize: currentExpandedSize,
+    defaultSize: collapseSize,
+    size: collapseSize,
+  };
+}
+
+function expandBlockConfig(block: BlockConfig): BlockConfig {
+  const originalSize =
+    block.originalDefaultSize ?? block.defaultSize ?? block.minSize ?? 100;
+
+  return {
+    ...block,
+    defaultSize: originalSize,
+    size: originalSize,
+  };
+}
+
+/**
+ * Grid state reducer
+ */
+export function gridStateReducer(state: GridState, action: GridAction): GridState {
+  switch (action.type) {
+    case "HIDE_BLOCK": {
+      if (state.hiddenBlocks.has(action.payload.blockId)) {
+        return state;
+      }
+
+      return {
+        ...state,
+        hiddenBlocks: new Set([...state.hiddenBlocks, action.payload.blockId]),
+      };
+    }
+
+    case "SHOW_BLOCK": {
+      if (!state.hiddenBlocks.has(action.payload.blockId)) {
+        return state;
+      }
+
+      const newHiddenBlocks = new Set(state.hiddenBlocks);
+      newHiddenBlocks.delete(action.payload.blockId);
+      return {
+        ...state,
+        hiddenBlocks: newHiddenBlocks,
+      };
+    }
+
+    case "TOGGLE_BLOCK_VISIBILITY": {
+      const isHidden = state.hiddenBlocks.has(action.payload.blockId);
+      const toggledHiddenBlocks = new Set(state.hiddenBlocks);
+      if (isHidden) {
+        toggledHiddenBlocks.delete(action.payload.blockId);
+      } else {
+        toggledHiddenBlocks.add(action.payload.blockId);
+      }
+      return {
+        ...state,
+        hiddenBlocks: toggledHiddenBlocks,
+      };
+    }
+
+    case "RESIZE_BLOCK": {
+      const block = state.blocks[action.payload.blockId];
+      if (!block) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [action.payload.blockId]: resizeBlockConfig(block, action.payload.size),
+        },
+      };
+    }
+
+    case "COLLAPSE_BLOCK": {
+      const collapseBlock = state.blocks[action.payload.blockId];
+      if (!collapseBlock) return state;
+
+      if (isBlockCollapsed(collapseBlock)) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [action.payload.blockId]: collapseBlockConfig(collapseBlock),
+        },
+      };
+    }
+
+    case "EXPAND_BLOCK": {
+      const expandBlock = state.blocks[action.payload.blockId];
+      if (!expandBlock) return state;
+
+      if (!isBlockCollapsed(expandBlock)) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [action.payload.blockId]: expandBlockConfig(expandBlock),
+        },
+      };
+    }
+
+    case "ENSURE_BLOCK_VISIBLE": {
+      const block = state.blocks[action.payload.blockId];
+      if (!block) return state;
+
+      const expandIfCollapsed = action.payload.expandIfCollapsed ?? true;
+      const shouldShow = state.hiddenBlocks.has(action.payload.blockId);
+      const shouldExpand = expandIfCollapsed && isBlockCollapsed(block);
+
+      if (!shouldShow && !shouldExpand) {
+        return state;
+      }
+
+      const nextHiddenBlocks = shouldShow
+        ? new Set([...state.hiddenBlocks].filter((id) => id !== action.payload.blockId))
+        : state.hiddenBlocks;
+
+      return {
+        ...state,
+        hiddenBlocks: nextHiddenBlocks,
+        blocks: shouldExpand
+          ? {
+              ...state.blocks,
+              [action.payload.blockId]: expandBlockConfig(block),
+            }
+          : state.blocks,
+      };
+    }
+
+    case "SET_ACTIVE_DIVIDER":
+      return {
+        ...state,
+        activeDivider: action.payload.dividerId,
+      };
+
+    case "SWITCH_MODE":
+      return {
+        ...state,
+        activeMode: action.payload.mode,
+      };
+
+    case "UPDATE_VIEWPORT":
+      return {
+        ...state,
+        viewport: action.payload.viewport,
+      };
+
+    case "LOAD_STATE":
+      return {
+        ...state,
+        ...action.payload.state,
+        // Always preserve current viewport
+        viewport: state.viewport,
+      };
+
+    case "RESET_STATE": {
+      // Reset block sizes to their original defaults
+      const resetBlocks = Object.fromEntries(
+        Object.entries(state.blocks).map(([id, block]) => [
+          id,
+          {
+            ...block,
+            size: block.defaultSize,
+            // Reset to original defaultSize stored somewhere, or current defaultSize
+          },
+        ])
+      );
+      return {
+        ...state,
+        blocks: resetBlocks,
+        activeDivider: undefined,
+        resize: {
+          isDragging: false,
+          startPosition: { x: 0, y: 0 },
+          initialSize: 0,
+        },
+      };
+    }
+
+    case "START_RESIZE":
+      return {
+        ...state,
+        resize: {
+          isDragging: true,
+          activeBlockId: action.payload.blockId,
+          activeDividerId: action.payload.dividerId,
+          startPosition: action.payload.startPosition,
+          initialSize: action.payload.initialSize,
+          initialAdjacentBlockId: action.payload.initialAdjacentBlockId,
+          initialAdjacentSize: action.payload.initialAdjacentSize,
+        },
+      };
+
+    case "UPDATE_RESIZE":
+      return {
+        ...state,
+        resize: {
+          ...state.resize,
+          // The resize calculation happens in the resize handler, not the reducer
+        },
+      };
+
+    case "END_RESIZE":
+      return {
+        ...state,
+        resize: {
+          isDragging: false,
+          startPosition: { x: 0, y: 0 },
+          initialSize: 0,
+        },
+      };
+
+    case "SPLIT_BLOCK": {
+      const { targetBlockId, direction, firstChildId, secondChildId, initialSize = 1 } = action.payload;
+      const targetBlock = state.blocks[targetBlockId];
+
+      // Validate target exists and is a group
+      if (!targetBlock) {
+        console.warn(`Cannot split: block ${targetBlockId} not found`);
+        return state;
+      }
+
+      if (targetBlock.type !== "group") {
+        console.warn(`Cannot split: block ${targetBlockId} is not a group`);
+        return state;
+      }
+
+      // Validate canSplit flag
+      if (targetBlock.canSplit !== true) {
+        console.warn(`Cannot split: block ${targetBlockId} does not have canSplit enabled`);
+        return state;
+      }
+
+      const splitDirection = direction === "horizontal" ? "column" : "row";
+
+      // Determine view type for new panes
+      const newViewType = action.payload.newViewType || targetBlock.defaultViewType;
+
+      // Case 1: Group with undefined direction - set direction and REPLACE children
+      if (!targetBlock.direction) {
+        const existingChildren = targetBlock.children || [];
+        const oldChildId = existingChildren[0];
+        const oldChild = oldChildId ? state.blocks[oldChildId] : undefined;
+
+        // Update group: set direction and replace children
+        const updatedGroup: BlockConfig = {
+          ...targetBlock,
+          direction: splitDirection,
+          children: [firstChildId, secondChildId],
+        };
+
+        // First child inherits content from original child (including tabs!)
+        const firstChild: BlockConfig = {
+          id: firstChildId,
+          type: "block",
+          parentId: targetBlockId,
+          order: 0,
+          defaultSize: initialSize,
+          sizeUnit: "fr",
+          viewType: oldChild?.viewType,
+          viewState: oldChild?.viewState,
+          tabState: oldChild?.tabState,  // Preserve tabs when splitting
+        };
+
+        // Second child gets default or specified view type
+        const secondChild: BlockConfig = {
+          id: secondChildId,
+          type: "block",
+          parentId: targetBlockId,
+          order: 1,
+          defaultSize: initialSize,
+          sizeUnit: "fr",
+          viewType: newViewType,
+        };
+
+        // Delete old children from state
+        const newBlocks = { ...state.blocks };
+        existingChildren.forEach(childId => {
+          delete newBlocks[childId];
+        });
+
+        // Add updated blocks
+        return {
+          ...state,
+          blocks: {
+            ...newBlocks,
+            [targetBlockId]: updatedGroup,
+            [firstChildId]: firstChild,
+            [secondChildId]: secondChild,
+          },
+        };
+      }
+
+      // Case 2: Group with defined direction - add to existing children
+      if (targetBlock.direction) {
+        // Check if directions match
+        if (targetBlock.direction !== splitDirection) {
+          console.warn(`Cannot split group ${targetBlockId}: direction mismatch (has ${targetBlock.direction}, requested ${splitDirection})`);
+          return state;
+        }
+
+        const updatedGroup: BlockConfig = {
+          ...targetBlock,
+          children: [...(targetBlock.children || []), secondChildId],
+        };
+
+        const newChild: BlockConfig = {
+          id: secondChildId,
+          type: "block",
+          parentId: targetBlockId,
+          order: (targetBlock.children?.length || 0),
+          defaultSize: initialSize,
+          sizeUnit: "fr",
+          viewType: newViewType,
+        };
+
+        return {
+          ...state,
+          blocks: {
+            ...state.blocks,
+            [targetBlockId]: updatedGroup,
+            [secondChildId]: newChild,
+          },
+        };
+      }
+
+      return state;
+    }
+
+    case "UNSPLIT_BLOCK": {
+      const { blockId } = action.payload;
+      const targetBlock = state.blocks[blockId];
+      if (!targetBlock || targetBlock.type !== "group" || !targetBlock.children) {
+        return state;
+      }
+
+      // Remove child blocks
+      const newBlocks = { ...state.blocks };
+      targetBlock.children.forEach(childId => {
+        delete newBlocks[childId];
+      });
+
+      // Convert group back to block
+      const restoredBlock: BlockConfig = {
+        ...targetBlock,
+        type: "block",
+        children: undefined,
+        viewType: undefined, // User will need to set content
+      };
+      newBlocks[blockId] = restoredBlock;
+
+      return {
+        ...state,
+        blocks: newBlocks,
+      };
+    }
+
+    case "ADD_BLOCK": {
+      const { parentId, block } = action.payload;
+      const parentBlock = state.blocks[parentId];
+      if (!parentBlock) return state;
+
+      // Add block to parent's children if parent is a group
+      const updatedParent = parentBlock.type === "group" && parentBlock.children
+        ? {
+            ...parentBlock,
+            children: [...parentBlock.children, block.id],
+          }
+        : parentBlock;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [parentId]: updatedParent,
+          [block.id]: block,
+        },
+      };
+    }
+
+    case "REMOVE_BLOCK": {
+      const { blockId } = action.payload;
+      const blockToRemove = state.blocks[blockId];
+      if (!blockToRemove) return state;
+
+      const newBlocks = { ...state.blocks };
+
+      // Remove from parent's children array
+      if (blockToRemove.parentId) {
+        const parentBlock = newBlocks[blockToRemove.parentId];
+        if (parentBlock && parentBlock.type === "group" && parentBlock.children) {
+          newBlocks[blockToRemove.parentId] = {
+            ...parentBlock,
+            children: parentBlock.children.filter(id => id !== blockId),
+          };
+        }
+      }
+
+      // Remove the block itself
+      delete newBlocks[blockId];
+
+      // Also remove from hidden blocks if present
+      const newHiddenBlocks = new Set(state.hiddenBlocks);
+      newHiddenBlocks.delete(blockId);
+
+      return {
+        ...state,
+        blocks: newBlocks,
+        hiddenBlocks: newHiddenBlocks,
+      };
+    }
+
+    case "SET_BLOCK_VIEW_TYPE": {
+      const { blockId, viewType } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            viewType,
+          },
+        },
+      };
+    }
+
+    case "OPEN_TAB": {
+      const { blockId, tab } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block) return state;
+
+      // Generate unique tab ID
+      const timestamp = Date.now();
+      const random = Math.random().toString(36).substring(2, 9);
+      const newTabId = `tab-${timestamp}-${random}`;
+
+      const newTab = { ...tab, id: newTabId };
+      const currentTabState = block.tabState;
+
+      // Initialize tab state if it doesn't exist
+      if (!currentTabState) {
+        return {
+          ...state,
+          blocks: {
+            ...state.blocks,
+            [blockId]: {
+              ...block,
+              tabState: {
+                tabs: [newTab],
+                activeTabId: newTabId,
+                history: [newTabId],
+                historyIndex: 0,
+                scrollOffset: 0,
+              },
+            },
+          },
+        };
+      }
+
+      // Add tab to existing state
+      const newTabs = [...currentTabState.tabs, newTab];
+      const newHistory = [
+        ...currentTabState.history.slice(0, currentTabState.historyIndex + 1),
+        newTabId,
+      ];
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...currentTabState,
+              tabs: newTabs,
+              activeTabId: newTabId,
+              history: newHistory,
+              historyIndex: newHistory.length - 1,
+            },
+          },
+        },
+      };
+    }
+
+    case "CLOSE_TAB": {
+      const { blockId, tabId } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const tabIndex = tabState.tabs.findIndex((t) => t.id === tabId);
+      if (tabIndex === -1) return state;
+
+      const newTabs = tabState.tabs.filter((t) => t.id !== tabId);
+
+      // If closing the last tab, clear tab state
+      if (newTabs.length === 0) {
+        return {
+          ...state,
+          blocks: {
+            ...state.blocks,
+            [blockId]: {
+              ...block,
+              tabState: undefined,
+            },
+          },
+        };
+      }
+
+      // Determine new active tab
+      let newActiveTabId = tabState.activeTabId;
+      if (tabId === tabState.activeTabId) {
+        // Try to activate the next tab, or the previous one
+        const newActiveIndex = tabIndex < newTabs.length ? tabIndex : tabIndex - 1;
+        newActiveTabId = newTabs[newActiveIndex].id;
+      }
+
+      // Update history to remove closed tab
+      const newHistory = tabState.history.filter((id) => id !== tabId);
+      let newHistoryIndex = tabState.historyIndex;
+
+      // Adjust history index if needed
+      if (newHistoryIndex >= newHistory.length) {
+        newHistoryIndex = Math.max(0, newHistory.length - 1);
+      }
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              tabs: newTabs,
+              activeTabId: newActiveTabId,
+              history: newHistory,
+              historyIndex: newHistoryIndex,
+            },
+          },
+        },
+      };
+    }
+
+    case "SET_ACTIVE_TAB": {
+      const { blockId, tabId } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const tabExists = tabState.tabs.some((t) => t.id === tabId);
+      if (!tabExists) return state;
+
+      // Add to history if different from current
+      let newHistory = tabState.history;
+      let newHistoryIndex = tabState.historyIndex;
+
+      if (tabId !== tabState.activeTabId) {
+        // Truncate history from current position and add new tab
+        newHistory = [
+          ...tabState.history.slice(0, tabState.historyIndex + 1),
+          tabId,
+        ];
+        newHistoryIndex = newHistory.length - 1;
+      }
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              activeTabId: tabId,
+              history: newHistory,
+              historyIndex: newHistoryIndex,
+            },
+          },
+        },
+      };
+    }
+
+    case "UPDATE_TAB": {
+      const { blockId, tabId, updates } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const tabIndex = tabState.tabs.findIndex((t) => t.id === tabId);
+      if (tabIndex === -1) return state;
+
+      const updatedTabs = [...tabState.tabs];
+      updatedTabs[tabIndex] = { ...updatedTabs[tabIndex], ...updates };
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              tabs: updatedTabs,
+            },
+          },
+        },
+      };
+    }
+
+    case "REORDER_TABS": {
+      const { blockId, fromIndex, toIndex } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      if (
+        fromIndex < 0 ||
+        fromIndex >= tabState.tabs.length ||
+        toIndex < 0 ||
+        toIndex >= tabState.tabs.length
+      ) {
+        return state;
+      }
+
+      const newTabs = [...tabState.tabs];
+      const [movedTab] = newTabs.splice(fromIndex, 1);
+      newTabs.splice(toIndex, 0, movedTab);
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              tabs: newTabs,
+            },
+          },
+        },
+      };
+    }
+
+    case "NAVIGATE_TAB_HISTORY": {
+      const { blockId, direction } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      const { tabState } = block;
+      const newHistoryIndex =
+        direction === "forward"
+          ? Math.min(tabState.historyIndex + 1, tabState.history.length - 1)
+          : Math.max(tabState.historyIndex - 1, 0);
+
+      // No change if already at the end/start
+      if (newHistoryIndex === tabState.historyIndex) return state;
+
+      const newActiveTabId = tabState.history[newHistoryIndex];
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...tabState,
+              activeTabId: newActiveTabId,
+              historyIndex: newHistoryIndex,
+            },
+          },
+        },
+      };
+    }
+
+    case "SET_TAB_SCROLL_OFFSET": {
+      const { blockId, offset } = action.payload;
+      const block = state.blocks[blockId];
+      if (!block?.tabState) return state;
+
+      return {
+        ...state,
+        blocks: {
+          ...state.blocks,
+          [blockId]: {
+            ...block,
+            tabState: {
+              ...block.tabState,
+              scrollOffset: offset,
+            },
+          },
+        },
+      };
+    }
+
+    default:
+      return state;
+  }
+}
+
+/**
+ * Create initial grid state from block configurations
+ */
+export function createInitialState(
+  blocks: BlockConfig[],
+  viewport: ViewportInfo,
+  activeMode: string
+): GridState {
+  const blocksMap = blocks.reduce((acc, block) => {
+    acc[block.id] = {
+      ...block,
+      size: block.defaultSize,
+      originalDefaultSize: block.defaultSize, // Store original size for expand functionality
+    };
+    return acc;
+  }, {} as Record<string, BlockConfig>);
+
+  return {
+    blocks: blocksMap,
+    // Initialize hidden blocks from BlockConfig.isHidden property
+    hiddenBlocks: new Set<string>(
+      blocks.filter(block => block.isHidden).map(block => block.id)
+    ),
+    activeMode,
+    viewport,
+    resize: {
+      isDragging: false,
+      startPosition: { x: 0, y: 0 },
+      initialSize: 0,
+    },
+  };
+}
+
+// Context
+const GridContext = createContext<GridContextValue | null>(null);
+
+export interface GridProviderProps {
+  children: React.ReactNode;
+  blocks: BlockConfig[];
+  modes?: ResponsiveModes;
+  gridId?: string;
+  persist?:
+    | boolean
+    | "localStorage"
+    | "sessionStorage"
+    | ((state: GridState) => void);
+  persistKey?: string;
+  onModeChange?: (newMode: string, previousMode: string) => void;
+  onLayoutChange?: (blocks: BlockConfig[]) => void;
+}
+
+/**
+ * Grid context provider component
+ */
+export function GridProvider({
+  children,
+  blocks,
+  modes,
+  gridId = "default",
+  persist = false,
+  persistKey,
+  onModeChange,
+  onLayoutChange,
+}: GridProviderProps) {
+  // Mode management
+  const { activeMode, viewport, setMode: setModeInternal } = useGridMode(modes);
+
+  // Initialize state
+  const [state, dispatch] = useReducer(
+    gridStateReducer,
+    createInitialState(blocks, viewport, activeMode)
+  );
+
+  // Update viewport in state when it changes
+  useEffect(() => {
+    dispatch({
+      type: "UPDATE_VIEWPORT",
+      payload: { viewport },
+    });
+  }, [viewport]);
+
+  // Update active mode in state when it changes
+  useEffect(() => {
+    const previousMode = state.activeMode;
+    if (activeMode !== previousMode) {
+      dispatch({
+        type: "SWITCH_MODE",
+        payload: { mode: activeMode },
+      });
+      onModeChange?.(activeMode, previousMode);
+    }
+  }, [activeMode, state.activeMode, onModeChange]);
+
+  // Persistence
+  const { saveState, clearState } = useGridPersistence({
+    gridId: persistKey || gridId,
+    enabled: persist,
+    state,
+    onStateLoad: (loadedState) => {
+      const reconciledState = mergePersistedGridState(loadedState, blocks);
+      dispatch({ type: "LOAD_STATE", payload: { state: reconciledState } });
+    },
+    autoSave: true,
+  });
+
+  // Resize operations (extracted to custom hook)
+  const { startResize, updateResize, endResize } = useGridResizeOperations(state, dispatch);
+
+  // Create context value
+  const contextValue: GridContextValue = useMemo(
+    () => ({
+      gridId,
+      state: {
+        ...state,
+        activeMode,
+        viewport,
+      },
+      dispatch,
+
+      // Grid operations
+      resizeBlock: (blockId: string, size: number) => {
+        dispatch({
+          type: "RESIZE_BLOCK",
+          payload: { blockId, size },
+        });
+      },
+
+      collapseBlock: (blockId: string) => {
+        dispatch({
+          type: "COLLAPSE_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      expandBlock: (blockId: string) => {
+        dispatch({
+          type: "EXPAND_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      switchMode: (mode: string) => {
+        setModeInternal(mode);
+      },
+
+      // Block visibility operations
+      hideBlock: (blockId: string) => {
+        dispatch({
+          type: "HIDE_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      showBlock: (blockId: string) => {
+        dispatch({
+          type: "SHOW_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      ensureBlockVisible: (
+        blockId: string,
+        options: EnsureBlockVisibleOptions = {}
+      ) => {
+        dispatch({
+          type: "ENSURE_BLOCK_VISIBLE",
+          payload: { blockId, ...options },
+        });
+      },
+
+      toggleBlockVisibility: (blockId: string) => {
+        dispatch({
+          type: "TOGGLE_BLOCK_VISIBILITY",
+          payload: { blockId },
+        });
+      },
+
+      // Split operations (LayoutService primitives)
+      splitBlock: (blockId: string, direction: 'horizontal' | 'vertical', options = {}) => {
+        const { initialSize = 1, viewType, position = 'after' } = options;
+
+        // Generate unique IDs using timestamp to prevent collisions
+        const timestamp = Date.now();
+        const firstChildId = `${blockId}-${timestamp}-1`;
+        const secondChildId = `${blockId}-${timestamp}-2`;
+
+        dispatch({
+          type: "SPLIT_BLOCK",
+          payload: {
+            targetBlockId: blockId,
+            direction,
+            newBlockId: position === 'before' ? firstChildId : secondChildId,
+            firstChildId,
+            secondChildId,
+            initialSize,
+            newViewType: viewType,
+            position,
+          },
+        });
+
+        // Return the new block ID
+        return position === 'before' ? firstChildId : secondChildId;
+      },
+
+      unsplitBlock: (blockId: string) => {
+        dispatch({
+          type: "UNSPLIT_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      canSplit: (blockId: string) => {
+        const block = state.blocks[blockId];
+
+        // Only groups can be split
+        if (!block || block.type !== "group") return false;
+
+        // Check if group has canSplit flag enabled
+        if (block.canSplit !== true) return false;
+
+        // Check minimum size constraints if specified
+        const minSplitSize = block.splitConfig?.minSplitSize || 200;
+        if (block.sizeUnit === "px" && (block.defaultSize || 0) < minSplitSize * 2) {
+          return false;
+        }
+
+        return true;
+      },
+
+      addBlock: (parentId: string, blockConfig: Partial<BlockConfig>) => {
+        const newBlockId = blockConfig.id || `block-${Date.now()}`;
+        const block: BlockConfig = {
+          id: newBlockId,
+          type: "block",
+          parentId,
+          defaultSize: 1,
+          sizeUnit: "fr",
+          ...blockConfig,
+        };
+
+        dispatch({
+          type: "ADD_BLOCK",
+          payload: { parentId, block },
+        });
+
+        return newBlockId;
+      },
+
+      removeBlock: (blockId: string) => {
+        dispatch({
+          type: "REMOVE_BLOCK",
+          payload: { blockId },
+        });
+      },
+
+      // View type operations (future ViewRegistry support)
+      setBlockViewType: (blockId: string, viewType: string) => {
+        dispatch({
+          type: "SET_BLOCK_VIEW_TYPE",
+          payload: { blockId, viewType },
+        });
+      },
+
+      getBlockViewType: (blockId: string) => {
+        return state.blocks[blockId]?.viewType;
+      },
+
+      // Tab operations
+      openTab: (blockId: string, tab: Omit<Tab, 'id'>) => {
+        // Generate ID here and return it
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substring(2, 9);
+        const newTabId = `tab-${timestamp}-${random}`;
+
+        dispatch({
+          type: "OPEN_TAB",
+          payload: { blockId, tab },
+        });
+
+        return newTabId;
+      },
+
+      closeTab: (blockId: string, tabId: string) => {
+        dispatch({
+          type: "CLOSE_TAB",
+          payload: { blockId, tabId },
+        });
+      },
+
+      setActiveTab: (blockId: string, tabId: string) => {
+        dispatch({
+          type: "SET_ACTIVE_TAB",
+          payload: { blockId, tabId },
+        });
+      },
+
+      updateTab: (blockId: string, tabId: string, updates: Partial<Tab>) => {
+        dispatch({
+          type: "UPDATE_TAB",
+          payload: { blockId, tabId, updates },
+        });
+      },
+
+      reorderTabs: (blockId: string, fromIndex: number, toIndex: number) => {
+        dispatch({
+          type: "REORDER_TABS",
+          payload: { blockId, fromIndex, toIndex },
+        });
+      },
+
+      navigateTabHistory: (blockId: string, direction: 'forward' | 'back') => {
+        dispatch({
+          type: "NAVIGATE_TAB_HISTORY",
+          payload: { blockId, direction },
+        });
+      },
+
+      getTabState: (blockId: string) => {
+        return state.blocks[blockId]?.tabState;
+      },
+
+      // Resize operations (using extracted hook)
+      startResize,
+      updateResize,
+      endResize,
+
+      // Persistence
+      persistState: () => saveState(state),
+      resetState: () => {
+        dispatch({ type: "RESET_STATE" });
+        clearState();
+      },
+    }),
+    [gridId, state, activeMode, viewport, saveState, clearState, setModeInternal, startResize, updateResize, endResize]
+  );
+
+  // Notify parent of layout changes
+  useEffect(() => {
+    if (onLayoutChange) {
+      const blockConfigs = Object.values(state.blocks);
+      onLayoutChange(blockConfigs);
+    }
+  }, [state.blocks, onLayoutChange]);
+
+  return (
+    <GridContext.Provider value={contextValue}>{children}</GridContext.Provider>
+  );
+}
+
+/**
+ * Hook to access grid context
+ */
+export function useGridContext(): GridContextValue {
+  const context = useContext(GridContext);
+  if (!context) {
+    throw new Error("useGridContext must be used within a GridProvider");
+  }
+  return context;
+}
+
+/**
+ * Hook to access grid state
+ */
+export function useGridState() {
+  const { state } = useGridContext();
+  return state;
+}
+
+/**
+ * Hook to access grid actions
+ */
+export function useGridActions() {
+  const {
+    resizeBlock,
+    collapseBlock,
+    expandBlock,
+    hideBlock,
+    showBlock,
+    ensureBlockVisible,
+    toggleBlockVisibility,
+    switchMode,
+    persistState,
+    resetState,
+  } = useGridContext();
+  return {
+    resizeBlock,
+    collapseBlock,
+    expandBlock,
+    hideBlock,
+    showBlock,
+    ensureBlockVisible,
+    toggleBlockVisibility,
+    switchMode,
+    persistState,
+    resetState,
+  };
+}
+
+/**
+ * Hook to access resize operations
+ */
+export function useGridResize() {
+  const { startResize, updateResize, endResize, state } = useGridContext();
+  return {
+    startResize,
+    updateResize,
+    endResize,
+    isDragging: state.resize.isDragging,
+    activeBlockId: state.resize.activeBlockId,
+    activeDividerId: state.resize.activeDividerId,
+  };
+}
+
+/**
+ * Hook to access a specific block's state
+ * @param blockId - The ID of the block to access
+ * @returns Block state with calculated isCollapsed property
+ */
+export function useBlockState(blockId: string) {
+  const { state } = useGridContext();
+  const block = state.blocks[blockId];
+
+  if (!block) {
+    console.warn(`Block with id "${blockId}" not found in grid state`);
+    return null;
+  }
+
+  const currentSize = block.size ?? block.defaultSize ?? 0;
+  const collapseTo = block.collapseTo ?? 0;
+  const isCollapsed = currentSize <= collapseTo;
+
+  return {
+    ...block,
+    size: currentSize,
+    isCollapsed,
+  };
+}
+
+/**
+ * Hook to access the parent block's state
+ * @param blockId - The ID of the child block whose parent you want to access
+ * @returns Parent block state with calculated isCollapsed property, or null if no parent
+ */
+export function useParentBlockState(blockId: string) {
+  const { state } = useGridContext();
+  const block = state.blocks[blockId];
+
+  if (!block || !block.parentId) {
+    return null;
+  }
+
+  const parentBlock = state.blocks[block.parentId];
+  if (!parentBlock) {
+    console.warn(`Parent block "${block.parentId}" not found for block "${blockId}"`);
+    return null;
+  }
+
+  const currentSize = parentBlock.size ?? parentBlock.defaultSize ?? 0;
+  const collapseTo = parentBlock.collapseTo ?? 0;
+  const isCollapsed = currentSize <= collapseTo;
+
+  return {
+    ...parentBlock,
+    size: currentSize,
+    isCollapsed,
+  };
+}
+
+/**
+ * Hook to check if a block is hidden
+ * @param blockId - The ID of the block to check
+ * @returns True if the block is hidden
+ */
+export function useIsBlockHidden(blockId: string): boolean {
+  const { state } = useGridContext();
+  return state.hiddenBlocks.has(blockId);
+}
+
+/**
+ * Hook to hide a block
+ * Returns a memoized callback
+ */
+export function useHideBlock(): (blockId: string) => void {
+  const { hideBlock } = useGridContext();
+  return hideBlock;
+}
+
+/**
+ * Hook to show a block
+ * Returns a memoized callback
+ */
+export function useShowBlock(): (blockId: string) => void {
+  const { showBlock } = useGridContext();
+  return showBlock;
+}
+
+/**
+ * Hook to show a block and optionally expand it if it is collapsed.
+ * Returns a memoized callback.
+ */
+export function useEnsureBlockVisible(): (
+  blockId: string,
+  options?: EnsureBlockVisibleOptions
+) => void {
+  const { ensureBlockVisible } = useGridContext();
+  return ensureBlockVisible;
+}
+
+/**
+ * Hook to toggle block visibility
+ * Returns a memoized callback
+ */
+export function useToggleBlockVisibility(): (blockId: string) => void {
+  const { toggleBlockVisibility } = useGridContext();
+  return toggleBlockVisibility;
+}
+
+/**
+ * Hook to access split operations
+ */
+export function useSplitBlock() {
+  const { splitBlock, unsplitBlock, canSplit, state } = useGridContext();
+  return {
+    splitBlock,
+    unsplitBlock,
+    canSplit,
+    state,
+  };
+}
+
+/**
+ * Hook to split a block
+ * Returns a memoized callback
+ */
+export function useSplit(): (blockId: string, direction: 'horizontal' | 'vertical', options?: {
+  initialSize?: number;
+  viewType?: string;
+  position?: 'before' | 'after';
+}) => string {
+  const { splitBlock } = useGridContext();
+  return splitBlock;
+}
+
+/**
+ * Hook to check if a block can be split
+ * Returns a memoized callback
+ */
+export function useCanSplit(): (blockId: string) => boolean {
+  const { canSplit } = useGridContext();
+  return canSplit;
+}
+
+/**
+ * Hook to access view type operations
+ */
+export function useBlockViewType(blockId: string) {
+  const { getBlockViewType, setBlockViewType } = useGridContext();
+  return {
+    viewType: getBlockViewType(blockId),
+    setViewType: (viewType: string) => setBlockViewType(blockId, viewType),
+  };
+}

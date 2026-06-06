@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { useViewRegistry } from '@pretty-poly/react'
+import { useViewRegistry } from '@/lib/view-registry'
 import { useGridContext } from './grid-provider'
-import type { ViewDescriptor } from '@pretty-poly/react'
+import type { ViewDescriptor } from '@/lib/view-registry'
 import { cn } from '@/lib/utils'
 
 /**

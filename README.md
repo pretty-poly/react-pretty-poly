@@ -1,334 +1,92 @@
-# @pretty-poly/react
+# PrettyPoly
 
-A **shadcn/ui compatible** polymorphic React component library for creating resizable, responsive grid layouts that adapt to any context.
+A shadcn-compatible polymorphic grid system for React. PrettyPoly is distributed as source through the public GitHub registry at `pretty-poly/react-pretty-poly`; it is not intended to be installed as an npm package.
 
-> ⚠️ **Alpha Release (v0.3.0)** - This is a pre-1.0 release. Grid mode is the primary supported path; responsive modes and the copied registry workflow are still stabilizing. API may change before 1.0.
+> Alpha release `v0.3.0`: grid mode is the primary supported path. Responsive modes, tabs, and primitives are still stabilizing.
 
-## Features
+## Install
 
-🎯 **Polymorphic Design** - Handle multiple tasks or contexts within a single view
-📱 **Responsive Modes** - Automatically switch between grid, dock, tabs, and other layouts
-🎛️ **Resizable Components** - CSS Grid-powered with fractional and pixel units
-💾 **State Persistence** - localStorage, sessionStorage, or custom persistence
-⌨️ **Keyboard Navigation** - Full accessibility support with keyboard controls
-🎨 **Shadcn/UI Compatible** - Works seamlessly with modern design systems
-🔧 **TypeScript First** - Comprehensive type safety and IntelliSense
-
-## Installation
-
-PrettyPoly offers two installation methods:
-
-### Method 1: Copy Components (Recommended)
-
-Like shadcn/ui, copy components directly into your project for full control and proper Tailwind class generation:
+Initialize shadcn in the consuming project if needed:
 
 ```bash
-# Initialize shadcn (if you haven't already)
 npx shadcn@latest init
-
-# Add PrettyPoly components
-npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-system.json
 ```
 
-There is not a canonical hosted registry URL yet. Until one is deployed with CORS, use a local file path or host the generated files from `public/r/` yourself. Versioned registry artifacts are generated under `public/r/v0.3/`.
-
-**Why copy?** When you import from npm, Tailwind can't scan the component files in `node_modules`, so CSS classes won't be generated. Copying ensures:
-- ✅ All Tailwind classes are generated
-- ✅ Full control to customize components
-- ✅ No version conflicts
-- ✅ TypeScript types included
-
-See [docs/INSTALLATION.md](./docs/INSTALLATION.md) for detailed installation instructions.
-
-### Method 2: NPM Package
-
-For quick prototyping or if you prefer traditional npm packages:
+Install the core grid system from the tagged GitHub registry:
 
 ```bash
-# New projects
-npm install @pretty-poly/react tailwindcss
-
-# Existing shadcn/ui projects
-npm install @pretty-poly/react
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.3.0
 ```
 
-**Note:** With npm installation, you may need to configure Tailwind's `safelist` to ensure all component classes are included.
+Optional items:
 
-The library is fully compatible with existing shadcn/ui setups and will inherit your theme configuration automatically.
+```bash
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.3.0
+```
 
-## Quick Start
+GitHub registry installs copy source into your project using your `components.json` aliases. PrettyPoly assumes a normal shadcn setup with `@/components`, `@/hooks`, `@/lib`, and an existing `@/lib/utils` `cn` helper.
+
+## Usage
 
 ```tsx
-import { Grid, Block } from '@pretty-poly/react'
+import { Grid } from "@/components/grid/grid"
+import { Block } from "@/components/grid/block"
+import type { BlockConfig } from "@/lib/grid-types"
 
-const layout = [
+const layout: BlockConfig[] = [
+  { id: "root", type: "group", direction: "row", order: 0 },
   {
-    id: 'root',
-    type: 'group',
-    direction: 'row',
-    order: 0
-  },
-  {
-    id: 'sidebar',
-    type: 'block',
+    id: "sidebar",
+    type: "block",
     defaultSize: 300,
     minSize: 200,
     maxSize: 500,
-    sizeUnit: 'px',
-    dividerPosition: 'end',
-    parentId: 'root',
-    order: 0
+    sizeUnit: "px",
+    parentId: "root",
+    order: 0,
   },
   {
-    id: 'main',
-    type: 'block',
+    id: "main",
+    type: "block",
     defaultSize: 1,
-    sizeUnit: 'fr',
-    parentId: 'root',
-    order: 1
-  }
+    sizeUnit: "fr",
+    parentId: "root",
+    order: 1,
+  },
 ]
 
-function App() {
+export function App() {
   return (
-    <Grid defaultLayout={layout} persist="localStorage">
-      <Block id="sidebar" className="bg-gray-100 p-4">
-        <h2>Sidebar</h2>
-        <nav>...</nav>
+    <Grid defaultLayout={layout} dividers="auto" persist="localStorage">
+      <Block id="sidebar" className="p-4">
+        Sidebar
       </Block>
       <Block id="main" className="p-6">
-        <h1>Main Content</h1>
-        <p>Resizable content area</p>
+        Main content
       </Block>
     </Grid>
   )
 }
 ```
 
-## Responsive Design
+## Registry Items
 
-PrettyPoly automatically adapts to different screen sizes and interaction patterns:
+- `grid-system`: core grid, block, divider, hooks, and grid utilities.
+- `grid-sidebar`: optional sidebar components.
+- `grid-primitives`: ViewRegistry, CommandService, and LayoutService primitives.
+- `grid-tabs`: optional tab components plus ViewRegistry tab helpers.
 
-```tsx
-const responsiveModes = {
-  mobile: { type: 'dock', maxWidth: 767 },
-  tablet: { type: 'tabs', minWidth: 768, maxWidth: 1023 },
-  desktop: { type: 'grid', minWidth: 1024 }
-}
+## Development
 
-<Grid modes={responsiveModes}>
-  <Block
-    id="sidebar"
-    desktop={{ defaultSize: 300, collapsible: true }}
-    mobile={{ icon: MenuIcon, label: "Menu", dockOrder: 1 }}
-    tablet={{ tabLabel: "Navigation" }}
-  >
-    Content adapts automatically
-  </Block>
-</Grid>
+The installable source lives in top-level `components/`, `hooks/`, and `lib/`. The root `registry.json` is the source registry entrypoint.
+
+```bash
+npm run registry:validate
+npm test -- --run
+npm run type-check
+npm run lint
 ```
 
-## Core Components
-
-### Grid
-Root container that manages layout state and responsive behavior.
-
-```tsx
-<Grid
-  defaultLayout={blocks}
-  modes={responsiveModes}
-  persist="localStorage"
-  onLayoutChange={handleChange}
-  onModeChange={handleModeChange}
-/>
-```
-
-### Block
-Content containers that can be resized, collapsed, and configured per mode.
-
-```tsx
-<Block
-  id="unique-id"
-  type="block" // or "group"
-  desktop={{ defaultSize: 300, minSize: 200 }}
-  mobile={{ icon: Icon, label: "Label" }}
->
-  Content
-</Block>
-```
-
-### Divider
-Draggable handles are generated by the grid overlay for configured sibling blocks. The low-level `Divider` export remains available for advanced/manual layouts, but most apps should rely on `dividers="auto"` or the default overlay behavior.
-
-## Layout Modes
-
-### Grid Mode (Desktop)
-Full resizable grid with draggable dividers, collapse/expand, and keyboard navigation.
-
-### Dock Mode (Mobile)
-Bottom navigation with icon-based panel switching, similar to mobile apps.
-
-### Tabs Mode (Tablet)
-Traditional tabbed interface for medium-sized screens.
-
-### Stack Mode
-Full-screen panels with swipe navigation for mobile interfaces.
-
-### Sidebar Mode
-Collapsible sidebar with main content area.
-
-### Accordion Mode
-Expandable vertical sections for content hierarchy.
-
-## Persistence
-
-Save and restore layout state across sessions:
-
-```tsx
-// localStorage
-<Grid persist="localStorage" persistKey="my-layout" />
-
-// sessionStorage
-<Grid persist="sessionStorage" />
-
-// Custom function
-<Grid persist={(state) => saveToDatabase(state)} />
-```
-
-## Keyboard Navigation
-
-- **Arrow Keys**: Navigate between blocks
-- **Ctrl + Arrow Keys**: Resize focused block
-- **Ctrl + Plus/Minus**: Expand/collapse block
-- **Enter/Space**: Toggle collapse state
-- **Escape**: Remove focus
-
-## TypeScript
-
-Full TypeScript support with comprehensive type definitions:
-
-```tsx
-import type {
-  BlockConfig,
-  GridProps,
-  ResponsiveModes,
-  LayoutMode
-} from '@pretty-poly/react'
-```
-
-## Styling
-
-### CSS Variables (Shadcn/UI Compatible)
-```css
-:root {
-  --pretty-poly-border: hsl(214.3 31.8% 91.4%);
-  --pretty-poly-foreground: hsl(222.2 84% 4.9%);
-  --pretty-poly-background: hsl(0 0% 100%);
-  /* ... */
-}
-```
-
-### Custom Components
-```tsx
-<Divider
-  handle={({ className }) => (
-    <div className={`custom-handle ${className}`} />
-  )}
-/>
-```
-
-## Examples
-
-See the `/examples` directory for:
-- Basic resizable layout
-- Comprehensive responsive demo
-- VS Code-style interface
-- Shadcn/UI integration
-- Custom mode examples
-
-## API Reference
-
-### Grid Props
-| Prop | Type | Description |
-|------|------|-------------|
-| `defaultLayout` | `BlockConfig[]` | Initial layout configuration |
-| `modes` | `ResponsiveModes` | Responsive mode definitions |
-| `persist` | `boolean \| string \| function` | State persistence options |
-| `onLayoutChange` | `function` | Layout change callback |
-| `onModeChange` | `function` | Mode change callback |
-
-### Block Props
-| Prop | Type | Description |
-|------|------|-------------|
-| `id` | `string` | Unique block identifier |
-| `type` | `'block' \| 'group'` | Block type |
-| `[mode]` | `ModeConfig` | Mode-specific configuration |
-
-### Hooks
-
-- `useGridResize()` - Handle resize operations
-- `useGridMode()` - Manage responsive modes
-- `useGridPersistence()` - State persistence
-- `useGridKeyboard()` - Keyboard navigation
-
-## Shadcn/UI Integration
-
-### Automatic Theme Support
-
-Pretty Poly automatically inherits your shadcn/ui theme:
-
-```tsx
-// Uses your shadcn theme colors automatically
-<Block className="bg-card border border-border text-card-foreground">
-  Content styled with your theme
-</Block>
-```
-
-### Dark Mode
-
-Supports shadcn/ui dark mode out of the box:
-
-```tsx
-// Add dark mode toggle to your app
-<div className="dark"> {/* or use next-themes */}
-  <Grid>
-    {/* Components automatically adapt to dark theme */}
-  </Grid>
-</div>
-```
-
-### Custom Styling
-
-Use the `cn` utility for conditional classes:
-
-```tsx
-import { cn } from '@pretty-poly/react'
-
-<Block
-  className={cn(
-    "bg-background",
-    isActive && "border-primary",
-    isCollapsed && "opacity-50"
-  )}
->
-```
-
-### Architecture
-
-Pretty Poly uses a **hybrid approach**:
-- **Core functionality**: Custom CSS for dynamic grid layouts (required)
-- **Visual styling**: Tailwind CSS + shadcn/ui variables (customizable)
-
-This ensures the dynamic resizing works perfectly while maintaining full shadcn/ui compatibility.
-
-## Contributing
-
-This library was extracted from the grid_panes Phoenix LiveView implementation and modernized for React. See the original implementation at `/path/to/grid_panes`.
-
-## License
-
-MIT © Amazing Team
-
----
-
-**PrettyPoly** - Where layouts adapt to every context 🎭
+There is no registry build step. Do not commit generated `public/r` or `dist/r` files.

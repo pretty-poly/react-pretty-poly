@@ -1,8 +1,8 @@
 import React from 'react'
 import { vi } from 'vitest'
 import { render, RenderOptions } from '@testing-library/react'
-import { GridProvider } from '../components/Grid/GridProvider'
-import type { BlockConfig, ResponsiveModes } from '../types'
+import { GridProvider } from '@/components/grid/grid-provider'
+import type { BlockConfig, ResponsiveModes } from '@/lib/grid-types'
 
 // Default test layout for testing
 export const defaultTestLayout: BlockConfig[] = [

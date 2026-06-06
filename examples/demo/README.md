@@ -1,11 +1,11 @@
 # PrettyPoly Demo App
 
-This is a separate demo application for testing and showcasing the `@pretty-poly/react` library with shadcn/ui integration.
+This is a separate demo application for testing and showcasing PrettyPoly as copied shadcn registry source.
 
 ## Features
 
 - **Separate Environment**: Clean demo app with its own dependencies
-- **PrettyPoly Integration**: References the library via file path
+- **PrettyPoly Integration**: Uses copied source from the GitHub shadcn registry
 - **Shadcn/UI Components**: Comprehensive examples showing integration with popular UI components
 - **Enhanced Examples**: Modern examples that showcase real-world use cases
 
@@ -35,15 +35,16 @@ npm run preview
 
 ## Library Development
 
-When making changes to the `@pretty-poly/react` library:
+When making changes to PrettyPoly registry source:
 
-1. Make your changes in `../pretty_poly/`
-2. Build the library: `cd ../pretty_poly && npm run build`
-3. Restart the demo app dev server to see changes
+1. Make changes in the root `components/`, `hooks/`, or `lib/` source.
+2. Validate the registry: `cd ../.. && npm run registry:validate`.
+3. Reinstall copied source: `npm run update:grid`.
+4. Restart the demo app dev server to see changes.
 
 ## Architecture
 
-- **Library Reference**: Uses `"@pretty-poly/react": "file:../pretty_poly"` in package.json
+- **Registry Source**: Uses `shadcn add pretty-poly/react-pretty-poly/...` to copy source locally
 - **Tailwind CSS v4**: Modern CSS framework
 - **Shadcn/UI**: High-quality components that integrate seamlessly with PrettyPoly
 - **TypeScript**: Full type safety across all examples

@@ -1,5 +1,5 @@
 /**
- * @pretty-poly/react - A polymorphic React component library for resizable, responsive grid layouts
+ * PrettyPoly - A polymorphic React component library for resizable, responsive grid layouts
  */
 
 // Components

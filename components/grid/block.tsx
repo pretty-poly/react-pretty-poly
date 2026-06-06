@@ -1,0 +1,107 @@
+import { forwardRef, useMemo } from 'react'
+import type { BlockProps } from "@/lib/grid-types"
+import { cn } from "@/lib/utils"
+import { useGridContext, useGridState } from "@/components/grid/grid-provider"
+import { BlockContent } from "@/components/grid/block-content"
+import { BlockHeader } from "@/components/grid/block-header"
+import { BlockFooter } from "@/components/grid/block-footer"
+import { BlockToolbar } from "@/components/grid/block-toolbar"
+import { BlockLayout } from "@/components/grid/block-layout"
+
+/**
+ * Block component for grid layouts
+ */
+export const Block = forwardRef<HTMLDivElement, BlockProps>(
+  ({
+    id,
+    type = 'block',
+    direction = 'row',
+    children,
+    className,
+    divider,
+    noDivider,
+    'aria-label': ariaLabel
+  }, ref) => {
+    const { gridId } = useGridContext()
+    const state = useGridState()
+
+    // Get block configuration from state
+    const blockConfig = state?.blocks[id]
+
+    // Check if block is hidden
+    const isHidden = state?.hiddenBlocks?.has(id) || false
+
+    // Calculate collapsed state
+    const isCollapsed = useMemo(() => {
+      if (blockConfig?.collapsible && blockConfig.collapseAt) {
+        const currentSize = blockConfig.size ?? blockConfig.defaultSize ?? 0
+        return currentSize <= blockConfig.collapseAt
+      }
+      return false
+    }, [blockConfig])
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          // Base styles - simple grid item that fills its space
+          'relative',
+          'w-full h-full',
+          'overflow-hidden',
+          'transition-opacity duration-150',
+          isCollapsed && 'opacity-70',
+          className
+        )}
+        style={{
+          // Hide block with display: none - removes from grid flow
+          // The grid template will be dynamically updated to exclude this block
+          display: isHidden ? 'none' : undefined,
+        }}
+        data-grid-id={gridId}
+        data-block-id={id}
+        data-block-type={type}
+        data-block-direction={direction}
+        data-block-size-default={blockConfig?.defaultSize}
+        data-block-size-unit={blockConfig?.sizeUnit}
+        data-block-size-min={blockConfig?.minSize}
+        data-block-size-max={blockConfig?.maxSize}
+        data-block-resizable={blockConfig?.resizable !== false}
+        data-block-collapse-at={blockConfig?.collapseAt}
+        data-block-collapse-to={blockConfig?.collapseTo}
+        data-block-divider-position={blockConfig?.dividerPosition}
+        data-block-divider-size={blockConfig?.dividerSize}
+        data-block-divider={divider !== undefined ? JSON.stringify(divider) : undefined}
+        data-block-no-divider={noDivider}
+        data-block-hidden={isHidden}
+        aria-label={ariaLabel}
+        aria-hidden={isHidden}
+        role={type === 'group' ? 'group' : undefined}
+      >
+        {children}
+      </div>
+    )
+  }
+)
+
+Block.displayName = 'Block'
+
+/**
+ * Block.Group component for nested layouts
+ */
+export const BlockGroup = forwardRef<HTMLDivElement, BlockProps>(
+  (props, ref) => {
+    return <Block ref={ref} {...props} type="group" />
+  }
+)
+
+BlockGroup.displayName = 'Block.Group'
+
+// Add all sub-components as properties of Block
+Object.assign(Block, {
+  Group: BlockGroup,
+  Layout: BlockLayout,
+  Header: BlockHeader,
+  Content: BlockContent,
+  Footer: BlockFooter,
+  Toolbar: BlockToolbar
+})

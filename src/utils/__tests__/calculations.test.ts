@@ -11,7 +11,7 @@ import {
   pxToFr,
   findAdjacentBlock,
   isZeroSum
-} from '../calculations'
+} from '@/lib/grid-calculations'
 
 describe('calculations utilities', () => {
   describe('getFlexSpacePx', () => {

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Comprehensive plan to fix issues and enhance the @pretty-poly/react library. This plan addresses test failures, adds missing tooling, improves code quality, and implements performance optimizations.
+Comprehensive plan to fix issues and enhance PrettyPoly. This plan addresses test failures, adds missing tooling, improves code quality, and implements performance optimizations.
 
 ---
 

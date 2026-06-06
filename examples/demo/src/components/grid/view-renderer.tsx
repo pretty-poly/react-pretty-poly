@@ -1,4 +1,4 @@
-import { useViewRegistry } from '@pretty-poly/react'
+import { useViewRegistry } from '@/lib/view-registry'
 import type { Tab } from '@/lib/grid-types'
 
 /**

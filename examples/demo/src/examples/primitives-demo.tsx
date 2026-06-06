@@ -8,27 +8,31 @@
  */
 
 import React from 'react'
+import { Grid } from '@/components/grid/grid'
+import { Block } from '@/components/grid/block'
+import { BlockContent } from '@/components/grid/block-content'
 import {
-  Grid,
-  Block,
-  BlockContent,
   ViewRegistryProvider,
-  CommandServiceProvider,
-  LayoutServiceProvider,
   useViewRegistry,
+  type ViewDescriptor,
+  type ViewProps,
+} from '@/lib/view-registry'
+import {
+  CommandServiceProvider,
   useCommandService,
-  useLayoutService,
   useRegisterCommands,
+  type Command,
+} from '@/lib/command-service'
+import {
+  LayoutServiceProvider,
+  useLayoutService,
   useSetBlockViewType,
   useBlockViewType,
   useSaveLayout,
   useApplyLayout,
   useLayouts,
-  type BlockConfig,
-  type ViewDescriptor,
-  type ViewProps,
-  type Command,
-} from '@pretty-poly/react'
+} from '@/lib/layout-service'
+import type { BlockConfig } from '@/lib/grid-types'
 import { FileText, Image, Video, Music, Save, FolderOpen, Sparkles } from 'lucide-react'
 
 // Simple view components

@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
-import { useGridMode } from '../useGridMode'
+import { useGridMode } from '@/hooks/use-grid-mode'
 import { setViewportSize } from '../../test/test-utils'
-import type { ResponsiveModes } from '../../types'
+import type { ResponsiveModes } from '@/lib/grid-types'
 
 // Mock window dimensions
 const mockViewport = (width: number, height: number) => {

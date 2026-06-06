@@ -1,6 +1,7 @@
 {
-  "name": "@pretty-poly/react",
+  "name": "pretty-poly",
   "version": "0.3.0",
+  "private": true,
   "description": "A shadcn/ui compatible polymorphic React component library for creating resizable, responsive grid layouts",
   "repository": {
     "type": "git",
@@ -8,36 +9,15 @@
   },
   "bugs": "https://github.com/pretty-poly/react-pretty-poly/issues",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "tsc && vite build",
-    "build:watch": "vite build --watch",
-    "build:registry": "tsx scripts/build-registry.ts",
-    "update:demo": "npm run build:registry && cd examples/demo && npm run update:grid && npm run lint",
+    "registry:validate": "shadcn registry validate ./registry.json",
+    "update:demo": "cd examples/demo && npm run update:grid && npm run lint",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "type-check": "tsc --noEmit",
-    "size": "size-limit",
-    "size:why": "size-limit --why",
-    "build:analyze": "vite build && open dist/stats.html",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "prepublishOnly": "npm run build:registry && npm run build"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [
     "react",
@@ -55,15 +35,9 @@
   ],
   "author": "Amazing Team",
   "license": "MIT",
-  "peerDependencies": {
-    "react": ">=18.0.0 <20.0.0",
-    "react-dom": ">=18.0.0 <20.0.0",
-    "tailwindcss": "^4.0.0"
-  },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@playwright/test": "^1.55.1",
-    "@size-limit/preset-small-lib": "^11.2.0",
     "@tailwindcss/vite": "^4.1.13",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
@@ -83,16 +57,13 @@
     "jsdom": "^27.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "rollup-plugin-visualizer": "^6.0.4",
-    "shadcn": "^3.5.0",
-    "size-limit": "^11.2.0",
+    "shadcn": "^4.10.0",
     "tailwindcss": "^4.1.13",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.6",
     "typescript": "^5.0.2",
     "typescript-eslint": "^8.45.0",
     "vite": "^5.4.20",
-    "vite-plugin-dts": "^3.0.0",
     "vitest": "^0.34.0"
   },
   "dependencies": {

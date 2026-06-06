@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
-import { Divider } from '../Divider/Divider'
+import { Divider } from '@/components/divider/divider'
 import { renderWithGrid, mockGetBoundingClientRect } from '../../test/test-utils'
-import type { BlockConfig } from '../../types'
+import type { BlockConfig } from '@/lib/grid-types'
 
 const mockBlocks: BlockConfig[] = [
   {

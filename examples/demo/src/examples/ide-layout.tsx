@@ -113,7 +113,7 @@ const codeFiles: CodeFile[] = [
     modified: false,
     content: [
       { line: 1, text: "import { useState } from 'react'", color: 'purple' },
-      { line: 2, text: "import { Grid, Block } from '@pretty-poly/react'", color: 'purple' },
+      { line: 2, text: "import { Grid } from '@/components/grid/grid'", color: 'purple' },
       { line: 3, text: "import './App.css'", color: 'purple' },
       { line: 4, text: '' },
       { line: 5, text: 'export function App() {', color: 'purple' },
@@ -141,7 +141,7 @@ const codeFiles: CodeFile[] = [
     modified: true,
     content: [
       { line: 1, text: "import React from 'react'", color: 'purple' },
-      { line: 2, text: "import { Grid, Block } from '@pretty-poly/react'", color: 'purple' },
+      { line: 2, text: "import { Block } from '@/components/grid/block'", color: 'purple' },
       { line: 3, text: '' },
       { line: 4, text: 'export function MyComponent() {', color: 'purple' },
       { line: 5, text: '  return (', color: 'purple' },

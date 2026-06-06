@@ -1,0 +1,90 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "pretty-poly",
+  "homepage": "https://github.com/pretty-poly/react-pretty-poly",
+  "items": [
+    {
+      "name": "grid-system",
+      "type": "registry:block",
+      "title": "PrettyPoly Grid System",
+      "description": "Core resizable grid, block, divider, hooks, and layout utilities.",
+      "files": [
+        { "path": "components/grid/grid.tsx", "type": "registry:component", "target": "@components/grid/grid.tsx" },
+        { "path": "components/grid/grid-provider.tsx", "type": "registry:component", "target": "@components/grid/grid-provider.tsx" },
+        { "path": "components/grid/block.tsx", "type": "registry:component", "target": "@components/grid/block.tsx" },
+        { "path": "components/grid/block-content.tsx", "type": "registry:component", "target": "@components/grid/block-content.tsx" },
+        { "path": "components/grid/block-header.tsx", "type": "registry:component", "target": "@components/grid/block-header.tsx" },
+        { "path": "components/grid/block-footer.tsx", "type": "registry:component", "target": "@components/grid/block-footer.tsx" },
+        { "path": "components/grid/block-toolbar.tsx", "type": "registry:component", "target": "@components/grid/block-toolbar.tsx" },
+        { "path": "components/grid/block-layout.tsx", "type": "registry:component", "target": "@components/grid/block-layout.tsx" },
+        { "path": "components/grid/block-split-container.tsx", "type": "registry:component", "target": "@components/grid/block-split-container.tsx" },
+        { "path": "components/grid/block-tree-renderer.tsx", "type": "registry:component", "target": "@components/grid/block-tree-renderer.tsx" },
+        { "path": "components/grid/block-close-button.tsx", "type": "registry:component", "target": "@components/grid/block-close-button.tsx" },
+        { "path": "components/divider/divider.tsx", "type": "registry:component", "target": "@components/divider/divider.tsx" },
+        { "path": "components/divider/divider-overlay.tsx", "type": "registry:component", "target": "@components/divider/divider-overlay.tsx" },
+        { "path": "hooks/use-grid-resize.ts", "type": "registry:hook", "target": "@hooks/use-grid-resize.ts" },
+        { "path": "hooks/use-grid-resize-operations.ts", "type": "registry:hook", "target": "@hooks/use-grid-resize-operations.ts" },
+        { "path": "hooks/use-grid-mode.ts", "type": "registry:hook", "target": "@hooks/use-grid-mode.ts" },
+        { "path": "hooks/use-grid-persistence.ts", "type": "registry:hook", "target": "@hooks/use-grid-persistence.ts" },
+        { "path": "hooks/use-grid-keyboard.ts", "type": "registry:hook", "target": "@hooks/use-grid-keyboard.ts" },
+        { "path": "hooks/use-block-split-direction.ts", "type": "registry:hook", "target": "@hooks/use-block-split-direction.ts" },
+        { "path": "hooks/use-remove-block.ts", "type": "registry:hook", "target": "@hooks/use-remove-block.ts" },
+        { "path": "lib/grid-calculations.ts", "type": "registry:lib", "target": "@lib/grid-calculations.ts" },
+        { "path": "lib/grid-constraints.ts", "type": "registry:lib", "target": "@lib/grid-constraints.ts" },
+        { "path": "lib/grid-storage.ts", "type": "registry:lib", "target": "@lib/grid-storage.ts" },
+        { "path": "lib/grid-types.ts", "type": "registry:lib", "target": "@lib/grid-types.ts" },
+        { "path": "lib/grid-divider-auto-detection.ts", "type": "registry:lib", "target": "@lib/grid-divider-auto-detection.ts" }
+      ],
+      "css": {
+        "@keyframes grid-divider-fade": {
+          "0%": { "opacity": "0" },
+          "100%": { "opacity": "1" }
+        },
+        "@keyframes grid-divider-slide": {
+          "0%": { "transform": "translateY(-4px)", "opacity": "0" },
+          "100%": { "transform": "translateY(0)", "opacity": "1" }
+        }
+      }
+    },
+    {
+      "name": "grid-sidebar",
+      "type": "registry:block",
+      "title": "PrettyPoly Grid Sidebar",
+      "description": "Optional sidebar components for PrettyPoly blocks.",
+      "registryDependencies": [
+        "pretty-poly/react-pretty-poly/grid-system#v0.3.0"
+      ],
+      "files": [
+        { "path": "components/grid/block-sidebar.tsx", "type": "registry:component", "target": "@components/grid/block-sidebar.tsx" },
+        { "path": "components/grid/block-sidebar-item.tsx", "type": "registry:component", "target": "@components/grid/block-sidebar-item.tsx" },
+        { "path": "components/grid/block-sidebar-spacer.tsx", "type": "registry:component", "target": "@components/grid/block-sidebar-spacer.tsx" }
+      ]
+    },
+    {
+      "name": "grid-primitives",
+      "type": "registry:item",
+      "title": "PrettyPoly Primitives",
+      "description": "ViewRegistry, CommandService, and LayoutService primitives.",
+      "files": [
+        { "path": "lib/view-registry.tsx", "type": "registry:lib", "target": "@lib/view-registry.tsx" },
+        { "path": "lib/command-service.tsx", "type": "registry:lib", "target": "@lib/command-service.tsx" },
+        { "path": "lib/layout-service.tsx", "type": "registry:lib", "target": "@lib/layout-service.tsx" }
+      ]
+    },
+    {
+      "name": "grid-tabs",
+      "type": "registry:block",
+      "title": "PrettyPoly Grid Tabs",
+      "description": "Optional tab and ViewRegistry integration components for PrettyPoly blocks.",
+      "registryDependencies": [
+        "pretty-poly/react-pretty-poly/grid-system#v0.3.0",
+        "pretty-poly/react-pretty-poly/grid-primitives#v0.3.0"
+      ],
+      "files": [
+        { "path": "components/grid/block-tabs.tsx", "type": "registry:component", "target": "@components/grid/block-tabs.tsx" },
+        { "path": "components/grid/new-tab-dropdown.tsx", "type": "registry:component", "target": "@components/grid/new-tab-dropdown.tsx" },
+        { "path": "components/grid/view-renderer.tsx", "type": "registry:component", "target": "@components/grid/view-renderer.tsx" }
+      ]
+    }
+  ]
+}
