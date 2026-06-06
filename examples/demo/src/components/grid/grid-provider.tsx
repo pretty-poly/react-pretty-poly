@@ -13,23 +13,84 @@ import type {
   ResponsiveModes,
   ViewportInfo,
   Tab,
+  EnsureBlockVisibleOptions,
 } from "@/lib/grid-types";
 import { useGridMode } from "@/hooks/use-grid-mode";
 import { useGridPersistence } from "@/hooks/use-grid-persistence";
 import { useGridResizeOperations } from "@/hooks/use-grid-resize-operations";
+import { mergePersistedGridState } from "@/lib/grid-storage";
+
+function getBlockSize(block: BlockConfig): number {
+  return block.size ?? block.defaultSize ?? 0;
+}
+
+function getCollapseThreshold(block: BlockConfig): number {
+  return block.collapseAt ?? block.collapseTo ?? 0;
+}
+
+function isBlockCollapsed(block: BlockConfig): boolean {
+  if (!block.collapsible) return false;
+  return getBlockSize(block) <= getCollapseThreshold(block);
+}
+
+function resizeBlockConfig(block: BlockConfig, size: number): BlockConfig {
+  return {
+    ...block,
+    defaultSize: size,
+    size,
+    originalDefaultSize: isBlockCollapsed({ ...block, defaultSize: size, size })
+      ? block.originalDefaultSize
+      : size,
+  };
+}
+
+function collapseBlockConfig(block: BlockConfig): BlockConfig {
+  const currentSize = getBlockSize(block);
+  const currentExpandedSize = isBlockCollapsed(block)
+    ? block.originalDefaultSize ?? block.defaultSize ?? currentSize
+    : currentSize;
+  const collapseSize = block.collapseTo ?? 0;
+
+  return {
+    ...block,
+    originalDefaultSize: currentExpandedSize,
+    defaultSize: collapseSize,
+    size: collapseSize,
+  };
+}
+
+function expandBlockConfig(block: BlockConfig): BlockConfig {
+  const originalSize =
+    block.originalDefaultSize ?? block.defaultSize ?? block.minSize ?? 100;
+
+  return {
+    ...block,
+    defaultSize: originalSize,
+    size: originalSize,
+  };
+}
 
 /**
  * Grid state reducer
  */
-function gridStateReducer(state: GridState, action: GridAction): GridState {
+export function gridStateReducer(state: GridState, action: GridAction): GridState {
   switch (action.type) {
-    case "HIDE_BLOCK":
+    case "HIDE_BLOCK": {
+      if (state.hiddenBlocks.has(action.payload.blockId)) {
+        return state;
+      }
+
       return {
         ...state,
         hiddenBlocks: new Set([...state.hiddenBlocks, action.payload.blockId]),
       };
+    }
 
     case "SHOW_BLOCK": {
+      if (!state.hiddenBlocks.has(action.payload.blockId)) {
+        return state;
+      }
+
       const newHiddenBlocks = new Set(state.hiddenBlocks);
       newHiddenBlocks.delete(action.payload.blockId);
       return {
@@ -60,11 +121,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
         ...state,
         blocks: {
           ...state.blocks,
-          [action.payload.blockId]: {
-            ...block,
-            defaultSize: action.payload.size,
-            size: action.payload.size,
-          },
+          [action.payload.blockId]: resizeBlockConfig(block, action.payload.size),
         },
       };
     }
@@ -73,23 +130,13 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
       const collapseBlock = state.blocks[action.payload.blockId];
       if (!collapseBlock) return state;
 
-      // Respect minSize to prevent CSS Grid breakage (negative sizes)
-      const targetCollapseSize = collapseBlock.collapseTo ?? 0;
-      const minSizeConstraint = collapseBlock.minSize ?? 0;
-      const collapseSize = Math.max(targetCollapseSize, minSizeConstraint);
+      if (isBlockCollapsed(collapseBlock)) return state;
 
       return {
         ...state,
         blocks: {
           ...state.blocks,
-          [action.payload.blockId]: {
-            ...collapseBlock,
-            // Preserve original size for expand
-            originalDefaultSize:
-              collapseBlock.originalDefaultSize || collapseBlock.defaultSize,
-            defaultSize: collapseSize,
-            size: collapseSize,
-          },
+          [action.payload.blockId]: collapseBlockConfig(collapseBlock),
         },
       };
     }
@@ -98,19 +145,42 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
       const expandBlock = state.blocks[action.payload.blockId];
       if (!expandBlock) return state;
 
-      // Restore to the original default size defined in configuration
-      const originalSize =
-        expandBlock.originalDefaultSize || expandBlock.defaultSize || 100;
+      if (!isBlockCollapsed(expandBlock)) return state;
+
       return {
         ...state,
         blocks: {
           ...state.blocks,
-          [action.payload.blockId]: {
-            ...expandBlock,
-            defaultSize: originalSize,
-            size: originalSize,
-          },
+          [action.payload.blockId]: expandBlockConfig(expandBlock),
         },
+      };
+    }
+
+    case "ENSURE_BLOCK_VISIBLE": {
+      const block = state.blocks[action.payload.blockId];
+      if (!block) return state;
+
+      const expandIfCollapsed = action.payload.expandIfCollapsed ?? true;
+      const shouldShow = state.hiddenBlocks.has(action.payload.blockId);
+      const shouldExpand = expandIfCollapsed && isBlockCollapsed(block);
+
+      if (!shouldShow && !shouldExpand) {
+        return state;
+      }
+
+      const nextHiddenBlocks = shouldShow
+        ? new Set([...state.hiddenBlocks].filter((id) => id !== action.payload.blockId))
+        : state.hiddenBlocks;
+
+      return {
+        ...state,
+        hiddenBlocks: nextHiddenBlocks,
+        blocks: shouldExpand
+          ? {
+              ...state.blocks,
+              [action.payload.blockId]: expandBlockConfig(block),
+            }
+          : state.blocks,
       };
     }
 
@@ -692,7 +762,7 @@ function gridStateReducer(state: GridState, action: GridAction): GridState {
 /**
  * Create initial grid state from block configurations
  */
-function createInitialState(
+export function createInitialState(
   blocks: BlockConfig[],
   viewport: ViewportInfo,
   activeMode: string
@@ -788,7 +858,8 @@ export function GridProvider({
     enabled: persist,
     state,
     onStateLoad: (loadedState) => {
-      dispatch({ type: "LOAD_STATE", payload: { state: loadedState } });
+      const reconciledState = mergePersistedGridState(loadedState, blocks);
+      dispatch({ type: "LOAD_STATE", payload: { state: reconciledState } });
     },
     autoSave: true,
   });
@@ -845,6 +916,16 @@ export function GridProvider({
         dispatch({
           type: "SHOW_BLOCK",
           payload: { blockId },
+        });
+      },
+
+      ensureBlockVisible: (
+        blockId: string,
+        options: EnsureBlockVisibleOptions = {}
+      ) => {
+        dispatch({
+          type: "ENSURE_BLOCK_VISIBLE",
+          payload: { blockId, ...options },
         });
       },
 
@@ -1056,6 +1137,7 @@ export function useGridActions() {
     expandBlock,
     hideBlock,
     showBlock,
+    ensureBlockVisible,
     toggleBlockVisibility,
     switchMode,
     persistState,
@@ -1067,6 +1149,7 @@ export function useGridActions() {
     expandBlock,
     hideBlock,
     showBlock,
+    ensureBlockVisible,
     toggleBlockVisibility,
     switchMode,
     persistState,
@@ -1170,6 +1253,18 @@ export function useHideBlock(): (blockId: string) => void {
 export function useShowBlock(): (blockId: string) => void {
   const { showBlock } = useGridContext();
   return showBlock;
+}
+
+/**
+ * Hook to show a block and optionally expand it if it is collapsed.
+ * Returns a memoized callback.
+ */
+export function useEnsureBlockVisible(): (
+  blockId: string,
+  options?: EnsureBlockVisibleOptions
+) => void {
+  const { ensureBlockVisible } = useGridContext();
+  return ensureBlockVisible;
 }
 
 /**

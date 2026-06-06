@@ -88,7 +88,11 @@ export function useGridPersistence({
       }
 
       // Don't save if state hasn't changed
-      const stateString = JSON.stringify(stateToSave);
+      const stateString = JSON.stringify({
+        blocks: stateToSave.blocks,
+        hiddenBlocks: [...stateToSave.hiddenBlocks],
+        activeMode: stateToSave.activeMode,
+      });
       if (stateString === lastSavedState.current) {
         return;
       }

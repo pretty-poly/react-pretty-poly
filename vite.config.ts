@@ -12,6 +12,12 @@ export default defineConfig(({ mode }) => ({
     tailwindcss(),
     dts({
       insertTypesEntry: true,
+      exclude: [
+        'src/**/*.test.ts',
+        'src/**/*.test.tsx',
+        'src/**/__tests__/**',
+        'src/test/**',
+      ],
     }),
     // Only generate bundle visualizer in analyze mode
     ...(mode === 'analyze' ? [

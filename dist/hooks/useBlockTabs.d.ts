@@ -10,8 +10,8 @@ export declare function useBlockTabs(blockId: string): {
     activeTab: Tab | undefined;
     history: string[];
     historyIndex: number;
-    tabState: import('../types').TabState | undefined;
-    tabConfig: import('../types').TabConfig | undefined;
+    tabState: import('..').TabState | undefined;
+    tabConfig: import('..').TabConfig | undefined;
     isEnabled: boolean;
     canGoBack: boolean;
     canGoForward: boolean;

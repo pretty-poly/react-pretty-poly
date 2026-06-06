@@ -171,11 +171,6 @@ export default function ExampleSelector() {
     window.history.pushState({}, "", newUrl);
   };
 
-  const _goBack = () => {
-    // Use browser back to navigate, popstate listener will handle state updates
-    window.history.back();
-  };
-
   // If an example is selected, show it full page
   if (!showSelector && selectedExample) {
     const currentExample = examples.find((ex) => ex.key === selectedExample);

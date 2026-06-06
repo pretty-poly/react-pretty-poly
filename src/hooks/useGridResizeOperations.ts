@@ -70,8 +70,12 @@ export function useGridResizeOperations(
       adjacentBlock = sortedSiblings[blockIndex + 1];
     }
 
-    // Validation: Check if adjacent block is resizable
-    if (adjacentBlock && adjacentBlock.resizable === false) {
+    // Validation: Check if adjacent block is resizable when the resize is coupled.
+    if (
+      adjacentBlock &&
+      block.sizeUnit === "fr" &&
+      adjacentBlock.resizable === false
+    ) {
       console.warn(
         `Cannot resize block "${blockId}" - adjacent block "${adjacentBlock.id}" is marked as non-resizable.`
       );
@@ -162,6 +166,23 @@ export function useGridResizeOperations(
         block.maxSize,
         shouldInvertDelta
       );
+
+      if (block.collapsible && block.collapseAt !== undefined) {
+        const currentBlockSize = block.size ?? block.defaultSize ?? 0;
+        const collapseTo = block.collapseTo ?? 0;
+        const isCurrentlyCollapsed = currentBlockSize <= collapseTo;
+
+        if (!isCurrentlyCollapsed && newSize < block.collapseAt) {
+          dispatch({
+            type: "COLLAPSE_BLOCK",
+            payload: { blockId: state.resize.activeBlockId },
+          });
+          dispatch({ type: "END_RESIZE" });
+          document.body.style.userSelect = "";
+          document.body.style.cursor = "";
+          return;
+        }
+      }
 
       dispatch({
         type: "RESIZE_BLOCK",

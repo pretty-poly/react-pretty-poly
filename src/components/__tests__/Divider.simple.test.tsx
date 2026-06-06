@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Divider } from '../Divider/Divider'
 import { Grid, Block } from '../..'
 import type { BlockConfig } from '../../types'
 
@@ -54,7 +53,6 @@ describe('Divider (Simplified)', () => {
     render(
       <Grid defaultLayout={testLayout}>
         <Block id="sidebar">Sidebar Content</Block>
-        <Divider targetId="sidebar" position="end" />
         <Block id="main">Main Content</Block>
       </Grid>
     )
@@ -62,14 +60,13 @@ describe('Divider (Simplified)', () => {
     // Check that the divider is present
     const divider = screen.getByRole('separator')
     expect(divider).toBeInTheDocument()
-    expect(divider).toHaveAttribute('data-block-target', 'sidebar')
+    expect(divider).toHaveAttribute('data-target-block', 'sidebar')
   })
 
   it('handles mouse interactions', () => {
     render(
       <Grid defaultLayout={testLayout}>
         <Block id="sidebar">Sidebar</Block>
-        <Divider targetId="sidebar" position="end" />
         <Block id="main">Main</Block>
       </Grid>
     )
@@ -89,7 +86,6 @@ describe('Divider (Simplified)', () => {
     render(
       <Grid defaultLayout={testLayout}>
         <Block id="sidebar">Sidebar</Block>
-        <Divider targetId="sidebar" position="end" />
         <Block id="main">Main</Block>
       </Grid>
     )

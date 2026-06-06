@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useGridContext } from '@/components/grid/grid-provider'
+import { useGridContext } from "@/components/grid/grid-provider"
 
 /**
  * Hook for removing blocks with smart container preservation

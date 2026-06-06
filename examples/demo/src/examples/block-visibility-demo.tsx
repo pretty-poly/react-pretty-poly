@@ -346,7 +346,7 @@ function Toolbar() {
 
 export default function BlockVisibilityDemo() {
   return (
-    <Grid id="visibility-demo" defaultLayout={blocks}>
+    <Grid defaultLayout={blocks}>
       <DemoBlocks />
     </Grid>
   );

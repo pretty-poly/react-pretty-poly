@@ -3,7 +3,7 @@ import { default as React } from 'react';
 interface DividerProps {
     targetId: string;
     position: 'start' | 'end';
-    direction: 'vertical' | 'horizontal';
+    direction?: 'vertical' | 'horizontal';
     size?: number;
     className?: string;
     'aria-label'?: string;

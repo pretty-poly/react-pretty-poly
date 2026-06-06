@@ -10,6 +10,7 @@ export {
   useIsBlockHidden,
   useHideBlock,
   useShowBlock,
+  useEnsureBlockVisible,
   useToggleBlockVisibility
 } from './GridProvider'
 export type { GridProviderProps } from './GridProvider'

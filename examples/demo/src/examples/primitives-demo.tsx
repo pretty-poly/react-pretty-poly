@@ -245,7 +245,7 @@ function PrimitivesDemoInternal() {
 
       {/* Main Grid */}
       <div className="flex-1">
-        <Grid id="primitives-demo" defaultLayout={blocks}>
+        <Grid defaultLayout={blocks}>
           <Block id="main">
             <BlockContent>
               <CurrentViewComponent viewId={mainViewType} blockId="main" />

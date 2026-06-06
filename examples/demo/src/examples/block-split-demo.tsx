@@ -478,7 +478,7 @@ function BlockSplitDemoContent() {
         // Fallback
         return <EditorPane blockId={blockId} />;
       }}
-      getSplitContainerProps={(block, blockId) => ({
+      getSplitContainerProps={(_block, blockId) => ({
         label: blockId === "editor-area" ? "Editor Area" : "Terminal Area",
         icon: blockId === "editor-area" ? FileText : Terminal,
         splitButtonIcons: {

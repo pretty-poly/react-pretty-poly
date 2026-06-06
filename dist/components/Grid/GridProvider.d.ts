@@ -1,6 +1,14 @@
 import { default as React } from 'react';
-import { GridState, GridContextValue, BlockConfig, ResponsiveModes } from '../../types';
+import { GridState, GridAction, GridContextValue, BlockConfig, ResponsiveModes, ViewportInfo, EnsureBlockVisibleOptions } from '../../types';
 
+/**
+ * Grid state reducer
+ */
+export declare function gridStateReducer(state: GridState, action: GridAction): GridState;
+/**
+ * Create initial grid state from block configurations
+ */
+export declare function createInitialState(blocks: BlockConfig[], viewport: ViewportInfo, activeMode: string): GridState;
 export interface GridProviderProps {
     children: React.ReactNode;
     blocks: BlockConfig[];
@@ -32,6 +40,7 @@ export declare function useGridActions(): {
     expandBlock: (blockId: string) => void;
     hideBlock: (blockId: string) => void;
     showBlock: (blockId: string) => void;
+    ensureBlockVisible: (blockId: string, options?: EnsureBlockVisibleOptions) => void;
     toggleBlockVisibility: (blockId: string) => void;
     switchMode: (mode: string) => void;
     persistState: () => void;
@@ -76,8 +85,8 @@ export declare function useBlockState(blockId: string): {
     children?: string[];
     viewType?: string;
     viewState?: unknown;
-    tabState?: import('../../types').TabState;
-    tabConfig?: import('../../types').TabConfig;
+    tabState?: import('../..').TabState;
+    tabConfig?: import('../..').TabConfig;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
@@ -117,8 +126,8 @@ export declare function useParentBlockState(blockId: string): {
     children?: string[];
     viewType?: string;
     viewState?: unknown;
-    tabState?: import('../../types').TabState;
-    tabConfig?: import('../../types').TabConfig;
+    tabState?: import('../..').TabState;
+    tabConfig?: import('../..').TabConfig;
     canSplit?: boolean;
     hasToolbar?: boolean;
     defaultViewType?: string;
@@ -146,6 +155,11 @@ export declare function useHideBlock(): (blockId: string) => void;
  * Returns a memoized callback
  */
 export declare function useShowBlock(): (blockId: string) => void;
+/**
+ * Hook to show a block and optionally expand it if it is collapsed.
+ * Returns a memoized callback.
+ */
+export declare function useEnsureBlockVisible(): (blockId: string, options?: EnsureBlockVisibleOptions) => void;
 /**
  * Hook to toggle block visibility
  * Returns a memoized callback

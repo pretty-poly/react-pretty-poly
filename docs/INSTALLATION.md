@@ -30,15 +30,17 @@ This will create a `components.json` configuration file.
 #### Step 2: Add PrettyPoly components
 
 ```bash
-# Add the complete Grid system
-npx shadcn@latest add https://pretty-poly.github.io/react/r/grid-system
+# Add the complete Grid system from a local checkout
+npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-system.json
 
 # Optional: Add sidebar components
-npx shadcn@latest add https://pretty-poly.github.io/react/r/grid-sidebar
+npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-sidebar.json
 
 # Optional: Add tab components
-npx shadcn@latest add https://pretty-poly.github.io/react/r/grid-tabs
+npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-tabs.json
 ```
+
+There is not a canonical hosted registry URL yet. Use the generated local files above, or host `public/r/` on your own static host with CORS enabled. The unversioned files in `public/r/` are also generated for local testing, but copied installs should prefer the versioned `public/r/v0.3/` paths.
 
 The CLI will:
 - Copy all component files to your `components/` directory
@@ -106,8 +108,8 @@ npm install clsx tailwind-merge
 ```
 
 **Peer dependencies:**
-- `react` ^18.0.0
-- `react-dom` ^18.0.0
+- `react` >=18.0.0 <20.0.0
+- `react-dom` >=18.0.0 <20.0.0
 - `tailwindcss` ^4.0.0
 
 ## Tailwind Configuration

@@ -1,8 +1,7 @@
 import { forwardRef, useMemo } from 'react'
 import type { BlockProps } from "@/lib/grid-types"
 import { cn } from "@/lib/utils"
-import { useGridContext, useGridState, useGridActions } from "@/components/grid/grid-provider"
-import { useGridMode } from "@/hooks/use-grid-mode"
+import { useGridContext, useGridState } from "@/components/grid/grid-provider"
 import { BlockContent } from "@/components/grid/block-content"
 import { BlockHeader } from "@/components/grid/block-header"
 import { BlockFooter } from "@/components/grid/block-footer"
@@ -29,8 +28,6 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
   }, ref) => {
     const { gridId } = useGridContext()
     const state = useGridState()
-    const { collapseBlock, expandBlock } = useGridActions()
-    const { supportsFeature } = useGridMode()
 
     // Get block configuration from state
     const blockConfig = state?.blocks[id]
@@ -46,19 +43,6 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
       }
       return false
     }, [blockConfig])
-
-    // Handle double-click for collapse/expand
-    const handleDoubleClick = () => {
-      if (blockConfig?.collapsible && blockConfig.collapseAt) {
-        const currentSize = blockConfig.size ?? blockConfig.defaultSize ?? 0
-        const isCollapsed = currentSize <= blockConfig.collapseAt
-        if (isCollapsed) {
-          expandBlock(id)
-        } else {
-          collapseBlock(id)
-        }
-      }
-    }
 
     return (
       <div
@@ -96,8 +80,6 @@ export const Block = forwardRef<HTMLDivElement, BlockProps>(
         aria-label={ariaLabel}
         aria-hidden={isHidden}
         role={type === 'group' ? 'group' : undefined}
-        tabIndex={supportsFeature('resizing') && !isHidden ? 0 : undefined}
-        onDoubleClick={supportsFeature('collapse') ? handleDoubleClick : undefined}
       >
         {children}
       </div>

@@ -1,11 +1,11 @@
 import React, { useRef, useCallback, useState, useLayoutEffect, useEffect } from 'react'
 import { cn } from "@/lib/utils"
-import { useGridState, useGridResize } from "@/components/grid/grid-provider"
+import { useGridActions, useGridContext, useGridResize } from "@/components/grid/grid-provider"
 
 interface DividerProps {
   targetId: string
   position: 'start' | 'end'
-  direction: 'vertical' | 'horizontal'
+  direction?: 'vertical' | 'horizontal'
   size?: number
   className?: string
   'aria-label'?: string
@@ -24,7 +24,8 @@ export const Divider: React.FC<DividerProps> = ({
   'aria-label': ariaLabel
 }) => {
   const dividerRef = useRef<HTMLDivElement>(null)
-  const state = useGridState()
+  const { gridId, state } = useGridContext()
+  const { collapseBlock, expandBlock } = useGridActions()
   const { startResize, isDragging, activeDividerId } = useGridResize()
 
   const [dividerPosition, setDividerPosition] = useState({
@@ -38,13 +39,17 @@ export const Divider: React.FC<DividerProps> = ({
   const isVertical = direction === 'vertical'
   const dividerId = `${targetId}-${position}-divider`
   const isActive = isDragging && activeDividerId === dividerId
+  const targetBlockSize = targetBlock?.size ?? targetBlock?.defaultSize ?? 0
+  const isTargetCollapsed =
+    targetBlock?.collapsible === true &&
+    targetBlockSize <= (targetBlock.collapseTo ?? 0)
 
   /**
    * Calculate and update divider position based on block boundaries
    */
   const updatePosition = useCallback(() => {
     // Find the grid container (has data-grid-id)
-    const gridContainer = document.querySelector('[data-grid-id]') as HTMLElement
+    const gridContainer = document.querySelector(`[data-grid-id="${gridId}"]`) as HTMLElement
     const targetElement = document.querySelector(`[data-block-id="${targetId}"]`) as HTMLElement
 
     if (!gridContainer || !targetElement) return
@@ -94,13 +99,13 @@ export const Divider: React.FC<DividerProps> = ({
         height: size
       })
     }
-  }, [targetId, position, isVertical, size, targetBlock?.parentId])
+  }, [gridId, targetId, position, isVertical, size, targetBlock?.parentId])
 
   /**
    * Set up ResizeObserver to track block and container size changes
    */
   useLayoutEffect(() => {
-    const gridContainer = document.querySelector('[data-grid-id]') as HTMLElement
+    const gridContainer = document.querySelector(`[data-grid-id="${gridId}"]`) as HTMLElement
     const targetElement = document.querySelector(`[data-block-id="${targetId}"]`) as HTMLElement
 
     if (!gridContainer || !targetElement) return
@@ -138,7 +143,7 @@ export const Divider: React.FC<DividerProps> = ({
     return () => {
       resizeObserver.disconnect()
     }
-  }, [targetId, updatePosition, targetBlock?.parentId])
+  }, [gridId, targetId, updatePosition, targetBlock?.parentId])
 
   /**
    * Also update position when blocks change (resize operations)
@@ -154,6 +159,26 @@ export const Divider: React.FC<DividerProps> = ({
     event.preventDefault()
     startResize(targetId, dividerId, event)
   }, [targetId, dividerId, startResize])
+
+  /**
+   * Handle double-click collapse/expand on the divider handle.
+   */
+  const handleDoubleClick = useCallback((event: React.MouseEvent) => {
+    event.preventDefault()
+
+    if (!targetBlock?.collapsible || targetBlock.collapseAt === undefined) {
+      return
+    }
+
+    const currentSize = targetBlock.size ?? targetBlock.defaultSize ?? 0
+    const isCollapsed = currentSize <= (targetBlock.collapseTo ?? 0)
+
+    if (isCollapsed) {
+      expandBlock(targetId)
+    } else {
+      collapseBlock(targetId)
+    }
+  }, [collapseBlock, expandBlock, targetBlock, targetId])
 
   if (!targetBlock) {
     return null
@@ -177,7 +202,7 @@ export const Divider: React.FC<DividerProps> = ({
         top: `${dividerPosition.top}px`,
         width: `${dividerPosition.width}px`,
         height: `${dividerPosition.height}px`,
-        pointerEvents: 'auto', // Re-enable pointer events (parent has pointer-events: none)
+        pointerEvents: isTargetCollapsed ? 'none' : 'auto', // Re-enable pointer events (parent has pointer-events: none)
         zIndex: 10
       }}
       data-divider-id={dividerId}
@@ -192,6 +217,7 @@ export const Divider: React.FC<DividerProps> = ({
       tabIndex={0}
       onMouseDown={handlePointerDown}
       onTouchStart={handlePointerDown}
+      onDoubleClick={handleDoubleClick}
     />
   )
 }

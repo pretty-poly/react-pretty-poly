@@ -55,8 +55,10 @@ export function ViewRenderer({ tab, blockId, ...additionalProps }: ViewRendererP
   // Render the view component with props from ViewProps interface
   return (
     <ViewComponent
+      key={tab.id}
       viewId={tab.viewType}
       blockId={blockId}
+      tabId={tab.id}
       // Spread any view-specific state from the tab
       {...(tab.viewState as Record<string, unknown> || {})}
       // Allow additional props to be passed through

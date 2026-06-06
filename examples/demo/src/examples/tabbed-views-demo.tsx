@@ -128,7 +128,6 @@ function AudioMixerView({ blockId }: ViewProps) {
           <div key={i} className="flex flex-col items-center gap-2">
             <input
               type="range"
-              orient="vertical"
               className="h-32"
               defaultValue={70 - i * 10}
             />
@@ -405,12 +404,12 @@ function TabbedViewsDemoContent() {
       id: "root",
       type: "block",
       defaultSize: 100,
-      sizeUnit: "percent",
+      sizeUnit: "fr",
     },
   ];
 
   return (
-    <Grid id="tabbed-views-demo" defaultLayout={blocks} className="h-dvh">
+    <Grid defaultLayout={blocks} className="h-dvh">
       <TabbedBlock id="root" />
     </Grid>
   );

@@ -20,6 +20,8 @@ const PROJECT_ROOT = path.join(__dirname, "..");
 const SRC_DIR = path.join(PROJECT_ROOT, "src");
 const REGISTRY_DIR = path.join(PROJECT_ROOT, "registry");
 const OUTPUT_DIR = path.join(PROJECT_ROOT, "public", "r");
+const REGISTRY_VERSION = "v0.3";
+const VERSIONED_OUTPUT_DIR = path.join(OUTPUT_DIR, REGISTRY_VERSION);
 
 interface RegistryFile {
   path: string;
@@ -191,6 +193,10 @@ const FILE_MAPPINGS: Record<string, { src: string; target: string }> = {
     src: "src/components/Block/Block.tsx",
     target: "components/grid/block.tsx",
   },
+  "components/grid/block-close-button.tsx": {
+    src: "src/components/Block/BlockCloseButton.tsx",
+    target: "components/grid/block-close-button.tsx",
+  },
   "components/grid/block-content.tsx": {
     src: "src/components/Block/BlockContent.tsx",
     target: "components/grid/block-content.tsx",
@@ -270,6 +276,10 @@ const FILE_MAPPINGS: Record<string, { src: string; target: string }> = {
   "hooks/use-block-split-direction.ts": {
     src: "src/hooks/useBlockSplitDirection.ts",
     target: "hooks/use-block-split-direction.ts",
+  },
+  "hooks/use-remove-block.ts": {
+    src: "src/hooks/useRemoveBlock.ts",
+    target: "hooks/use-remove-block.ts",
   },
 
   // Utilities
@@ -352,10 +362,17 @@ async function buildRegistryItem(item: RegistryItem): Promise<void> {
     files: processedFiles,
   };
 
-  // Write to output directory
-  const outputPath = path.join(OUTPUT_DIR, `${item.name}.json`);
-  await fs.mkdir(OUTPUT_DIR, { recursive: true });
-  await fs.writeFile(outputPath, JSON.stringify(outputItem, null, 2), "utf-8");
+  // Write to both stable and versioned output directories.
+  await Promise.all([OUTPUT_DIR, VERSIONED_OUTPUT_DIR].map((dir) => fs.mkdir(dir, { recursive: true })));
+  await Promise.all(
+    [OUTPUT_DIR, VERSIONED_OUTPUT_DIR].map((dir) =>
+      fs.writeFile(
+        path.join(dir, `${item.name}.json`),
+        JSON.stringify(outputItem, null, 2),
+        "utf-8"
+      )
+    )
+  );
 
   console.log(`✓ Built registry item: ${item.name}`);
 }
@@ -376,15 +393,18 @@ async function build() {
     await buildRegistryItem(item);
   }
 
-  // Copy registry.json to output
-  await fs.writeFile(
-    path.join(OUTPUT_DIR, "registry.json"),
-    registryContent,
-    "utf-8"
+  // Copy registry.json to stable and versioned outputs.
+  await fs.mkdir(OUTPUT_DIR, { recursive: true });
+  await fs.mkdir(VERSIONED_OUTPUT_DIR, { recursive: true });
+  await Promise.all(
+    [OUTPUT_DIR, VERSIONED_OUTPUT_DIR].map((dir) =>
+      fs.writeFile(path.join(dir, "registry.json"), registryContent, "utf-8")
+    )
   );
 
   console.log("\n✓ Registry build complete!");
   console.log(`Output directory: ${OUTPUT_DIR}`);
+  console.log(`Versioned output directory: ${VERSIONED_OUTPUT_DIR}`);
 }
 
 // Run the build

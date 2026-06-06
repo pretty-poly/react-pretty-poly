@@ -30,6 +30,8 @@ export interface ViewProps {
     viewId: string;
     /** ID of the block containing this view */
     blockId?: string;
+    /** ID of the tab containing this view */
+    tabId?: string;
     /** Callback when view wants to be closed */
     onClose?: () => void;
     /** Callback when view receives focus */

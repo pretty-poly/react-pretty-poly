@@ -10,7 +10,7 @@
  * This shows how commands provide a unified way to handle actions!
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Grid,
   Block,
@@ -305,7 +305,7 @@ function CommandServiceDemoInternal() {
 
       {/* Grid with Blocks */}
       <div className="flex-1">
-        <Grid id="command-demo" defaultLayout={blocks}>
+        <Grid defaultLayout={blocks}>
           {state.sidebarVisible && (
             <Block id="sidebar">
               <BlockHeader>

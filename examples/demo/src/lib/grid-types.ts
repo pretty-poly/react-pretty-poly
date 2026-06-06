@@ -132,6 +132,10 @@ export interface GridState {
   resize: ResizeState
 }
 
+export interface EnsureBlockVisibleOptions {
+  expandIfCollapsed?: boolean
+}
+
 // Grid context
 export interface GridContextValue {
   gridId: string
@@ -147,6 +151,7 @@ export interface GridContextValue {
   // Block visibility operations
   hideBlock: (blockId: string) => void
   showBlock: (blockId: string) => void
+  ensureBlockVisible: (blockId: string, options?: EnsureBlockVisibleOptions) => void
   toggleBlockVisibility: (blockId: string) => void
 
   // Split operations (LayoutService primitives)
@@ -190,6 +195,7 @@ export type GridAction =
   | { type: "EXPAND_BLOCK"; payload: { blockId: string } }
   | { type: "HIDE_BLOCK"; payload: { blockId: string } }
   | { type: "SHOW_BLOCK"; payload: { blockId: string } }
+  | { type: "ENSURE_BLOCK_VISIBLE"; payload: { blockId: string; expandIfCollapsed?: boolean } }
   | { type: "TOGGLE_BLOCK_VISIBILITY"; payload: { blockId: string } }
   | { type: "SET_ACTIVE_DIVIDER"; payload: { dividerId?: string } }
   | { type: "SWITCH_MODE"; payload: { mode: string } }

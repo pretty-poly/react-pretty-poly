@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Grid, Block, Divider } from '../..'
+import { Grid, Block } from '../..'
 import { mockGetBoundingClientRect, setViewportSize } from '../../test/test-utils'
 import type { BlockConfig, ResponsiveModes } from '../../types'
 
@@ -72,7 +72,6 @@ describe('Grid Integration', () => {
             <h2>Sidebar</h2>
           </Block>
 
-          <Divider targetId="sidebar" position="end" />
 
           <Block id="main" className="main-content">
             <h1>Main Content</h1>
@@ -94,7 +93,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -200,7 +198,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout} onLayoutChange={onLayoutChange}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -235,7 +232,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -266,7 +262,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -292,7 +287,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -317,7 +311,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -345,7 +338,6 @@ describe('Grid Integration', () => {
           persistKey="test-grid"
         >
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
@@ -360,7 +352,7 @@ describe('Grid Integration', () => {
 
       // Wait for state to be persisted
       await waitFor(() => {
-        expect(localStorage.getItem('pretty-poly-grid-test-grid')).toBeTruthy()
+        expect(localStorage.getItem('pretty-poly-grid-v2-test-grid')).toBeTruthy()
       })
 
       // Re-render component (simulating page reload)
@@ -371,13 +363,12 @@ describe('Grid Integration', () => {
           persistKey="test-grid"
         >
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )
 
       // Should load the persisted state
-      const savedState = localStorage.getItem('pretty-poly-grid-test-grid')
+      const savedState = localStorage.getItem('pretty-poly-grid-v2-test-grid')
       expect(savedState).toBeTruthy()
 
       const parsedState = JSON.parse(savedState!)
@@ -418,7 +409,6 @@ describe('Grid Integration', () => {
       render(
         <Grid defaultLayout={basicLayout} onLayoutChange={onLayoutChange}>
           <Block id="sidebar">Sidebar</Block>
-          <Divider targetId="sidebar" position="end" />
           <Block id="main">Main</Block>
         </Grid>
       )

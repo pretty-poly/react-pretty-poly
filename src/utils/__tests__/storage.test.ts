@@ -8,7 +8,8 @@ import {
   loadGridState,
   removeGridState,
   getAllGridStates,
-  createCustomAdapter
+  createCustomAdapter,
+  mergePersistedGridState
 } from '../storage'
 import type { GridState } from '../../types'
 
@@ -64,18 +65,21 @@ describe('storage utilities', () => {
 
     it('clears only pretty-poly keys', () => {
       localStorage.setItem('other-app-key', 'should-remain')
-      localStorage.setItem('pretty-poly-grid-test', 'should-be-removed')
+      localStorage.setItem('pretty-poly-grid-v2-test', 'should-be-removed')
 
       localStorageAdapter.clear()
 
       expect(localStorage.getItem('other-app-key')).toBe('should-remain')
-      expect(localStorage.getItem('pretty-poly-grid-test')).toBe(null)
+      expect(localStorage.getItem('pretty-poly-grid-v2-test')).toBe(null)
     })
 
     it('handles JSON parsing errors gracefully', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       // Manually set invalid JSON
       localStorage.setItem('test-key', 'invalid-json')
       expect(localStorageAdapter.load('test-key')).toBe(null)
+      expect(consoleSpy).toHaveBeenCalled()
+      consoleSpy.mockRestore()
     })
   })
 
@@ -99,12 +103,12 @@ describe('storage utilities', () => {
     })
 
     it('clears memory storage correctly', () => {
-      memoryStorageAdapter.save('pretty-poly-grid-test', { test: 'data' })
+      memoryStorageAdapter.save('pretty-poly-grid-v2-test', { test: 'data' })
       memoryStorageAdapter.save('other-key', { other: 'data' })
 
       memoryStorageAdapter.clear()
 
-      expect(memoryStorageAdapter.load('pretty-poly-grid-test')).toBe(null)
+      expect(memoryStorageAdapter.load('pretty-poly-grid-v2-test')).toBe(null)
       expect(memoryStorageAdapter.load('other-key')).toEqual({ other: 'data' })
     })
   })
@@ -137,7 +141,13 @@ describe('storage utilities', () => {
       const loaded = loadGridState(gridId)
 
       expect(loaded).toEqual({
-        blocks: mockGridState.blocks,
+        blocks: {
+          block1: {
+            id: 'block1',
+            defaultSize: 300
+          }
+        },
+        hiddenBlocks: [],
         activeMode: mockGridState.activeMode
       })
       expect(loaded).not.toHaveProperty('viewport') // Should not persist viewport
@@ -209,6 +219,99 @@ describe('storage utilities', () => {
     it('custom adapter load returns null', () => {
       const customAdapter = createCustomAdapter(() => {})
       expect(customAdapter.load('any-key')).toBe(null)
+    })
+  })
+
+  describe('mergePersistedGridState', () => {
+    it('keeps current config and applies mutable persisted state', () => {
+      const configuredBlocks = [
+        {
+          id: 'block1',
+          type: 'block' as const,
+          defaultSize: 240,
+          minSize: 100,
+          sizeUnit: 'px' as const,
+          viewType: 'current'
+        },
+        {
+          id: 'block2',
+          type: 'block' as const,
+          defaultSize: 1,
+          sizeUnit: 'fr' as const
+        }
+      ]
+
+      const merged = mergePersistedGridState(
+        {
+          blocks: {
+            block1: {
+              id: 'block1',
+              type: 'block',
+              defaultSize: 320,
+              size: 320,
+              viewType: 'persisted',
+              tabState: {
+                tabs: [{ id: 'tab-1', label: 'Tab 1', viewType: 'detail' }],
+                activeTabId: 'tab-1',
+                history: ['tab-1'],
+                historyIndex: 0,
+                scrollOffset: 12
+              }
+            },
+            stale: {
+              id: 'stale',
+              type: 'block',
+              defaultSize: 999
+            }
+          },
+          hiddenBlocks: new Set(['block2', 'stale']),
+          activeMode: 'desktop'
+        },
+        configuredBlocks
+      )
+
+      expect(merged.blocks?.block1).toMatchObject({
+        id: 'block1',
+        defaultSize: 320,
+        minSize: 100,
+        size: 320,
+        sizeUnit: 'px',
+        viewType: 'persisted'
+      })
+      expect(merged.blocks?.block2).toMatchObject(configuredBlocks[1])
+      expect(merged.blocks?.stale).toBeUndefined()
+      expect(merged.hiddenBlocks).toEqual(new Set(['block2']))
+    })
+
+    it('allows collapsible persisted sizes below minSize', () => {
+      const merged = mergePersistedGridState(
+        {
+          blocks: {
+            sidebar: {
+              id: 'sidebar',
+              type: 'block',
+              defaultSize: 48,
+              size: 48,
+              originalDefaultSize: 320
+            }
+          }
+        },
+        [
+          {
+            id: 'sidebar',
+            type: 'block',
+            defaultSize: 320,
+            minSize: 200,
+            sizeUnit: 'px',
+            collapsible: true,
+            collapseTo: 48
+          }
+        ]
+      )
+
+      expect(merged.blocks?.sidebar.defaultSize).toBe(48)
+      expect(merged.blocks?.sidebar.size).toBe(48)
+      expect(merged.blocks?.sidebar.originalDefaultSize).toBe(320)
     })
   })
 })

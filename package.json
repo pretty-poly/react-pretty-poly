@@ -1,10 +1,10 @@
 {
   "name": "@pretty-poly/react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A shadcn/ui compatible polymorphic React component library for creating resizable, responsive grid layouts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pretty-poly/react-pretty-poly"
+    "url": "git+https://github.com/pretty-poly/react-pretty-poly.git"
   },
   "bugs": "https://github.com/pretty-poly/react-pretty-poly/issues",
   "type": "module",
@@ -37,7 +37,7 @@
     "build:analyze": "vite build && open dist/stats.html",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build:registry && npm run build"
   },
   "keywords": [
     "react",
@@ -56,8 +56,8 @@
   "author": "Amazing Team",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": ">=18.0.0 <20.0.0",
+    "react-dom": ">=18.0.0 <20.0.0",
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {

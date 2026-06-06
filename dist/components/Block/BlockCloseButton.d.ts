@@ -1,11 +1,11 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ComponentType } from 'react';
 
 export interface BlockCloseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     /**
      * Optional icon component to display (e.g., lucide-react X icon)
      * If not provided, a simple × character is used
      */
-    icon?: React.ComponentType<{
+    icon?: ComponentType<{
         className?: string;
     }>;
     /**

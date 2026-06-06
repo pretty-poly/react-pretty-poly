@@ -40,6 +40,9 @@ export interface ViewProps {
   /** ID of the block containing this view */
   blockId?: string
 
+  /** ID of the tab containing this view */
+  tabId?: string
+
   /** Callback when view wants to be closed */
   onClose?: () => void
 

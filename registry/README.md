@@ -14,7 +14,12 @@ public/r/                    # Output directory (after build)
 ├── registry.json            # Copied from registry/
 ├── grid-system.json         # Core grid system components
 ├── grid-sidebar.json        # Optional sidebar components
-└── grid-tabs.json           # Optional tab components
+├── grid-tabs.json           # Optional tab components
+└── v0.3/                    # Versioned registry output for copied installs
+    ├── registry.json
+    ├── grid-system.json
+    ├── grid-sidebar.json
+    └── grid-tabs.json
 ```
 
 ## Building the Registry
@@ -29,7 +34,7 @@ This command:
 1. Reads `registry/registry.json` configuration
 2. Processes source files from `src/`
 3. Transforms import paths (`@/components/*` → user's configured paths)
-4. Generates JSON files in `public/r/` with component source code
+4. Generates JSON files in both `public/r/` and `public/r/v0.3/`
 
 ### Build Process
 
@@ -72,7 +77,7 @@ The build script (`scripts/build-registry.ts`):
 ## Component Groups
 
 ### `grid-system` (Required)
-**Files:** 20 files
+**Files:** 22 files
 **Description:** Complete grid layout system with resizable panels
 
 Includes:
@@ -115,7 +120,9 @@ The build script maps source files to registry paths:
 | `src/components/Grid/Grid.tsx` | `components/grid/grid.tsx` | component |
 | `src/components/Grid/GridProvider.tsx` | `components/grid/grid-provider.tsx` | component |
 | `src/components/Block/Block.tsx` | `components/grid/block.tsx` | component |
+| `src/components/Block/BlockCloseButton.tsx` | `components/grid/block-close-button.tsx` | component |
 | `src/hooks/useGridResize.ts` | `hooks/use-grid-resize.ts` | hook |
+| `src/hooks/useRemoveBlock.ts` | `hooks/use-remove-block.ts` | hook |
 | `src/utils/calculations.ts` | `lib/grid-calculations.ts` | lib |
 | `src/types/index.ts` | `lib/grid-types.ts` | lib |
 
@@ -201,13 +208,18 @@ npm run build:registry
 ### 5. Test installation
 
 ```bash
-cd examples/demo
-npx shadcn@latest add ../../../public/r/grid-system
+npx shadcn@latest add ../../../public/r/v0.3/grid-system.json
 ```
 
 ## Publishing the Registry
 
-The registry files in `public/r/` should be:
+There is not a canonical hosted registry URL yet. For now, use local paths like:
+
+```bash
+npx shadcn@latest add /path/to/pretty_poly/public/r/v0.3/grid-system.json
+```
+
+When a hosted registry exists, the registry files in `public/r/` should be:
 
 1. **Hosted on a static site** (GitHub Pages, Vercel, Netlify, etc.)
 2. **Served with CORS enabled**
@@ -218,18 +230,19 @@ Example deployment:
 https://pretty-poly.github.io/react/r/registry.json
 https://pretty-poly.github.io/react/r/grid-system.json
 https://pretty-poly.github.io/react/r/grid-sidebar.json
+https://pretty-poly.github.io/react/r/v0.3/grid-system.json
 ```
 
 Then users can install with:
 ```bash
-npx shadcn@latest add https://pretty-poly.github.io/react/r/grid-system
+npx shadcn@latest add https://pretty-poly.github.io/react/r/v0.3/grid-system.json
 ```
 
 ## Development Workflow
 
 1. **Make changes** to components in `src/`
 2. **Run build** to update npm package: `npm run build`
-3. **Build registry** to update component registry: `npm run build:registry`
+3. **Build registry** to update stable and versioned registry artifacts: `npm run build:registry`
 4. **Test locally** in demo app
 5. **Commit** both source and registry changes
 6. **Deploy** `public/r/` to static hosting
@@ -249,7 +262,7 @@ When components change:
 The registry should match the npm package version:
 - Keep `registry.json` in sync with `package.json` version
 - Document breaking changes in registry updates
-- Consider versioned registry URLs for major versions
+- Use versioned registry URLs for copied installs, for example `/r/v0.3/grid-system.json`
 
 ### Testing
 
@@ -258,7 +271,7 @@ Test the registry installation:
 ```bash
 # In a test project
 npx shadcn@latest init
-npx shadcn@latest add /path/to/pretty-poly/public/r/grid-system
+npx shadcn@latest add /path/to/pretty-poly/public/r/v0.3/grid-system.json
 
 # Verify:
 # - All files copied correctly

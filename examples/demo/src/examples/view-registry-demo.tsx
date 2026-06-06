@@ -119,7 +119,6 @@ function AudioMixerView({ blockId }: ViewProps) {
           <div key={i} className="flex flex-col items-center gap-2">
             <input
               type="range"
-              orient="vertical"
               className="h-32"
               defaultValue={70 - i * 10}
             />
@@ -308,14 +307,11 @@ function ViewSwitcher({
         onChange={(e) => onViewTypeChange(e.target.value)}
         className="px-2 py-1 text-sm border rounded bg-background cursor-pointer hover:bg-accent"
       >
-        {allViews.map((view) => {
-          const _ViewIcon = view.icon as LucideIcon | undefined;
-          return (
-            <option key={view.id} value={view.id}>
-              {view.title}
-            </option>
-          );
-        })}
+        {allViews.map((view) => (
+          <option key={view.id} value={view.id}>
+            {view.title}
+          </option>
+        ))}
       </select>
       <span className="text-xs text-muted-foreground">({blockId})</span>
     </div>
@@ -463,7 +459,7 @@ export default function ViewRegistryDemo() {
   ];
 
   return (
-    <Grid id="view-registry-demo" defaultLayout={blocks} className="h-dvh">
+    <Grid defaultLayout={blocks} className="h-dvh">
       {/* Top Row - contains topLeft and topRight */}
       <div
         data-grid-id="view-registry-demo"
