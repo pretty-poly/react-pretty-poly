@@ -1,15 +1,6 @@
 import { forwardRef, useState, useRef, useEffect, useCallback } from 'react'
 import { clsx } from 'clsx'
-
-export interface Tab {
-  id: string
-  label: string
-  icon?: React.ComponentType<{ className?: string }>
-  closable?: boolean
-  disabled?: boolean
-  isDirty?: boolean
-  isPinned?: boolean
-}
+import type { Tab } from "@/lib/grid-types"
 
 export interface BlockTabsProps {
   tabs: Tab[]
@@ -147,8 +138,8 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
         className={clsx(
           'pretty-poly-block-tabs',
           'flex items-center',
-          'border-b border-gray-200',
-          'bg-white',
+          'border-b border-border',
+          'bg-card',
           className
         )}
         role="tablist"
@@ -156,12 +147,12 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
       >
         {/* Navigation controls */}
         {showNavigation && (
-          <div className="flex items-center space-x-1 px-2 border-r border-gray-200 flex-shrink-0">
+          <div className="flex items-center space-x-1 px-2 border-r border-border flex-shrink-0">
             <button
               onClick={onNavigateBack}
               disabled={!canGoBack}
               className={clsx(
-                'p-1.5 rounded hover:bg-gray-100 transition-colors',
+                'p-1.5 rounded hover:bg-accent transition-colors',
                 !canGoBack && 'opacity-30 cursor-not-allowed'
               )}
               aria-label="Navigate back"
@@ -175,7 +166,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
               onClick={onNavigateForward}
               disabled={!canGoForward}
               className={clsx(
-                'p-1.5 rounded hover:bg-gray-100 transition-colors',
+                'p-1.5 rounded hover:bg-accent transition-colors',
                 !canGoForward && 'opacity-30 cursor-not-allowed'
               )}
               aria-label="Navigate forward"
@@ -194,7 +185,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
             onClick={() => scrollTabs('left')}
             disabled={!canScrollLeft}
             className={clsx(
-              'flex-shrink-0 p-1.5 hover:bg-gray-100 transition-colors',
+              'flex-shrink-0 p-1.5 hover:bg-accent transition-colors',
               !canScrollLeft && 'opacity-30 cursor-not-allowed'
             )}
             aria-label="Scroll tabs left"
@@ -218,7 +209,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
         >
           {/* Left gradient overlay */}
           {showScrollControls && canScrollLeft && (
-            <div className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none bg-gradient-to-r from-white to-transparent z-10" />
+            <div className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none bg-gradient-to-r from-card to-transparent z-10" />
           )}
 
           {tabs.map((tab) => {
@@ -234,10 +225,10 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
                   'border-b-2 transition-colors duration-150',
                   'min-w-0 flex-shrink-0', // Prevent shrinking
                   isActive
-                    ? 'border-blue-500 text-blue-600 bg-blue-50'
-                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50',
+                    ? 'border-primary text-primary bg-accent'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-accent',
                   tab.disabled && 'opacity-50 cursor-not-allowed',
-                  tab.isPinned && 'bg-gray-100',
+                  tab.isPinned && 'bg-accent/50',
                   !allowOverflow && 'flex-1' // Equal width tabs when overflow disabled
                 )}
                 role="tab"
@@ -255,7 +246,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
                 {/* Pin indicator */}
                 {tab.isPinned && (
                   <svg
-                    className="w-3 h-3 flex-shrink-0 text-gray-400"
+                    className="w-3 h-3 flex-shrink-0 text-muted-foreground"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     aria-label="Pinned"
@@ -278,7 +269,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
                 {/* Dirty indicator */}
                 {tab.isDirty && (
                   <div
-                    className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"
+                    className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
                     title="Unsaved changes"
                     aria-label="Has unsaved changes"
                   />
@@ -288,7 +279,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
                 {tab.closable && onTabClose && !tab.isPinned && (
                   <button
                     className={clsx(
-                      'flex-shrink-0 w-4 h-4 rounded-sm hover:bg-gray-200',
+                      'flex-shrink-0 w-4 h-4 rounded-sm hover:bg-muted',
                       'flex items-center justify-center',
                       'transition-colors duration-150',
                       isHovered || isActive ? 'opacity-100' : 'opacity-0'
@@ -318,7 +309,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
 
           {/* Right gradient overlay */}
           {showScrollControls && canScrollRight && (
-            <div className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none bg-gradient-to-l from-white to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none bg-gradient-to-l from-card to-transparent z-10" />
           )}
         </div>
 
@@ -328,7 +319,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
             onClick={() => scrollTabs('right')}
             disabled={!canScrollRight}
             className={clsx(
-              'flex-shrink-0 p-1.5 hover:bg-gray-100 transition-colors',
+              'flex-shrink-0 p-1.5 hover:bg-accent transition-colors',
               !canScrollRight && 'opacity-30 cursor-not-allowed'
             )}
             aria-label="Scroll tabs right"
@@ -342,7 +333,7 @@ export const BlockTabs = forwardRef<HTMLDivElement, BlockTabsProps>(
 
         {/* Actions section */}
         {actions && (
-          <div className="flex items-center space-x-2 px-2 border-l border-gray-200 flex-shrink-0">
+          <div className="flex items-center space-x-2 px-2 border-l border-border flex-shrink-0">
             {actions}
           </div>
         )}

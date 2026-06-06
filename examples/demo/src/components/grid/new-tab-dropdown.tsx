@@ -1,16 +1,35 @@
 import { useState, useRef, useEffect } from 'react'
 import { useViewRegistry } from '@/lib/view-registry'
-import { useGridContext } from './grid-provider'
+import { useGridContext } from '@/components/grid/grid-provider'
 import type { ViewDescriptor } from '@/lib/view-registry'
 import { cn } from '@/lib/utils'
 
 /**
  * NewTabDropdown - Button with dropdown menu to create new tabs from registered views
+ *
+ * Features:
+ * - Lists all views from ViewRegistry
+ * - Groups views by category
+ * - Creates new tab with selected view type
+ * - Shows view icons if available
+ * - Keyboard accessible
+ *
+ * @example
+ * ```tsx
+ * <NewTabDropdown blockId="editor-block" />
+ * ```
  */
 export interface NewTabDropdownProps {
+  /** ID of the block to add tabs to */
   blockId: string
+
+  /** Custom label for the button (default: "+") */
   label?: string
+
+  /** Custom className for the button */
   className?: string
+
+  /** Callback when tab is created */
   onTabCreated?: (tabId: string) => void
 }
 
@@ -23,14 +42,14 @@ export function NewTabDropdown({
   const registry = useViewRegistry()
   const { openTab } = useGridContext()
   const [isOpen, setIsOpen] = useState(false)
-  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 })
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
 
+  // Get all views and group by category
   const allViews = registry.getAllViews(true)
   const categories = registry.getCategories()
   const hasCategories = categories.length > 0
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -44,6 +63,7 @@ export function NewTabDropdown({
     }
   }, [isOpen])
 
+  // Close dropdown on Escape key
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' && isOpen) {
@@ -72,6 +92,7 @@ export function NewTabDropdown({
     onTabCreated?.(tabId)
   }
 
+  // Group views by category
   const viewsByCategory = hasCategories
     ? categories.map(category => ({
         category,
@@ -79,24 +100,13 @@ export function NewTabDropdown({
       }))
     : [{ category: undefined, views: allViews }]
 
+  // Filter out empty categories
   const nonEmptyCategories = viewsByCategory.filter(group => group.views.length > 0)
-
-  const handleToggle = () => {
-    if (!isOpen && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect()
-      setMenuPosition({
-        top: rect.bottom + 4,
-        left: rect.right - 200, // Align right edge of menu with button
-      })
-    }
-    setIsOpen(!isOpen)
-  }
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        ref={buttonRef}
-        onClick={handleToggle}
+        onClick={() => setIsOpen(!isOpen)}
         className={cn(
           'px-2 py-1 text-sm font-medium rounded hover:bg-accent transition-colors',
           'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
@@ -112,16 +122,11 @@ export function NewTabDropdown({
       {isOpen && (
         <div
           className={cn(
-            'fixed min-w-[200px] max-h-[400px]',
-            'bg-popover text-popover-foreground border rounded-md shadow-lg overflow-y-auto',
-            'z-[9999]' // Very high z-index to appear above everything
+            'absolute top-full right-0 mt-1 min-w-[200px] max-h-[400px]',
+            'bg-popover border rounded-md shadow-md overflow-y-auto z-50'
           )}
           role="menu"
           aria-orientation="vertical"
-          style={{
-            top: `${menuPosition.top}px`,
-            left: `${menuPosition.left}px`,
-          }}
         >
           {nonEmptyCategories.length === 0 ? (
             <div className="px-3 py-2 text-sm text-muted-foreground text-center">

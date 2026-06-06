@@ -6,10 +6,6 @@ import { BlockContent } from "@/components/grid/block-content"
 import { BlockHeader } from "@/components/grid/block-header"
 import { BlockFooter } from "@/components/grid/block-footer"
 import { BlockToolbar } from "@/components/grid/block-toolbar"
-import { BlockTabs } from "@/components/grid/block-tabs"
-import { BlockSidebar } from "@/components/grid/block-sidebar"
-import { BlockSidebarItem } from "@/components/grid/block-sidebar-item"
-import { BlockSidebarSpacer } from "@/components/grid/block-sidebar-spacer"
 import { BlockLayout } from "@/components/grid/block-layout"
 
 /**
@@ -107,13 +103,5 @@ Object.assign(Block, {
   Header: BlockHeader,
   Content: BlockContent,
   Footer: BlockFooter,
-  Toolbar: BlockToolbar,
-  Tabs: BlockTabs,
-  Sidebar: BlockSidebar
-})
-
-// Add nested sidebar components
-Object.assign(BlockSidebar, {
-  Item: BlockSidebarItem,
-  Spacer: BlockSidebarSpacer
+  Toolbar: BlockToolbar
 })

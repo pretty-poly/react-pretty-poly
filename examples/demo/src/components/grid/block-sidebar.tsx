@@ -25,8 +25,8 @@ export const BlockSidebar = forwardRef<HTMLDivElement, BlockSidebarProps>(
           'flex flex-col',
           'flex-shrink-0', // Don't shrink
           'h-full', // Full height
-          'bg-gray-800', // VS Code-style dark background
-          'border-gray-700', // Border color
+          'bg-sidebar', // VS Code-style sidebar background (adapts to theme)
+          'border-sidebar-border', // Border color
           position === 'left' ? 'border-r' : 'border-l', // Border on appropriate side
           position === 'right' && 'order-last', // Move to right if specified
           className
