@@ -55,7 +55,7 @@ const examples: ExampleInfo[] = [
   {
     name: "✂️ Block Splitting (NEW!)",
     description:
-      "⚡ VS Code-style splits: Create editor layouts dynamically with keyboard shortcuts (Ctrl+\\)!",
+      "⚡ VS Code-style splits: Create editor layouts dynamically with toolbar controls!",
     component: BlockSplitDemo,
     key: "block-split-demo",
   },

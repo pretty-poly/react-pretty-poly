@@ -96,18 +96,6 @@ function WelcomeView(_props: ViewProps) {
             <div className="space-y-2 text-sm text-purple-800 dark:text-purple-200">
               <div className="flex items-center gap-3">
                 <kbd className="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 border border-purple-300 dark:border-purple-700 font-mono text-xs">
-                  Ctrl/Cmd + \
-                </kbd>
-                <span>Split Right (vertical split)</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 border border-purple-300 dark:border-purple-700 font-mono text-xs">
-                  Ctrl/Cmd + Shift + \
-                </kbd>
-                <span>Split Down (horizontal split)</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 border border-purple-300 dark:border-purple-700 font-mono text-xs">
                   Ctrl/Cmd + Tab
                 </kbd>
                 <span>Next Tab</span>

@@ -157,7 +157,7 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
                     <button
                       onClick={handleSplitVertical}
                       className="px-2 py-1 rounded text-xs border border-border hover:bg-accent transition-colors flex items-center gap-1"
-                      title={`${splitButtonLabels.vertical} (Ctrl+\\)`}
+                      title={splitButtonLabels.vertical}
                       aria-label={splitButtonLabels.vertical}
                     >
                       {VerticalIcon && <VerticalIcon className="w-3 h-3" />}
@@ -168,7 +168,7 @@ export const BlockSplitContainer = forwardRef<HTMLDivElement, BlockSplitContaine
                     <button
                       onClick={handleSplitHorizontal}
                       className="px-2 py-1 rounded text-xs border border-border hover:bg-accent transition-colors flex items-center gap-1"
-                      title={`${splitButtonLabels.horizontal} (Ctrl+Shift+\\)`}
+                      title={splitButtonLabels.horizontal}
                       aria-label={splitButtonLabels.horizontal}
                     >
                       {HorizontalIcon && <HorizontalIcon className="w-3 h-3" />}

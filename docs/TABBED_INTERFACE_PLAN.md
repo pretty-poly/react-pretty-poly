@@ -170,7 +170,7 @@ interface ViewConfig {
 ### Phase 4: Advanced Features ⏸️ DEFERRED
 - [ ] Tab drag & drop reordering
 - [ ] Tab history navigation (✅ Basic implementation exists)
-- [ ] Keyboard shortcuts via `useGridKeyboard` (✅ Basic implementation exists)
+- [ ] Optional tab-level keyboard shortcuts independent of grid layout controls
 - [ ] Tab persistence to localStorage
 - [ ] Dirty state tracking (✅ Basic implementation exists)
 

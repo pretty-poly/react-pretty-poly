@@ -51,14 +51,12 @@ export {
   useGridResize,
   useGridPersistence,
   useGridMode,
-  useGridKeyboard,
   useBlockSplitDirection,
   defaultModes,
 } from "./hooks";
 export type {
   UseGridResizeOptions,
   UseGridPersistenceOptions,
-  UseGridKeyboardOptions,
 } from "./hooks";
 
 // Types

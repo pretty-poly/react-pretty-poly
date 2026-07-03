@@ -16,10 +16,10 @@ registry.json
 The shadcn CLI reads those files directly from GitHub:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.0
 ```
 
-Use tags for reproducible installs. Same-repository dependencies must also use full GitHub item addresses such as `pretty-poly/react-pretty-poly/grid-system#v0.3.0`; bare names resolve to the built-in shadcn registry.
+Use tags for reproducible installs. Same-repository dependencies must also use full GitHub item addresses such as `pretty-poly/react-pretty-poly/grid-system#v0.4.0`; bare names resolve to the built-in shadcn registry.
 
 ## Items
 
@@ -34,6 +34,6 @@ Use tags for reproducible installs. Same-repository dependencies must also use f
 2. Update the root `registry.json` when files or item boundaries change.
 3. Validate with `npm run registry:validate`.
 4. Run tests and type checks before tagging.
-5. Push `main`, then tag the release, for example `v0.3.0`.
+5. Push `main`, then tag the release, for example `v0.4.0`.
 
 There is no `build:registry` step. Do not commit generated `public/r` or `dist/r` registry payloads.

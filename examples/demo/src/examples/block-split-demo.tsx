@@ -187,21 +187,13 @@ function WelcomePane({ blockId }: { blockId: string }) {
 
               <div className="p-4 border rounded-lg bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800">
                 <h2 className="text-xl font-semibold mb-3 text-purple-900 dark:text-purple-100">
-                  Keyboard Shortcuts
+                  Toolbar Controls
                 </h2>
                 <div className="space-y-2 text-sm text-purple-800 dark:text-purple-200">
-                  <div className="flex items-center gap-3">
-                    <kbd className="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 border border-purple-300 dark:border-purple-700 font-mono text-xs">
-                      Ctrl/Cmd + \
-                    </kbd>
-                    <span>Split Right (vertical split)</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <kbd className="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 border border-purple-300 dark:border-purple-700 font-mono text-xs">
-                      Ctrl/Cmd + Shift + \
-                    </kbd>
-                    <span>Split Down (horizontal split)</span>
-                  </div>
+                  <p>
+                    Use the Split Right and Split Down buttons in each
+                    splittable area toolbar to create new panes.
+                  </p>
                 </div>
               </div>
 

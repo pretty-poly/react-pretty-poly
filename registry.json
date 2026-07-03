@@ -26,7 +26,6 @@
         { "path": "hooks/use-grid-resize-operations.ts", "type": "registry:hook", "target": "@hooks/use-grid-resize-operations.ts" },
         { "path": "hooks/use-grid-mode.ts", "type": "registry:hook", "target": "@hooks/use-grid-mode.ts" },
         { "path": "hooks/use-grid-persistence.ts", "type": "registry:hook", "target": "@hooks/use-grid-persistence.ts" },
-        { "path": "hooks/use-grid-keyboard.ts", "type": "registry:hook", "target": "@hooks/use-grid-keyboard.ts" },
         { "path": "hooks/use-block-split-direction.ts", "type": "registry:hook", "target": "@hooks/use-block-split-direction.ts" },
         { "path": "hooks/use-remove-block.ts", "type": "registry:hook", "target": "@hooks/use-remove-block.ts" },
         { "path": "lib/grid-calculations.ts", "type": "registry:lib", "target": "@lib/grid-calculations.ts" },
@@ -52,7 +51,7 @@
       "title": "PrettyPoly Grid Sidebar",
       "description": "Optional sidebar components for PrettyPoly blocks.",
       "registryDependencies": [
-        "pretty-poly/react-pretty-poly/grid-system#v0.3.0"
+        "pretty-poly/react-pretty-poly/grid-system#v0.4.0"
       ],
       "files": [
         { "path": "components/grid/block-sidebar.tsx", "type": "registry:component", "target": "@components/grid/block-sidebar.tsx" },
@@ -77,8 +76,8 @@
       "title": "PrettyPoly Grid Tabs",
       "description": "Optional tab and ViewRegistry integration components for PrettyPoly blocks.",
       "registryDependencies": [
-        "pretty-poly/react-pretty-poly/grid-system#v0.3.0",
-        "pretty-poly/react-pretty-poly/grid-primitives#v0.3.0"
+        "pretty-poly/react-pretty-poly/grid-system#v0.4.0",
+        "pretty-poly/react-pretty-poly/grid-primitives#v0.4.0"
       ],
       "files": [
         { "path": "components/grid/block-tabs.tsx", "type": "registry:component", "target": "@components/grid/block-tabs.tsx" },

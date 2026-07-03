@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor, act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Grid } from '@/components/grid/grid'
 import { Block } from '@/components/grid/block'
 import { Divider } from '@/components/divider/divider'
@@ -155,6 +156,42 @@ describe('Grid (Simplified Integration)', () => {
 
     // Should call onLayoutChange on initial render
     expect(onLayoutChange).toHaveBeenCalled()
+  })
+
+  it('does not register document keydown handling for grid shortcuts', () => {
+    const addEventListenerSpy = vi.spyOn(document, 'addEventListener')
+
+    render(
+      <Grid defaultLayout={basicLayout}>
+        <Block id="sidebar">Sidebar</Block>
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    expect(
+      addEventListenerSpy.mock.calls.some(([eventName]) => eventName === 'keydown'),
+    ).toBe(false)
+
+    addEventListenerSpy.mockRestore()
+  })
+
+  it('allows text inputs inside a grid to receive spaces', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <Grid defaultLayout={basicLayout}>
+        <Block id="sidebar">
+          <input aria-label="Address" />
+        </Block>
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    const input = screen.getByLabelText('Address')
+
+    await user.type(input, 'Moo 2')
+
+    expect(input).toHaveValue('Moo 2')
   })
 
   it('handles persistence', () => {

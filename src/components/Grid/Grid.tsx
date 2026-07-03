@@ -3,7 +3,6 @@ import type { GridProps, BlockConfig, GridState } from "../../types";
 import { cn } from "../../utils/cn";
 import { GridProvider, useGridContext } from "./GridProvider";
 import { useGridResize } from "../../hooks/useGridResize";
-import { useGridKeyboard } from "../../hooks/useGridKeyboard";
 import { generateGridTemplate } from "../../utils/calculations";
 import { DividerOverlay } from "../Divider/DividerOverlay";
 
@@ -89,29 +88,6 @@ const GridInternal = forwardRef<
     containerRef,
     onSizeChange: resizeBlock,
     direction: rootBlock?.direction || "row",
-  });
-
-  // Get split operations
-  const { splitBlock: splitBlockFn } = useGridContext();
-
-  // Set up keyboard navigation
-  useGridKeyboard({
-    enabled: true,
-    blocks,
-    containerRef,
-    onResizeBlock: (blockId, delta) => {
-      const block = state.blocks[blockId];
-      if (block) {
-        const currentSize = block.defaultSize || 0;
-        const newSize = Math.max(0, currentSize + delta);
-        resizeBlock(blockId, newSize);
-      }
-    },
-    onCollapseBlock: collapseBlock,
-    onExpandBlock: expandBlock,
-    onSplitBlock: (blockId, direction) => {
-      splitBlockFn(blockId, direction);
-    },
   });
 
   // Note: Dividers are now handled by DividerOverlay as absolutely positioned overlays

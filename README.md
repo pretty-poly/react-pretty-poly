@@ -2,7 +2,7 @@
 
 A shadcn-compatible polymorphic grid system for React. PrettyPoly is distributed as source through the public GitHub registry at `pretty-poly/react-pretty-poly`; it is not intended to be installed as an npm package.
 
-> Alpha release `v0.3.0`: grid mode is the primary supported path. Responsive modes, tabs, and primitives are still stabilizing.
+> Alpha release `v0.4.0`: grid mode is the primary supported path. Responsive modes, tabs, and primitives are still stabilizing.
 
 ## Install
 
@@ -15,15 +15,15 @@ npx shadcn@latest init
 Install the core grid system from the tagged GitHub registry:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.0
 ```
 
 Optional items:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.3.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.3.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.0
 ```
 
 GitHub registry installs copy source into your project using your `components.json` aliases. PrettyPoly assumes a normal shadcn setup with `@/components`, `@/hooks`, `@/lib`, and an existing `@/lib/utils` `cn` helper.

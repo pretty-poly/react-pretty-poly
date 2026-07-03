@@ -20,15 +20,15 @@ npx shadcn@latest init
 Install the core grid system:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.0
 ```
 
 Install optional feature sets as needed:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.3.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.3.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.3.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.0
 ```
 
 The tag is intentional. Use tagged installs for reproducibility, and update tags explicitly when adopting a newer PrettyPoly release.
