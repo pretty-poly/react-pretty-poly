@@ -31,14 +31,18 @@ npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.1
 npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.1
 ```
 
+`grid-system` is the stable center of PrettyPoly. `grid-primitives` and
+`grid-tabs` are alpha/under-review items; install them only when you want to
+evaluate their current source.
+
 The tag is intentional. Use tagged installs for reproducibility, and update tags explicitly when adopting a newer PrettyPoly release.
 
 ## What Gets Copied
 
 - `grid-system`: `components/grid`, `components/divider`, grid hooks, and grid utilities.
 - `grid-sidebar`: optional block sidebar components.
-- `grid-primitives`: ViewRegistry, CommandService, and LayoutService primitives.
-- `grid-tabs`: BlockTabs, NewTabDropdown, and ViewRenderer.
+- `grid-primitives`: under-review optional helpers currently containing ViewRegistry, CommandService, and LayoutService source.
+- `grid-tabs`: under-review tab helpers currently containing BlockTabs, NewTabDropdown, and ViewRenderer.
 
 Files are written through shadcn target placeholders such as `@components/`, `@hooks/`, and `@lib/`, so they land in the directories configured by the consuming project.
 

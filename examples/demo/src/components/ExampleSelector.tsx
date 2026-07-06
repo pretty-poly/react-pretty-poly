@@ -30,106 +30,141 @@ interface ExampleInfo {
   key: string;
 }
 
+type PreviewLayout = React.ComponentProps<typeof LayoutPreview>["layout"];
+
+const previewLayouts: Partial<Record<string, PreviewLayout>> = {
+  "basic-dashboard": "basic-dashboard",
+  "email-client": "email-client",
+  "file-manager": "file-manager",
+  "ide-layout": "ide-layout",
+  "music-daw": "music-daw",
+  "fixed-sidebar": "fixed-sidebar",
+};
+
 const examples: ExampleInfo[] = [
-  {
-    name: "🚀 Split + Tabs Integration (PHASE 5!)",
-    description:
-      "✨ Phase 5: VS Code-style interface! Split panes + tabbed interface - each pane has independent tabs!",
-    component: SplitTabsDemo,
-    key: "split-tabs-demo",
-  },
-  {
-    name: "🎨 Tabbed Views + Registry (PHASE 3!)",
-    description:
-      "🚀 Phase 3: Tabs + ViewRegistry integration! Create tabs with different view types from dropdown menu.",
-    component: TabbedViewsDemo,
-    key: "tabbed-views-demo",
-  },
-  {
-    name: "📝 Tabbed Editor (NEW!)",
-    description:
-      "🎯 VS Code/Zed-style tabs: Multiple files with navigation history, dirty tracking, and pinning!",
-    component: TabbedEditorDemo,
-    key: "tabbed-editor-demo",
-  },
-  {
-    name: "✂️ Block Splitting (NEW!)",
-    description:
-      "⚡ VS Code-style splits: Create editor layouts dynamically with toolbar controls!",
-    component: BlockSplitDemo,
-    key: "block-split-demo",
-  },
-  {
-    name: "🎯 Block Visibility (NEW!)",
-    description:
-      "✨ Dynamic grid templates: Toggle sidebar & properties panel - grid automatically reflows!",
-    component: BlockVisibilityDemo,
-    key: "block-visibility-demo",
-  },
-  {
-    name: "🚀 Primitives Integration (NEW!)",
-    description:
-      "✨ Pretty Poly 2.0: All three primitives working together - ViewRegistry + CommandService + LayoutService!",
-    component: PrimitivesDemo,
-    key: "primitives-demo",
-  },
-  {
-    name: "Command Service Demo (NEW!)",
-    description:
-      "⌨️ Pretty Poly 2.0: Declarative commands with keyboard shortcuts and command palette!",
-    component: CommandServiceDemoWrapper,
-    key: "command-service-demo",
-  },
-  {
-    name: "View Registry Demo (NEW!)",
-    description:
-      "🚀 Pretty Poly 2.0: Demonstrates ViewRegistry primitive - blocks can display any registered view type!",
-    component: ViewRegistryDemoWrapper,
-    key: "view-registry-demo",
-  },
   {
     name: "Basic Dashboard",
     description:
-      "Clean three-column dashboard with sidebar, main content, and activity panel",
+      "Three-panel dashboard with navigation, main content, and activity context",
     component: BasicDashboard,
     key: "basic-dashboard",
   },
   {
-    name: "IDE Layout",
-    description:
-      "Code editor interface with file tree, editor, terminal, and properties panel",
-    component: IDELayout,
-    key: "ide-layout",
-  },
-  {
     name: "Email Client",
     description:
-      "Email interface with folder list, message list, and preview pane",
+      "Mailbox workflow with folder list, message list, and preview pane",
     component: EmailClient,
     key: "email-client",
   },
   {
-    name: "Music DAW",
-    description:
-      "Digital audio workstation with track list, timeline, editor, and mixer panel",
-    component: MusicDAW,
-    key: "music-daw",
-  },
-  {
     name: "File Manager",
     description:
-      "Clean file browser with folder tree, file list, and metadata display",
+      "File browser with folder tree, file list, and metadata panel",
     component: FileManager,
     key: "file-manager",
   },
   {
+    name: "IDE Layout",
+    description:
+      "Dense developer workspace with file tree, editor, terminal, and details",
+    component: IDELayout,
+    key: "ide-layout",
+  },
+  {
+    name: "Music DAW",
+    description:
+      "Audio production layout with tracks, timeline, editor, and mixer",
+    component: MusicDAW,
+    key: "music-daw",
+  },
+  {
     name: "Fixed Sidebar",
     description:
-      "Demonstrates non-resizable blocks with fixed sidebar and adjustable properties panel",
+      "Fixed navigation panel with adjustable work and properties areas",
     component: FixedSidebar,
     key: "fixed-sidebar",
   },
+  {
+    name: "Block Visibility",
+    description:
+      "Toggle optional panels while the grid recalculates the remaining space",
+    component: BlockVisibilityDemo,
+    key: "block-visibility-demo",
+  },
+  {
+    name: "Block Splitting Experiment",
+    description:
+      "Under-review runtime panel splitting behavior for adding workspace context",
+    component: BlockSplitDemo,
+    key: "block-split-demo",
+  },
+  {
+    name: "Tabbed Panel Experiment",
+    description:
+      "Under-review tab strip behavior for multiple related panel contexts",
+    component: TabbedEditorDemo,
+    key: "tabbed-editor-demo",
+  },
+  {
+    name: "Tabbed Views Experiment",
+    description:
+      "Under-review registry-backed tab content workflow",
+    component: TabbedViewsDemo,
+    key: "tabbed-views-demo",
+  },
+  {
+    name: "Split Tabs Experiment",
+    description:
+      "Under-review composition of runtime panel splitting and tabbed content",
+    component: SplitTabsDemo,
+    key: "split-tabs-demo",
+  },
+  {
+    name: "View Registry Experiment",
+    description:
+      "Under-review component lookup helper for rendering registered view types",
+    component: ViewRegistryDemoWrapper,
+    key: "view-registry-demo",
+  },
+  {
+    name: "Action Helper Experiment",
+    description:
+      "Under-review action helper source that may be removed from the public registry",
+    component: CommandServiceDemoWrapper,
+    key: "command-service-demo",
+  },
+  {
+    name: "Combined Helpers Experiment",
+    description:
+      "Under-review combination of view lookup, action helpers, and saved layout helpers",
+    component: PrimitivesDemo,
+    key: "primitives-demo",
+  },
 ];
+
+function ExperimentPreview() {
+  return (
+    <div className="grid grid-cols-[1fr_80px] grid-rows-[1fr_42px] gap-1 h-32 w-full bg-slate-50 p-2 rounded-lg border border-slate-200">
+      <div className="bg-white rounded border border-slate-200 p-2 flex flex-col gap-1">
+        <div className="h-2 bg-slate-300 rounded w-1/3"></div>
+        <div className="grid grid-cols-2 gap-1 flex-1">
+          <div className="bg-blue-50 rounded border border-blue-200"></div>
+          <div className="bg-amber-50 rounded border border-amber-200"></div>
+        </div>
+      </div>
+      <div className="bg-white rounded border border-slate-200 p-2 flex flex-col gap-1">
+        <div className="h-2 bg-slate-300 rounded"></div>
+        <div className="h-1 bg-slate-200 rounded"></div>
+        <div className="h-1 bg-slate-200 rounded w-2/3"></div>
+      </div>
+      <div className="col-span-2 bg-slate-900 rounded p-2 flex items-center gap-1">
+        <div className="h-2 bg-slate-700 rounded w-20"></div>
+        <div className="h-2 bg-slate-700 rounded w-16"></div>
+        <div className="h-2 bg-slate-700 rounded w-12"></div>
+      </div>
+    </div>
+  );
+}
 
 export default function ExampleSelector() {
   const [selectedExample, setSelectedExample] = useState<string>("");
@@ -190,56 +225,52 @@ export default function ExampleSelector() {
             PrettyPoly Demo Examples
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Interactive examples showcasing polymorphic grid layouts with
-            shadcn/ui integration. Click any example to see it in full-screen
-            mode.
+            Interactive examples showing how PrettyPoly panels fit into normal
+            React app workflows. Advanced experiments are kept at the end while
+            their public API shape is reviewed.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {examples.map((example) => (
-            <Card
-              key={example.key}
-              data-testid="example-card"
-              data-example-key={example.key}
-              className="cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1"
-              onClick={() => selectExample(example.key)}
-            >
-              <CardHeader>
-                <CardTitle className="text-lg">{example.name}</CardTitle>
-                <CardDescription className="text-sm">
-                  {example.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <LayoutPreview
-                  layout={
-                    example.key as
-                      | "basic-dashboard"
-                      | "ide-layout"
-                      | "email-client"
-                      | "music-daw"
-                      | "file-manager"
-                      | "fixed-sidebar"
-                  }
-                />
-                <Button variant="outline" className="w-full">
-                  View Example →
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+          {examples.map((example) => {
+            const previewLayout = previewLayouts[example.key];
+
+            return (
+              <Card
+                key={example.key}
+                data-testid="example-card"
+                data-example-key={example.key}
+                className="cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1"
+                onClick={() => selectExample(example.key)}
+              >
+                <CardHeader>
+                  <CardTitle className="text-lg">{example.name}</CardTitle>
+                  <CardDescription className="text-sm">
+                    {example.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {previewLayout ? (
+                    <LayoutPreview layout={previewLayout} />
+                  ) : (
+                    <ExperimentPreview />
+                  )}
+                  <Button variant="outline" className="w-full">
+                    View Example →
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         <div className="mt-12 text-center">
           <Card className="max-w-2xl mx-auto bg-blue-50 border-blue-200">
             <CardContent className="p-6">
               <p className="text-blue-800 text-sm">
-                <strong>💡 Pro Tip:</strong> Each example runs in full-page
-                mode. Try resizing panels by dragging dividers and
-                double-clicking to collapse/expand sections. These examples
-                demonstrate how PrettyPoly works seamlessly with shadcn/ui
-                components.
+                <strong>Tip:</strong> Each example runs in full-page mode. Try
+                resizing panels by dragging dividers and double-clicking to
+                collapse or expand sections.
               </p>
             </CardContent>
           </Card>

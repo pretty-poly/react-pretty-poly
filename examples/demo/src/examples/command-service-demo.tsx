@@ -1,13 +1,8 @@
 /**
- * Command Service Demo
+ * Under-review action helper demo.
  *
- * Demonstrates Pretty Poly 2.0's CommandService primitive:
- * - Declarative command registration
- * - Keyboard shortcuts
- * - Command execution from UI
- * - Command palette for discovery
- *
- * This shows how commands provide a unified way to handle actions!
+ * This source remains in the demo so we can decide whether centralized action
+ * helpers belong in PrettyPoly or should stay in consuming applications.
  */
 
 import { useState } from 'react'
@@ -46,7 +41,7 @@ interface DemoState {
 }
 
 // ============================================================================
-// Command Palette Component
+// Searchable action panel component
 // ============================================================================
 
 interface CommandPaletteProps {
@@ -110,7 +105,7 @@ function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         <div className="max-h-96 overflow-auto">
           {filteredCommands.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground text-sm">
-              No commands found
+              No actions found
             </div>
           ) : (
             filteredCommands.map(command => {
@@ -226,13 +221,13 @@ function CommandServiceDemoInternal() {
     {
       id: 'demo.openPalette',
       title: 'Open Command Palette',
-      description: 'Open the command palette to search and execute commands',
+      description: 'Open the action search panel',
       category: 'System',
       icon: Keyboard,
       keybinding: 'Ctrl+P',
       handler: () => {
         setPaletteOpen(true)
-        addNotification('Command palette opened')
+        addNotification('Action search opened')
       },
     },
     {
@@ -287,18 +282,18 @@ function CommandServiceDemoInternal() {
     <div className="h-screen flex flex-col">
       {/* Info Banner */}
       <div className="bg-purple-50 dark:bg-purple-950 border-b border-purple-200 dark:border-purple-800 p-4">
-        <h1 className="text-xl font-bold mb-2">Command Service Demo (Pretty Poly 2.0)</h1>
+        <h1 className="text-xl font-bold mb-2">Action Helper Experiment</h1>
         <p className="text-sm text-muted-foreground mb-2">
-          This demonstrates the <strong>CommandService</strong> primitive - declarative actions
-          with keyboard shortcuts and a command palette for discoverability.
+          This under-review source centralizes actions and keyboard shortcuts.
+          It is kept here to evaluate whether that belongs in PrettyPoly.
         </p>
         <div className="flex gap-6 text-xs">
           <div>
-            <strong>💻 Try this:</strong> Use keyboard shortcuts or the command palette (Ctrl+P)
+            <strong>Try this:</strong> Use the buttons or optional shortcuts.
           </div>
           <div>
-            <strong>⌨️ Shortcuts:</strong> Ctrl+I (increment), Ctrl+D (decrement), Ctrl+R (reset),
-            Ctrl+B (sidebar), Ctrl+P (palette)
+            <strong>Shortcuts:</strong> Ctrl+I (increment), Ctrl+D (decrement), Ctrl+R (reset),
+            Ctrl+B (sidebar), Ctrl+P (action search)
           </div>
         </div>
       </div>
@@ -309,7 +304,7 @@ function CommandServiceDemoInternal() {
           {state.sidebarVisible && (
             <Block id="sidebar">
               <BlockHeader>
-                <BlockToolbar left={<h2 className="text-sm font-semibold">Registered Commands</h2>} />
+                <BlockToolbar left={<h2 className="text-sm font-semibold">Registered Actions</h2>} />
               </BlockHeader>
               <BlockContent>
                 <div className="p-4 space-y-4">
@@ -337,7 +332,7 @@ function CommandServiceDemoInternal() {
 
                   <div className="pt-4 border-t">
                     <div className="text-xs text-muted-foreground">
-                      Total: {commands.length} commands
+                      Total: {commands.length} actions
                     </div>
                   </div>
                 </div>

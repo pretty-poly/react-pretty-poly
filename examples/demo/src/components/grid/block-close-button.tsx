@@ -20,7 +20,7 @@ export interface BlockCloseButtonProps extends ButtonHTMLAttributes<HTMLButtonEl
  * Close button component for removing blocks/panes
  *
  * Designed for use with BlockToolbar's `right` section to provide
- * VS Code-style close functionality for split panes.
+ * Close button for split panes.
  *
  * @example
  * ```tsx

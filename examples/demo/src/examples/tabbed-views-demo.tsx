@@ -7,7 +7,7 @@
  * - Multiple view types in a single tabbed interface
  * - View icons and categories in dropdown
  *
- * This shows how to build VS Code-style interfaces where tabs can contain different view types!
+ * This shows an under-review workflow where tabs can contain different view types.
  */
 
 import React from "react";

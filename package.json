@@ -2,7 +2,7 @@
   "name": "pretty-poly",
   "version": "0.4.1",
   "private": true,
-  "description": "A shadcn/ui compatible polymorphic React component library for creating resizable, responsive grid layouts",
+  "description": "A shadcn source registry for React resizable panel grids",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pretty-poly/react-pretty-poly.git"

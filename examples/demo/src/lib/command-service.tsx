@@ -6,7 +6,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
  * - Executed programmatically
  * - Triggered by keyboard shortcuts
  * - Displayed in menus/toolbars
- * - Shown in a command palette
+ * - Shown in custom action search UI
  */
 export interface Command {
   /** Unique identifier for this command */

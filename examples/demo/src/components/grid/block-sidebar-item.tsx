@@ -14,7 +14,7 @@ export interface BlockSidebarItemProps {
 
 /**
  * BlockSidebarItem component for individual sidebar items
- * VS Code-style icon buttons with tooltips and active states
+ * Vertical icon buttons with tooltips and active states
  */
 export const BlockSidebarItem = forwardRef<HTMLButtonElement, BlockSidebarItemProps>(
   ({

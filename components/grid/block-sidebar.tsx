@@ -12,7 +12,7 @@ export interface BlockSidebarProps {
 }
 
 /**
- * BlockSidebar component for VS Code-style vertical icon bars
+ * BlockSidebar component for vertical icon bars
  * Creates a fixed-width vertical navigation sidebar within a block
  */
 export const BlockSidebar = forwardRef<HTMLDivElement, BlockSidebarProps>(
@@ -25,7 +25,7 @@ export const BlockSidebar = forwardRef<HTMLDivElement, BlockSidebarProps>(
           'flex flex-col',
           'flex-shrink-0', // Don't shrink
           'h-full', // Full height
-          'bg-sidebar', // VS Code-style sidebar background (adapts to theme)
+          'bg-sidebar', // Sidebar background adapts to theme
           'border-sidebar-border', // Border color
           position === 'left' ? 'border-r' : 'border-l', // Border on appropriate side
           position === 'right' && 'order-last', // Move to right if specified

@@ -1,7 +1,7 @@
 /**
  * View Registry Demo
  *
- * Demonstrates Pretty Poly 2.0's primitive-based architecture:
+ * Demonstrates an under-review optional view lookup helper:
  * - ViewRegistry for registering view types
  * - Blocks can display any registered view type
  * - Runtime view switching (Blender's Area concept)

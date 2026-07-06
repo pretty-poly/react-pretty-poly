@@ -1,10 +1,13 @@
 # Divider Position and Delta Inversion Logic
 
-> Status: historical technical note. Current source paths are `components/`, `hooks/`, and `lib/`; see `../AGENTS.md` for current divider and resize implementation locations.
-
 ## Overview
 
-This document explains the critical relationship between divider position, target blocks, and delta inversion in the Pretty Poly resize system. Understanding this logic is essential for correctly implementing automatic divider positioning.
+This document explains the relationship between divider position, target blocks,
+and delta inversion in the PrettyPoly resize system.
+
+PrettyPoly currently supports `Grid` `dividers="auto" | "manual" | "none"`.
+Generated and explicit dividers are overlay handles; they do not add CSS Grid gap
+tracks or consume layout space.
 
 ## Key Concept: Resizing px Blocks with fr Blocks
 
@@ -64,7 +67,7 @@ When position is `start`, the divider is geometrically before the block we're re
 
 ## Implementation Rules
 
-### Auto-Detection Rules (divider-auto-detection.ts)
+### Auto-Detection Rules
 
 ```typescript
 // Case: fr block | divider | px block
@@ -84,7 +87,7 @@ if (currentUnit === 'px' && nextUnit === 'fr') {
 }
 ```
 
-### Resize Logic (GridProvider.tsx)
+### Resize Logic
 
 ```typescript
 // Get position from divider's data attribute
@@ -156,7 +159,9 @@ When testing divider behavior, verify:
 
 ## Related Files
 
-- `/src/utils/divider-auto-detection.ts` - Position detection logic
-- `/src/components/Grid/GridProvider.tsx` - Resize logic with inversion
-- `/src/components/Divider/Divider.tsx` - Divider component with auto-detection
-- `/src/utils/calculations.ts` - `calculateConstrainedSize` with inversion parameter
+- `lib/grid-divider-auto-detection.ts` - position detection logic.
+- `components/grid/grid-provider.tsx` - grid state and resize action wiring.
+- `components/divider/divider.tsx` - explicit divider component.
+- `components/divider/divider-overlay.tsx` - generated divider overlay.
+- `hooks/use-grid-resize-operations.ts` - drag lifecycle and resize calculations.
+- `lib/grid-calculations.ts` - `calculateConstrainedSize` and related math.

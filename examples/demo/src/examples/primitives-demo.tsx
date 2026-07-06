@@ -1,10 +1,8 @@
 /**
- * Pretty Poly 2.0 Primitives Integration Demo
+ * Under-review helper integration demo.
  *
- * Shows all three core primitives working together:
- * - ViewRegistry: Register view types
- * - CommandService: Execute actions with keyboard shortcuts
- * - LayoutService: Manage which views are where + save/load workspaces
+ * This shows the optional helper source that is being reviewed separately from
+ * the stable grid-system registry item.
  */
 
 import React from 'react'
@@ -41,7 +39,7 @@ const TextView: React.FC<ViewProps> = () => (
     <div className="text-center">
       <FileText className="w-16 h-16 mx-auto mb-4 text-blue-500" />
       <h2 className="text-2xl font-bold">Text View</h2>
-      <p className="text-muted-foreground mt-2">Press Ctrl+1 to switch to Image View</p>
+      <p className="text-muted-foreground mt-2">Use the controls below to switch views.</p>
     </div>
   </div>
 )
@@ -51,7 +49,7 @@ const ImageView: React.FC<ViewProps> = () => (
     <div className="text-center">
       <Image className="w-16 h-16 mx-auto mb-4 text-purple-500" />
       <h2 className="text-2xl font-bold">Image View</h2>
-      <p className="text-muted-foreground mt-2">Press Ctrl+2 to switch to Video View</p>
+      <p className="text-muted-foreground mt-2">Use the controls below to switch views.</p>
     </div>
   </div>
 )
@@ -61,7 +59,7 @@ const VideoView: React.FC<ViewProps> = () => (
     <div className="text-center">
       <Video className="w-16 h-16 mx-auto mb-4 text-cyan-500" />
       <h2 className="text-2xl font-bold">Video View</h2>
-      <p className="text-muted-foreground mt-2">Press Ctrl+3 to switch to Music View</p>
+      <p className="text-muted-foreground mt-2">Use the controls below to switch views.</p>
     </div>
   </div>
 )
@@ -71,7 +69,7 @@ const MusicView: React.FC<ViewProps> = () => (
     <div className="text-center">
       <Music className="w-16 h-16 mx-auto mb-4 text-green-500" />
       <h2 className="text-2xl font-bold">Music View</h2>
-      <p className="text-muted-foreground mt-2">Press Ctrl+0 to switch to Text View</p>
+      <p className="text-muted-foreground mt-2">Use the controls below to switch views.</p>
     </div>
   </div>
 )
@@ -105,7 +103,7 @@ function PrimitivesDemoInternal() {
     { id: 'main', type: 'block', parentId: 'root', order: 0, defaultSize: 1, sizeUnit: 'fr' },
   ], [])
 
-  // Register commands that use LayoutService to change views
+  // Register actions that use the layout helper to change views
   const commands: Command[] = React.useMemo(
     () => [
       {
@@ -169,14 +167,14 @@ function PrimitivesDemoInternal() {
       <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 shadow-lg">
         <h1 className="text-2xl font-bold flex items-center gap-2 mb-2">
           <Sparkles className="w-6 h-6" />
-          Pretty Poly 2.0: The Three Primitives
+          Under-review Helper Integration
         </h1>
         <p className="text-sm opacity-90 mb-3">
-          ViewRegistry + CommandService + LayoutService working together
+          Combined view lookup, action helper, and saved layout helper source.
         </p>
         <div className="flex gap-4 text-xs">
           <div className="bg-white/20 px-3 py-1 rounded">
-            <strong>Shortcuts:</strong> Ctrl+0 (Text), Ctrl+1 (Image), Ctrl+2 (Video), Ctrl+3 (Music), Ctrl+S (Save)
+            <strong>Optional shortcuts:</strong> Ctrl+0 (Text), Ctrl+1 (Image), Ctrl+2 (Video), Ctrl+3 (Music), Ctrl+S (Save)
           </div>
           <div className="bg-white/20 px-3 py-1 rounded">
             <strong>Current View:</strong> {mainViewType}
@@ -262,13 +260,13 @@ function PrimitivesDemoInternal() {
       <div className="border-t p-4 bg-muted/30 text-xs">
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <strong>ViewRegistry:</strong> {registry.count} views registered
+            <strong>View lookup:</strong> {registry.count} views registered
           </div>
           <div>
-            <strong>CommandService:</strong> {commandService.count} commands available
+            <strong>Action helper:</strong> {commandService.count} actions available
           </div>
           <div>
-            <strong>LayoutService:</strong> {layoutService.layoutCount} workspaces saved
+            <strong>Layout helper:</strong> {layoutService.layoutCount} workspaces saved
           </div>
         </div>
       </div>

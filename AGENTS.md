@@ -40,8 +40,12 @@ npm --prefix examples/demo run test:e2e:chromium
 
 - `grid-system`: core grid, block, divider, grid hooks, and grid utilities.
 - `grid-sidebar`: optional block sidebar components; depends on `grid-system`.
-- `grid-primitives`: ViewRegistry, CommandService, and LayoutService.
-- `grid-tabs`: optional tab components plus ViewRegistry tab helpers; depends on `grid-system` and `grid-primitives`.
+- `grid-primitives`: under-review optional helpers currently containing ViewRegistry, CommandService, and LayoutService source.
+- `grid-tabs`: under-review optional tab components plus ViewRegistry tab helpers; depends on `grid-system` and `grid-primitives`.
+
+`grid-system` is the stable center. Do not treat the primitive or tab registry
+items as settled product direction until `docs/CURRENT_STATE_REVIEW.md` is
+resolved in a follow-up slice.
 
 Use full GitHub registry dependency names in `registry.json`, for example:
 

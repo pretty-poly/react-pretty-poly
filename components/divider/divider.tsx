@@ -22,7 +22,7 @@ export const Divider: React.FC<DividerProps> = ({
   targetId,
   position,
   direction = 'vertical',
-  size = 4, // Default hover zone size (like VS Code)
+  size = 4, // Default hover zone size
   className,
   handle: Handle,
   onDoubleClick,

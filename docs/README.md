@@ -5,14 +5,13 @@ PrettyPoly is currently maintained as a shadcn source registry package.
 Current docs:
 
 - [README](../README.md): install, usage, registry items, and development commands.
+- [Product direction](./PRODUCT_DIRECTION.md): intended use cases, design principles, and non-goals.
+- [Current state review](./CURRENT_STATE_REVIEW.md): what is core, under review, likely overreach, and cleanup work.
 - [Registry notes](../registry/README.md): how the GitHub registry works.
 - [Installation guide](./INSTALLATION.md): consumer setup and verification.
 - [Agent guide](../AGENTS.md): contributor workflow, source layout, and release checklist.
 - [Demo guide](../examples/demo/README.md): local demo sync and validation.
-
-Historical docs:
-
-The other markdown files in this directory and the architecture notes in the repository root are retained as design history. They may mention old paths like `src/components/Grid`, npm package builds, generated registry JSON, `dist/`, or obsolete manual-divider-only behavior. Treat those references as historical unless a current doc above confirms them.
+- [Divider position and inversion](./divider-position-and-inversion.md): resize direction notes.
 
 Current source layout:
 

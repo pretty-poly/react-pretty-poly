@@ -1,7 +1,7 @@
 /**
  * Split + Tabs Demo
  *
- * Demonstrates VS Code-style interface combining:
+ * Demonstrates an under-review composition of:
  * - Split containers with dynamic pane creation
  * - Tabbed interface within each split pane
  * - ViewRegistry integration for tab content
@@ -55,8 +55,8 @@ function WelcomeView(_props: ViewProps) {
         <div>
           <h1 className="text-3xl font-bold mb-4">Split + Tabs Demo</h1>
           <p className="text-lg text-muted-foreground">
-            This demonstrates VS Code-style interface with split panes and tabs.
-            Each split pane has its own independent tab bar!
+            This demonstrates split panes and tabs as an under-review
+            composition. Each split pane has its own independent tab bar.
           </p>
         </div>
 

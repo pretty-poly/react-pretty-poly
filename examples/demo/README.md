@@ -11,7 +11,13 @@ This is a separate demo application for testing PrettyPoly as copied shadcn regi
 
 ## Examples Included
 
-The selector app includes dashboard, IDE, email, split-pane, tabbed, primitives, file-manager, DAW, and fixed-sidebar examples.
+The selector app leads with normal app surfaces: dashboard, email, file manager,
+IDE-like dense context, DAW, and fixed-sidebar examples.
+
+Under-review experiments for block visibility, runtime splitting, tabs, view
+lookup, action helpers, and saved layout helpers remain available at the end of
+the selector so their API shape can be evaluated without presenting them as the
+stable center of PrettyPoly.
 
 ## Development
 

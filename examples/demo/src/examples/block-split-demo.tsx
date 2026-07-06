@@ -113,7 +113,7 @@ function WelcomePane({ blockId }: { blockId: string }) {
             <div>
               <h1 className="text-3xl font-bold mb-4">Block Splitting Demo</h1>
               <p className="text-lg text-muted-foreground">
-                This demonstrates VS Code-style dynamic splitting with proper
+                This demonstrates under-review dynamic splitting with proper
                 container/pane separation. The Grid controls the entire
                 viewport, and each pane scrolls independently.
               </p>

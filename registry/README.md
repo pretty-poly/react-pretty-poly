@@ -25,8 +25,11 @@ Use tags for reproducible installs. Same-repository dependencies must also use f
 
 - `grid-system`: core grid, block, divider, hooks, and grid utilities.
 - `grid-sidebar`: optional sidebar components; depends on `grid-system`.
-- `grid-primitives`: ViewRegistry, CommandService, and LayoutService.
-- `grid-tabs`: optional tab, new-tab, and view-rendering components; depends on `grid-system` and `grid-primitives`.
+- `grid-primitives`: under-review optional helpers currently containing ViewRegistry, CommandService, and LayoutService source.
+- `grid-tabs`: under-review optional tab, new-tab, and view-rendering components; depends on `grid-system` and `grid-primitives`.
+
+`grid-system` is the stable center of the alpha. Do not treat `grid-primitives`
+or `grid-tabs` as settled direction until the current-state review is resolved.
 
 ## Maintenance
 

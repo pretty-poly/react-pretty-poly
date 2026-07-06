@@ -63,7 +63,7 @@
       "name": "grid-primitives",
       "type": "registry:item",
       "title": "PrettyPoly Primitives",
-      "description": "ViewRegistry, CommandService, and LayoutService primitives.",
+      "description": "Under-review optional helpers currently containing ViewRegistry, CommandService, and LayoutService source.",
       "files": [
         { "path": "lib/view-registry.tsx", "type": "registry:lib", "target": "@lib/view-registry.tsx" },
         { "path": "lib/command-service.tsx", "type": "registry:lib", "target": "@lib/command-service.tsx" },
@@ -74,7 +74,7 @@
       "name": "grid-tabs",
       "type": "registry:block",
       "title": "PrettyPoly Grid Tabs",
-      "description": "Optional tab and ViewRegistry integration components for PrettyPoly blocks.",
+      "description": "Under-review optional tab and ViewRegistry integration components for PrettyPoly blocks.",
       "registryDependencies": [
         "pretty-poly/react-pretty-poly/grid-system#v0.4.1",
         "pretty-poly/react-pretty-poly/grid-primitives#v0.4.1"
