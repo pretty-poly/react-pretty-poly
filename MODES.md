@@ -1,5 +1,7 @@
 # Layout Modes in Pretty Poly
 
+> Status: historical design note. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `README.md`, `registry/README.md`, and `AGENTS.md` for current commands and paths. Any `src/...` implementation paths below are stale unless they refer to tests.
+
 Pretty Poly supports three primary **grid-level layout modes** that transform the entire layout based on viewport size. The mode switching is handled primarily through CSS, using inline style generation and Tailwind's `group-data-*` variant system.
 
 ## Grid-level Layout Modes

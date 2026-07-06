@@ -14,6 +14,7 @@ import type {
   ViewportInfo,
   Tab,
   EnsureBlockVisibleOptions,
+  GridDividerMode,
 } from "@/lib/grid-types";
 import { useGridMode } from "@/hooks/use-grid-mode";
 import { useGridPersistence } from "@/hooks/use-grid-persistence";
@@ -213,14 +214,20 @@ export function gridStateReducer(state: GridState, action: GridAction): GridStat
     case "RESET_STATE": {
       // Reset block sizes to their original defaults
       const resetBlocks = Object.fromEntries(
-        Object.entries(state.blocks).map(([id, block]) => [
-          id,
-          {
-            ...block,
-            size: block.defaultSize,
-            // Reset to original defaultSize stored somewhere, or current defaultSize
-          },
-        ])
+        Object.entries(state.blocks).map(([id, block]) => {
+          const resetSize =
+            block.initialDefaultSize ?? block.originalDefaultSize ?? block.defaultSize;
+
+          return [
+            id,
+            {
+              ...block,
+              defaultSize: resetSize,
+              size: resetSize,
+              originalDefaultSize: resetSize,
+            },
+          ];
+        })
       );
       return {
         ...state,
@@ -268,7 +275,15 @@ export function gridStateReducer(state: GridState, action: GridAction): GridStat
       };
 
     case "SPLIT_BLOCK": {
-      const { targetBlockId, direction, firstChildId, secondChildId, initialSize = 1 } = action.payload;
+      const {
+        targetBlockId,
+        direction,
+        firstChildId,
+        secondChildId,
+        newBlockId,
+        initialSize = 1,
+        position = "after",
+      } = action.payload;
       const targetBlock = state.blocks[targetBlockId];
 
       // Validate target exists and is a group
@@ -293,41 +308,50 @@ export function gridStateReducer(state: GridState, action: GridAction): GridStat
       // Determine view type for new panes
       const newViewType = action.payload.newViewType || targetBlock.defaultViewType;
 
-      // Case 1: Group with undefined direction - set direction and REPLACE children
+      // Case 1: Group with undefined direction - set direction and replace children
       if (!targetBlock.direction) {
         const existingChildren = targetBlock.children || [];
         const oldChildId = existingChildren[0];
         const oldChild = oldChildId ? state.blocks[oldChildId] : undefined;
+        const firstChildIsNew = newBlockId === firstChildId;
+
+        const inheritedChildConfig = {
+          type: "block" as const,
+          parentId: targetBlockId,
+          defaultSize: initialSize,
+          sizeUnit: "fr" as const,
+          initialDefaultSize: initialSize,
+          viewType: oldChild?.viewType,
+          viewState: oldChild?.viewState,
+          tabState: oldChild?.tabState,
+        };
+
+        const newChildConfig = {
+          type: "block" as const,
+          parentId: targetBlockId,
+          defaultSize: initialSize,
+          sizeUnit: "fr" as const,
+          initialDefaultSize: initialSize,
+          viewType: newViewType,
+        };
+
+        const firstChild: BlockConfig = {
+          id: firstChildId,
+          order: 0,
+          ...(firstChildIsNew ? newChildConfig : inheritedChildConfig),
+        };
+
+        const secondChild: BlockConfig = {
+          id: secondChildId,
+          order: 1,
+          ...(firstChildIsNew ? inheritedChildConfig : newChildConfig),
+        };
 
         // Update group: set direction and replace children
         const updatedGroup: BlockConfig = {
           ...targetBlock,
           direction: splitDirection,
           children: [firstChildId, secondChildId],
-        };
-
-        // First child inherits content from original child (including tabs!)
-        const firstChild: BlockConfig = {
-          id: firstChildId,
-          type: "block",
-          parentId: targetBlockId,
-          order: 0,
-          defaultSize: initialSize,
-          sizeUnit: "fr",
-          viewType: oldChild?.viewType,
-          viewState: oldChild?.viewState,
-          tabState: oldChild?.tabState,  // Preserve tabs when splitting
-        };
-
-        // Second child gets default or specified view type
-        const secondChild: BlockConfig = {
-          id: secondChildId,
-          type: "block",
-          parentId: targetBlockId,
-          order: 1,
-          defaultSize: initialSize,
-          sizeUnit: "fr",
-          viewType: newViewType,
         };
 
         // Delete old children from state
@@ -356,18 +380,33 @@ export function gridStateReducer(state: GridState, action: GridAction): GridStat
           return state;
         }
 
+        const existingChildren = targetBlock.children || [];
+        const nextChildren =
+          position === "before"
+            ? [newBlockId, ...existingChildren]
+            : [...existingChildren, newBlockId];
+
+        const reorderedBlocks = nextChildren.reduce<Record<string, BlockConfig>>((acc, childId, order) => {
+          const child = state.blocks[childId];
+          if (child) {
+            acc[childId] = { ...child, order };
+          }
+          return acc;
+        }, {});
+
         const updatedGroup: BlockConfig = {
           ...targetBlock,
-          children: [...(targetBlock.children || []), secondChildId],
+          children: nextChildren,
         };
 
         const newChild: BlockConfig = {
-          id: secondChildId,
+          id: newBlockId,
           type: "block",
           parentId: targetBlockId,
-          order: (targetBlock.children?.length || 0),
+          order: nextChildren.indexOf(newBlockId),
           defaultSize: initialSize,
           sizeUnit: "fr",
+          initialDefaultSize: initialSize,
           viewType: newViewType,
         };
 
@@ -375,8 +414,9 @@ export function gridStateReducer(state: GridState, action: GridAction): GridStat
           ...state,
           blocks: {
             ...state.blocks,
+            ...reorderedBlocks,
             [targetBlockId]: updatedGroup,
-            [secondChildId]: newChild,
+            [newBlockId]: newChild,
           },
         };
       }
@@ -489,10 +529,8 @@ export function gridStateReducer(state: GridState, action: GridAction): GridStat
       const block = state.blocks[blockId];
       if (!block) return state;
 
-      // Generate unique tab ID
-      const timestamp = Date.now();
-      const random = Math.random().toString(36).substring(2, 9);
-      const newTabId = `tab-${timestamp}-${random}`;
+      const suppliedTabId = "id" in tab ? tab.id : undefined;
+      const newTabId = suppliedTabId ?? `tab-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
       const newTab = { ...tab, id: newTabId };
       const currentTabState = block.tabState;
@@ -772,6 +810,7 @@ export function createInitialState(
       ...block,
       size: block.defaultSize,
       originalDefaultSize: block.defaultSize, // Store original size for expand functionality
+      initialDefaultSize: block.defaultSize,
     };
     return acc;
   }, {} as Record<string, BlockConfig>);
@@ -806,6 +845,7 @@ export interface GridProviderProps {
     | "sessionStorage"
     | ((state: GridState) => void);
   persistKey?: string;
+  dividerMode?: GridDividerMode;
   onModeChange?: (newMode: string, previousMode: string) => void;
   onLayoutChange?: (blocks: BlockConfig[]) => void;
 }
@@ -820,11 +860,12 @@ export function GridProvider({
   gridId = "default",
   persist = false,
   persistKey,
+  dividerMode = "auto",
   onModeChange,
   onLayoutChange,
 }: GridProviderProps) {
   // Mode management
-  const { activeMode, viewport, setMode: setModeInternal } = useGridMode(modes);
+  const { activeMode, viewport, currentLayoutType, setMode: setModeInternal } = useGridMode(modes);
 
   // Initialize state
   const [state, dispatch] = useReducer(
@@ -876,6 +917,8 @@ export function GridProvider({
         activeMode,
         viewport,
       },
+      layoutType: currentLayoutType,
+      dividerMode,
       dispatch,
 
       // Grid operations
@@ -996,6 +1039,7 @@ export function GridProvider({
           parentId,
           defaultSize: 1,
           sizeUnit: "fr",
+          initialDefaultSize: blockConfig.defaultSize ?? 1,
           ...blockConfig,
         };
 
@@ -1027,15 +1071,15 @@ export function GridProvider({
       },
 
       // Tab operations
-      openTab: (blockId: string, tab: Omit<Tab, 'id'>) => {
+      openTab: (blockId: string, tab: Tab | Omit<Tab, 'id'>) => {
         // Generate ID here and return it
-        const timestamp = Date.now();
-        const random = Math.random().toString(36).substring(2, 9);
-        const newTabId = `tab-${timestamp}-${random}`;
+        const suppliedTabId = "id" in tab ? tab.id : undefined;
+        const newTabId =
+          suppliedTabId ?? `tab-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
         dispatch({
           type: "OPEN_TAB",
-          payload: { blockId, tab },
+          payload: { blockId, tab: { ...tab, id: newTabId } },
         });
 
         return newTabId;
@@ -1092,7 +1136,7 @@ export function GridProvider({
         clearState();
       },
     }),
-    [gridId, state, activeMode, viewport, saveState, clearState, setModeInternal, startResize, updateResize, endResize]
+    [gridId, state, activeMode, viewport, currentLayoutType, dividerMode, saveState, clearState, setModeInternal, startResize, updateResize, endResize]
   );
 
   // Notify parent of layout changes

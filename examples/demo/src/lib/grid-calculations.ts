@@ -1,3 +1,14 @@
+/**
+ * Grid calculation utilities ported from grid_resize.ts
+ */
+
+/**
+ * Calculate available flex space in pixels
+ * @param containerPx Total container size in pixels
+ * @param fixedTrackPx Sum of all fixed (px) tracks
+ * @param gapsPx Sum of all gap sizes
+ * @returns Available space for fr units
+ */
 export function getFlexSpacePx(
   containerPx: number,
   fixedTrackPx: number,

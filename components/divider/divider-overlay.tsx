@@ -2,20 +2,28 @@ import React, { useMemo } from 'react'
 import { useGridState } from "@/components/grid/grid-provider"
 import { Divider } from "@/components/divider/divider"
 import { autoDetectDividerPosition } from "@/lib/grid-divider-auto-detection"
-import type { BlockConfig } from "@/lib/grid-types"
+import type { BlockConfig, DividerConfig, GridDividerConfig } from "@/lib/grid-types"
 
 interface DividerInfo {
   id: string
   targetBlockId: string
   position: 'start' | 'end'
   direction: 'vertical' | 'horizontal'
+  size?: number
+  className?: string
+  handle?: DividerConfig['handle']
+  onDoubleClick?: () => void
+  'aria-label'?: string
 }
 
 /**
  * Auto-generates dividers based on block configuration
  * Uses smart position detection to determine which block should be resized
  */
-function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
+function generateDividers(
+  blocks: Record<string, BlockConfig>,
+  dividerConfig?: GridDividerConfig
+): DividerInfo[] {
   const dividers: DividerInfo[] = []
 
   // Find all group blocks
@@ -38,6 +46,10 @@ function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
 
       const previousChild = children[index - 1]
 
+      if (previousChild.dividerPosition === 'none' || child.dividerPosition === 'none') {
+        return
+      }
+
       // Skip divider if either block is explicitly marked as non-resizable
       const previousResizable = previousChild.resizable !== false
       const currentResizable = child.resizable !== false
@@ -57,11 +69,24 @@ function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
         return
       }
 
+      const override = dividerConfig?.overrides?.[targetId]
+      const blockSize = targetBlock?.dividerSize
+      const blockPosition = targetBlock?.dividerPosition
+      const resolvedPosition =
+        blockPosition && blockPosition !== 'auto' && blockPosition !== 'none'
+          ? blockPosition
+          : position
+
       dividers.push({
         id: `divider-${previousChild.id}-${child.id}`,
         targetBlockId: targetId,
-        position,
-        direction: dividerDirection
+        position: resolvedPosition,
+        direction: dividerDirection,
+        size: override?.size ?? blockSize ?? dividerConfig?.defaultSize,
+        className: override?.className ?? dividerConfig?.defaultClassName,
+        handle: override?.handle ?? dividerConfig?.defaultHandle,
+        onDoubleClick: override?.onDoubleClick,
+        'aria-label': override?.['aria-label']
       })
     })
   })
@@ -72,13 +97,17 @@ function generateDividers(blocks: Record<string, BlockConfig>): DividerInfo[] {
 /**
  * Overlay container that manages all dividers as absolutely positioned elements
  */
-export const DividerOverlay: React.FC = () => {
+export interface DividerOverlayProps {
+  dividerConfig?: GridDividerConfig
+}
+
+export const DividerOverlay: React.FC<DividerOverlayProps> = ({ dividerConfig }) => {
   const state = useGridState()
 
   // Auto-generate dividers from block configuration
   const dividers = useMemo(() => {
-    return generateDividers(state.blocks)
-  }, [state.blocks])
+    return generateDividers(state.blocks, dividerConfig)
+  }, [state.blocks, dividerConfig])
 
   if (dividers.length === 0) {
     return null
@@ -100,6 +129,11 @@ export const DividerOverlay: React.FC = () => {
           targetId={divider.targetBlockId}
           position={divider.position}
           direction={divider.direction}
+          size={divider.size}
+          className={divider.className}
+          handle={divider.handle}
+          onDoubleClick={divider.onDoubleClick}
+          aria-label={divider['aria-label']}
         />
       ))}
     </div>

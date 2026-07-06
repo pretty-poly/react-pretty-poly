@@ -1,5 +1,7 @@
 # Divider Position and Delta Inversion Logic
 
+> Status: historical technical note. Current source paths are `components/`, `hooks/`, and `lib/`; see `../AGENTS.md` for current divider and resize implementation locations.
+
 ## Overview
 
 This document explains the critical relationship between divider position, target blocks, and delta inversion in the Pretty Poly resize system. Understanding this logic is essential for correctly implementing automatic divider positioning.

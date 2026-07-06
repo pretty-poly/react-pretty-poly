@@ -2,7 +2,7 @@
 
 A shadcn-compatible polymorphic grid system for React. PrettyPoly is distributed as source through the public GitHub registry at `pretty-poly/react-pretty-poly`; it is not intended to be installed as an npm package.
 
-> Alpha release `v0.4.0`: grid mode is the primary supported path. Responsive modes, tabs, and primitives are still stabilizing.
+> Alpha release `v0.4.1`: grid mode is the primary supported path. Responsive modes, tabs, and primitives are still stabilizing.
 
 ## Install
 
@@ -15,15 +15,15 @@ npx shadcn@latest init
 Install the core grid system from the tagged GitHub registry:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.1
 ```
 
 Optional items:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.4.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.4.1
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.1
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.1
 ```
 
 GitHub registry installs copy source into your project using your `components.json` aliases. PrettyPoly assumes a normal shadcn setup with `@/components`, `@/hooks`, `@/lib`, and an existing `@/lib/utils` `cn` helper.
@@ -71,6 +71,12 @@ export function App() {
 }
 ```
 
+Divider behavior is explicit:
+
+- `dividers="auto"` is the default and generates overlay dividers from adjacent blocks.
+- `dividers="manual"` renders only explicit `<Divider>` children.
+- `dividers="none"` suppresses both generated and explicit dividers.
+
 ## Registry Items
 
 - `grid-system`: core grid, block, divider, hooks, and grid utilities.
@@ -84,9 +90,12 @@ The installable source lives in top-level `components/`, `hooks/`, and `lib/`. T
 
 ```bash
 npm run registry:validate
+npm run sync:demo
 npm test -- --run
 npm run type-check
 npm run lint
+npm --prefix examples/demo run type-check
+npm --prefix examples/demo run build
 ```
 
 There is no registry build step. Do not commit generated `public/r` or `dist/r` files.

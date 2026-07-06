@@ -170,6 +170,7 @@ export function mergePersistedGridState(
       ...block,
       defaultSize: defaultSize ?? block.defaultSize,
       size: size ?? defaultSize ?? block.size ?? block.defaultSize,
+      initialDefaultSize: block.defaultSize,
       originalDefaultSize:
         originalDefaultSize ?? block.originalDefaultSize ?? block.defaultSize,
       viewType:

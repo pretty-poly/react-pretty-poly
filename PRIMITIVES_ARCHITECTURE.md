@@ -1,5 +1,7 @@
 # Pretty Poly 2.0: Primitive-Based Architecture
 
+> Status: historical design note. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `README.md`, `registry/README.md`, and `AGENTS.md` for current commands and paths. Any `src/...` implementation paths below are stale unless they refer to tests.
+
 ## Research Synthesis
 
 After studying multiple polymorphic UI systems, here are the key patterns discovered:

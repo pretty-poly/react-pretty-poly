@@ -1,5 +1,7 @@
 # Dynamic Grids Design Document
 
+> Status: historical design note. Some dynamic grid primitives now exist in the registry source, but this document remains design history. See `../README.md`, `../registry/README.md`, and `../AGENTS.md` for current source layout and release workflow.
+
 This document outlines approaches for making the Pretty Poly grid system more dynamic, supporting runtime structural changes and panel management similar to VS Code.
 
 ## Current State

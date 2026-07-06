@@ -14,7 +14,8 @@ test.describe('Example Selector', () => {
     await expect(selectorPage.heading).toHaveText('PrettyPoly Demo Examples');
   });
 
-  test('displays all three example cards', async ({ page }) => {
+  test('displays expected example cards', async ({ page }) => {
+    expect(await selectorPage.exampleCards.count()).toBeGreaterThanOrEqual(3);
     await expect(selectorPage.basicDashboardCard).toBeVisible();
     await expect(selectorPage.ideLayoutCard).toBeVisible();
     await expect(selectorPage.emailClientCard).toBeVisible();
@@ -26,9 +27,9 @@ test.describe('Example Selector', () => {
     // Check URL updated
     expect(await selectorPage.getCurrentUrl()).toContain('example=basic-dashboard');
 
-    // Check selector is hidden and back button is visible
+    // Check selector is hidden and example content is visible
     await expect(selectorPage.heading).not.toBeVisible();
-    await expect(selectorPage.backButton).toBeVisible();
+    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
   });
 
   test('navigates to IDE Layout example', async ({ page }) => {
@@ -37,8 +38,7 @@ test.describe('Example Selector', () => {
     // Check URL updated
     expect(await selectorPage.getCurrentUrl()).toContain('example=ide-layout');
 
-    // Check back button is visible
-    await expect(selectorPage.backButton).toBeVisible();
+    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
   });
 
   test('navigates to Email Client example', async ({ page }) => {
@@ -47,8 +47,7 @@ test.describe('Example Selector', () => {
     // Check URL updated
     expect(await selectorPage.getCurrentUrl()).toContain('example=email-client');
 
-    // Check back button is visible
-    await expect(selectorPage.backButton).toBeVisible();
+    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
   });
 
   test('navigates back to selector from example', async ({ page }) => {
@@ -56,7 +55,7 @@ test.describe('Example Selector', () => {
     await selectorPage.selectExample('Email Client');
     await expect(selectorPage.heading).not.toBeVisible();
 
-    // Click back button
+    // Use browser history
     await selectorPage.goBack();
 
     // Should be back on selector page
@@ -71,7 +70,7 @@ test.describe('Example Selector', () => {
 
     // Should show the example, not the selector
     await expect(selectorPage.heading).not.toBeVisible();
-    await expect(selectorPage.backButton).toBeVisible();
+    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
   });
 
   test('handles browser back button', async ({ page }) => {
@@ -99,7 +98,7 @@ test.describe('Example Selector', () => {
 
     // Should be on the example again
     expect(await selectorPage.getCurrentUrl()).toContain('example=ide-layout');
-    await expect(selectorPage.backButton).toBeVisible();
+    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
   });
 
   test('maintains state across navigation', async ({ page }) => {

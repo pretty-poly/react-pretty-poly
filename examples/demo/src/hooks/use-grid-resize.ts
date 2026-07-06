@@ -36,7 +36,7 @@ export function useGridResize({
     if (!containerRef.current) return 0
 
     const rect = containerRef.current.getBoundingClientRect()
-    return direction === 'column' ? rect.width : rect.height
+    return direction === 'row' ? rect.width : rect.height
   }, [direction, containerRef])
 
   /**

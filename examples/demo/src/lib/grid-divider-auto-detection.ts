@@ -1,4 +1,4 @@
-import type { BlockConfig, DividerPosition, SizeUnit, DividerConfig, Direction } from "@/lib/grid-types"
+import type { BlockConfig, DividerPosition, SizeUnit, DividerConfig, DividerOrientation } from "@/lib/grid-types"
 
 /**
  * Smart auto-detection for divider position based on block size units
@@ -83,7 +83,7 @@ export function generateDividerConfig(
   gridDividerConfig?: {
     defaultSize?: number
     defaultClassName?: string
-    defaultHandle?: React.ComponentType<{ className?: string; direction: Direction }>
+    defaultHandle?: React.ComponentType<{ className?: string; direction: DividerOrientation }>
     overrides?: Record<string, unknown>
   }
 ): {
@@ -91,7 +91,7 @@ export function generateDividerConfig(
   position: DividerPosition
   size: number
   className?: string
-  handle?: React.ComponentType<{ className?: string; direction: Direction }>
+  handle?: React.ComponentType<{ className?: string; direction: DividerOrientation }>
   onDoubleClick?: () => void
   'aria-label'?: string
 } {

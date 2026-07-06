@@ -1,5 +1,7 @@
 # Automatic Divider Implementation Summary
 
+> Status: historical summary. The current divider contract is `Grid` `dividers="auto" | "manual" | "none"` with overlay dividers that do not consume grid gap space. See `../AGENTS.md` for current divider semantics and source paths.
+
 ## Overview
 Successfully implemented a new automatic divider system for PrettyPoly that eliminates CSS Grid containment violations and provides a cleaner developer experience. The system supports three modes: `auto`, `manual`, and `none`.
 

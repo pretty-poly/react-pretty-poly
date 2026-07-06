@@ -33,10 +33,11 @@ const GridInternal = forwardRef<
     | "onLayoutChange"
     | "onModeChange"
   >
->(({ children, className, "aria-label": ariaLabel }, ref) => {
+>(({ children, className, dividers = "auto", dividerConfig, "aria-label": ariaLabel }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     state,
+    layoutType,
     resizeBlock,
     collapseBlock,
     expandBlock,
@@ -244,8 +245,8 @@ ${selector} {
         {children}
 
         {/* Divider overlay - only in grid/desktop mode */}
-        {(state.activeMode === "grid" || state.activeMode === "desktop") && (
-          <DividerOverlay />
+        {dividers === "auto" && layoutType === "grid" && (
+          <DividerOverlay dividerConfig={dividerConfig} />
         )}
       </div>
     </>
@@ -268,7 +269,7 @@ export const Grid = forwardRef<GridAPI, GridProps>(
       onLayoutChange,
       onModeChange,
       className,
-      dividers = "manual",
+      dividers = "auto",
       dividerConfig,
       "aria-label": ariaLabel,
     },
@@ -285,6 +286,7 @@ export const Grid = forwardRef<GridAPI, GridProps>(
         gridId={gridId}
         persist={persist}
         persistKey={persistKey}
+        dividerMode={dividers}
         onLayoutChange={onLayoutChange}
         onModeChange={onModeChange}
       >

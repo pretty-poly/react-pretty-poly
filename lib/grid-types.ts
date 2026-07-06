@@ -3,6 +3,8 @@ export type BlockType = "block" | "group"
 export type SizeUnit = "px" | "fr" | "auto"
 export type Direction = "row" | "column"
 export type DividerPosition = "start" | "end" | "none" | "auto"
+export type DividerOrientation = "vertical" | "horizontal"
+export type GridDividerMode = "auto" | "manual" | "none"
 
 // Layout modes for responsive behavior (grid-level)
 export type LayoutMode =
@@ -28,6 +30,7 @@ export interface BlockConfig {
   // Runtime size tracking
   size?: number
   originalDefaultSize?: number
+  initialDefaultSize?: number
 
   // Resize behavior
   resizable?: boolean  // Defaults to true, set to false to prevent resizing
@@ -141,6 +144,8 @@ export interface EnsureBlockVisibleOptions {
 export interface GridContextValue {
   gridId: string
   state: GridState
+  layoutType: LayoutMode
+  dividerMode: GridDividerMode
   dispatch: React.Dispatch<GridAction>
 
   // Grid operations
@@ -171,7 +176,7 @@ export interface GridContextValue {
   getBlockViewType: (blockId: string) => string | undefined
 
   // Tab operations
-  openTab: (blockId: string, tab: Omit<Tab, 'id'>) => string  // Returns new tab ID
+  openTab: (blockId: string, tab: Tab | Omit<Tab, 'id'>) => string  // Returns new tab ID
   closeTab: (blockId: string, tabId: string) => void
   setActiveTab: (blockId: string, tabId: string) => void
   updateTab: (blockId: string, tabId: string, updates: Partial<Tab>) => void
@@ -231,7 +236,7 @@ export type GridAction =
   // Tab operations
   | { type: "OPEN_TAB"; payload: {
       blockId: string
-      tab: Omit<Tab, 'id'>  // ID will be auto-generated
+      tab: Tab | Omit<Tab, 'id'>  // ID will be auto-generated when omitted
     }}
   | { type: "CLOSE_TAB"; payload: {
       blockId: string
@@ -270,7 +275,7 @@ export interface GridProps {
   modes?: ResponsiveModes
 
   // Divider configuration (new automatic system)
-  dividers?: "auto" | "manual" | "none"
+  dividers?: GridDividerMode
   dividerConfig?: GridDividerConfig
 
   // Persistence
@@ -308,7 +313,7 @@ export interface DividerConfig {
   position?: DividerPosition
   size?: number
   className?: string
-  handle?: React.ComponentType<{ className?: string; direction: Direction }>
+  handle?: React.ComponentType<{ className?: string; direction: DividerOrientation }>
   onDoubleClick?: () => void
   "aria-label"?: string
 }
@@ -317,18 +322,20 @@ export interface DividerConfig {
 export interface GridDividerConfig {
   defaultSize?: number
   defaultClassName?: string
-  defaultHandle?: React.ComponentType<{ className?: string; direction: Direction }>
+  defaultHandle?: React.ComponentType<{ className?: string; direction: DividerOrientation }>
   overrides?: Record<string, Partial<DividerConfig>>
 }
 
 export interface DividerProps {
   targetId?: string // Optional - defaults to previous sibling block
   position?: DividerPosition // Optional - defaults to auto-detection
+  direction?: DividerOrientation
   size?: number
   className?: string
 
   // Customization
-  handle?: React.ComponentType<{ className?: string }>
+  handle?: React.ComponentType<{ className?: string; direction: DividerOrientation }>
+  onDoubleClick?: () => void
 
   // Accessibility
   "aria-label"?: string

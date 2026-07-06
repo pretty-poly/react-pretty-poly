@@ -1,4 +1,4 @@
-import { useGridState } from "@/components/grid/grid-provider"
+import { useGridContext } from "@/components/grid/grid-provider"
 import { BlockSplitContainer } from "@/components/grid/block-split-container"
 import type { BlockSplitContainerProps } from "@/components/grid/block-split-container"
 import type { BlockConfig } from "@/lib/grid-types"
@@ -87,7 +87,7 @@ export function BlockTreeRenderer({
   renderGroup,
   className
 }: BlockTreeRendererProps): React.ReactElement | null {
-  const state = useGridState()
+  const { gridId, state } = useGridContext()
 
   if (!state || !state.blocks) {
     return null
@@ -146,7 +146,8 @@ export function BlockTreeRenderer({
     )
   }
 
-  // Case 2: Regular group (no toolbar) → Just render children (Grid handles CSS)
+  // Case 2: Regular group (no toolbar) -> wrap non-root groups so CSS and divider
+  // measurement selectors have a concrete DOM node to target.
   if (block.type === 'group' && block.children) {
     const children = renderChildren()
 
@@ -155,9 +156,21 @@ export function BlockTreeRenderer({
       return <>{renderGroup(blockId, block, children)}</>
     }
 
-    // Don't wrap in a div - Grid component already handles the parent container
-    // and generates CSS Grid styles via selectors like [data-block-id="root"]
-    return <>{children}</>
+    if (!block.parentId) {
+      return <>{children}</>
+    }
+
+    return (
+      <div
+        data-grid-id={gridId}
+        data-block-id={blockId}
+        data-block-type="group"
+        data-block-direction={block.direction}
+        className={className || 'relative grid h-full min-h-0 w-full'}
+      >
+        {children}
+      </div>
+    )
   }
 
   // Case 3: Leaf block → Use renderBlock prop

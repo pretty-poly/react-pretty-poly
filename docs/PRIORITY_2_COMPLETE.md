@@ -1,5 +1,7 @@
 # Priority 2 Tasks - COMPLETED ✅
 
+> Status: historical completion note. It may describe old package-build artifacts and old `src/...` implementation paths. See `../README.md`, `../registry/README.md`, and `../AGENTS.md` for current source layout and validation commands.
+
 **Date:** 2025-10-02
 **Status:** All Priority 2 tasks successfully completed
 

@@ -51,7 +51,7 @@
       "title": "PrettyPoly Grid Sidebar",
       "description": "Optional sidebar components for PrettyPoly blocks.",
       "registryDependencies": [
-        "pretty-poly/react-pretty-poly/grid-system#v0.4.0"
+        "pretty-poly/react-pretty-poly/grid-system#v0.4.1"
       ],
       "files": [
         { "path": "components/grid/block-sidebar.tsx", "type": "registry:component", "target": "@components/grid/block-sidebar.tsx" },
@@ -76,8 +76,8 @@
       "title": "PrettyPoly Grid Tabs",
       "description": "Optional tab and ViewRegistry integration components for PrettyPoly blocks.",
       "registryDependencies": [
-        "pretty-poly/react-pretty-poly/grid-system#v0.4.0",
-        "pretty-poly/react-pretty-poly/grid-primitives#v0.4.0"
+        "pretty-poly/react-pretty-poly/grid-system#v0.4.1",
+        "pretty-poly/react-pretty-poly/grid-primitives#v0.4.1"
       ],
       "files": [
         { "path": "components/grid/block-tabs.tsx", "type": "registry:component", "target": "@components/grid/block-tabs.tsx" },

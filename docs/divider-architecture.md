@@ -1,5 +1,7 @@
 # Divider Architecture Documentation
 
+> Status: historical architecture note. PrettyPoly now defaults to generated overlay dividers and still supports explicit dividers with `dividers="manual"`. See `../AGENTS.md` and `../README.md` for current behavior.
+
 ## Current Architecture (v1 - Manual Placement)
 
 ### How It Works Today

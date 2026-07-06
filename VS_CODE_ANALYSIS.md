@@ -1,5 +1,7 @@
 # Pretty Poly vs VS Code Layout System Analysis
 
+> Status: historical design note. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `README.md`, `registry/README.md`, and `AGENTS.md` for current commands and paths. Any `src/...` implementation paths below are stale unless they refer to tests.
+
 ## Executive Summary
 
 Pretty Poly has a solid foundation with its recursive grid system and responsive modes, but lacks the sophisticated view management, service architecture, and dynamic composition capabilities that make VS Code's layout system so powerful. This document analyzes the gaps and provides a roadmap for evolution.

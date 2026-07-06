@@ -1,5 +1,7 @@
 # Block Splitting Implementation Plan
 
+> Status: historical design note. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `README.md`, `registry/README.md`, and `AGENTS.md` for current commands and paths. Any `src/...` implementation paths below are stale unless they refer to tests.
+
 ## Overview
 
 This document outlines the implementation plan for dynamic block splitting in Pretty Poly, enabling VS Code-like split views while maintaining alignment with the PRIMITIVES_ARCHITECTURE.md vision.

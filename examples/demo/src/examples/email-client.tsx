@@ -304,6 +304,8 @@ const EmailClientContent: React.FC<{
                   return (
                     <button
                       key={email.id}
+                      data-email-id={email.id}
+                      data-selected={isSelected ? 'true' : 'false'}
                       onClick={() => setSelectedEmail(email)}
                       className={`w-full text-left p-4 hover:bg-slate-50 cursor-pointer transition-colors ${
                         isSelected ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''

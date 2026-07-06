@@ -1,5 +1,7 @@
 # Divider Migration Plan: Manual → Automatic
 
+> Status: historical migration plan. The automatic overlay divider system is now implemented. Current modes are `auto`, `manual`, and `none`; manual dividers are still supported when `dividers="manual"` is passed.
+
 ## Proposed Architecture (v2 - Automatic Dividers)
 
 ### Core Philosophy

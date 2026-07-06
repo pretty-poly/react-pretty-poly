@@ -1,13 +1,16 @@
 import React, { useRef, useCallback, useState, useLayoutEffect, useEffect } from 'react'
 import { cn } from "@/lib/utils"
 import { useGridActions, useGridContext, useGridResize } from "@/components/grid/grid-provider"
+import type { DividerOrientation } from "@/lib/grid-types"
 
 interface DividerProps {
   targetId: string
   position: 'start' | 'end'
-  direction?: 'vertical' | 'horizontal'
+  direction?: DividerOrientation
   size?: number
   className?: string
+  handle?: React.ComponentType<{ className?: string; direction: DividerOrientation }>
+  onDoubleClick?: () => void
   'aria-label'?: string
 }
 
@@ -18,13 +21,15 @@ interface DividerProps {
 export const Divider: React.FC<DividerProps> = ({
   targetId,
   position,
-  direction,
+  direction = 'vertical',
   size = 4, // Default hover zone size (like VS Code)
   className,
+  handle: Handle,
+  onDoubleClick,
   'aria-label': ariaLabel
 }) => {
   const dividerRef = useRef<HTMLDivElement>(null)
-  const { gridId, state } = useGridContext()
+  const { gridId, state, dividerMode } = useGridContext()
   const { collapseBlock, expandBlock } = useGridActions()
   const { startResize, isDragging, activeDividerId } = useGridResize()
 
@@ -166,6 +171,11 @@ export const Divider: React.FC<DividerProps> = ({
   const handleDoubleClick = useCallback((event: React.MouseEvent) => {
     event.preventDefault()
 
+    if (onDoubleClick) {
+      onDoubleClick()
+      return
+    }
+
     if (!targetBlock?.collapsible || targetBlock.collapseAt === undefined) {
       return
     }
@@ -178,9 +188,9 @@ export const Divider: React.FC<DividerProps> = ({
     } else {
       collapseBlock(targetId)
     }
-  }, [collapseBlock, expandBlock, targetBlock, targetId])
+  }, [collapseBlock, expandBlock, onDoubleClick, targetBlock, targetId])
 
-  if (!targetBlock) {
+  if (!targetBlock || dividerMode === 'none') {
     return null
   }
 
@@ -218,7 +228,14 @@ export const Divider: React.FC<DividerProps> = ({
       onMouseDown={handlePointerDown}
       onTouchStart={handlePointerDown}
       onDoubleClick={handleDoubleClick}
-    />
+    >
+      {Handle && (
+        <Handle
+          className="pointer-events-none absolute inset-0"
+          direction={direction}
+        />
+      )}
+    </div>
   )
 }
 

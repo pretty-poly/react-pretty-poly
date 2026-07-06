@@ -216,15 +216,8 @@ export function useGridResizeOperations(
           return sum + size;
         }, 0);
 
-      // Measure actual divider sizes from DOM (not calculated count × 8px)
-      const dividers = Array.from(
-        parentElement?.querySelectorAll('[data-block-type="divider"]') || []
-      );
-      const gapSpace = dividers.reduce((sum, el) => {
-        if (!(el instanceof HTMLElement)) return sum;
-        const size = direction === "row" ? el.clientWidth : el.clientHeight;
-        return sum + size;
-      }, 0);
+      // Dividers are overlays, so they do not consume CSS grid layout space.
+      const gapSpace = 0;
 
       const fixedSpace = pxBlocks;
       const flexSpace = getFlexSpacePx(containerSize, fixedSpace, gapSpace);

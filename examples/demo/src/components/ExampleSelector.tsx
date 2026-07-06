@@ -200,6 +200,8 @@ export default function ExampleSelector() {
           {examples.map((example) => (
             <Card
               key={example.key}
+              data-testid="example-card"
+              data-example-key={example.key}
               className="cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1"
               onClick={() => selectExample(example.key)}
             >

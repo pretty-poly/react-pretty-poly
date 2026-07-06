@@ -20,15 +20,15 @@ npx shadcn@latest init
 Install the core grid system:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-system#v0.4.1
 ```
 
 Install optional feature sets as needed:
 
 ```bash
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.4.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.0
-npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.0
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-sidebar#v0.4.1
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-primitives#v0.4.1
+npx shadcn@latest add pretty-poly/react-pretty-poly/grid-tabs#v0.4.1
 ```
 
 The tag is intentional. Use tagged installs for reproducibility, and update tags explicitly when adopting a newer PrettyPoly release.
@@ -65,6 +65,8 @@ export function Example() {
 }
 ```
 
+Use `dividers="manual"` when the consuming app renders explicit `<Divider>` children. Use `dividers="none"` to suppress all dividers.
+
 ## Verification
 
 After installing or updating PrettyPoly in a consuming project:
@@ -72,6 +74,12 @@ After installing or updating PrettyPoly in a consuming project:
 ```bash
 npm run type-check
 npm run build
+```
+
+For Phoenix/Vite consumers, also run the app-specific asset build. In Boopbup that gate is:
+
+```bash
+mix assets.build
 ```
 
 If imports fail, check the consuming project’s `components.json` aliases first. PrettyPoly source imports use the standard `@/components`, `@/hooks`, and `@/lib` style after installation.

@@ -56,7 +56,7 @@ export default [
     }
   },
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ['**/*.js', '**/*.jsx', '**/*.mjs'],
     ...typescript.configs.disableTypeChecked,
   },
   {

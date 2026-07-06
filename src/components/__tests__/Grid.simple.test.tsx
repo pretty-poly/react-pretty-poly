@@ -100,6 +100,68 @@ describe('Grid (Simplified Integration)', () => {
     expect(gridStyles?.textContent).toContain('grid-template-columns')
   })
 
+  it('auto-generates dividers by default', () => {
+    render(
+      <Grid defaultLayout={basicLayout}>
+        <Block id="sidebar">Sidebar</Block>
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    expect(screen.getByRole('separator')).toBeInTheDocument()
+  })
+
+  it('does not auto-generate dividers in manual mode', () => {
+    render(
+      <Grid defaultLayout={basicLayout} dividers="manual">
+        <Block id="sidebar">Sidebar</Block>
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    expect(screen.queryByRole('separator')).not.toBeInTheDocument()
+  })
+
+  it('renders explicit divider children in manual mode', () => {
+    render(
+      <Grid defaultLayout={basicLayout} dividers="manual">
+        <Block id="sidebar">Sidebar</Block>
+        <Divider targetId="sidebar" position="end" />
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    expect(screen.getByRole('separator')).toHaveAttribute('data-target-block', 'sidebar')
+  })
+
+  it('suppresses explicit and generated dividers in none mode', () => {
+    render(
+      <Grid defaultLayout={basicLayout} dividers="none">
+        <Block id="sidebar">Sidebar</Block>
+        <Divider targetId="sidebar" position="end" />
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    expect(screen.queryByRole('separator')).not.toBeInTheDocument()
+  })
+
+  it('applies default divider configuration to generated dividers', () => {
+    render(
+      <Grid
+        defaultLayout={basicLayout}
+        dividerConfig={{ defaultSize: 12, defaultClassName: 'custom-divider' }}
+      >
+        <Block id="sidebar">Sidebar</Block>
+        <Block id="main">Main</Block>
+      </Grid>
+    )
+
+    const divider = screen.getByRole('separator')
+    expect(divider).toHaveClass('custom-divider')
+    expect(divider).toHaveStyle({ width: '12px' })
+  })
+
   it('handles mode changes', async () => {
     const modes = {
       mobile: { type: 'dock' as const, maxWidth: 767 },

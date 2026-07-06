@@ -1,6 +1,8 @@
 # Advanced Tabbed Interface Implementation Plan
 *Last Updated: 2025-10-28*
 
+> Status: historical implementation plan. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `../README.md`, `../registry/README.md`, and `../AGENTS.md` for current commands and paths.
+
 ## 🎯 Overview
 
 This document outlines the implementation plan for adding VS Code/Zed-style tabbed interfaces to pretty_poly blocks. The feature will enable multiple tabs within blocks with navigation history, scrollable tab bars, and dynamic view instantiation through a registry system.

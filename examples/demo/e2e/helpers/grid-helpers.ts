@@ -12,17 +12,17 @@ export async function getBlock(page: Page, blockId: string): Promise<Locator> {
 }
 
 /**
- * Get a divider element by its data-block-id
+ * Get a divider element by its divider id or target block id
  */
 export async function getDivider(page: Page, dividerId: string): Promise<Locator> {
-  return page.locator(`[data-block-id="${dividerId}"]`);
+  return page.locator(`[data-divider-id="${dividerId}"], [data-target-block="${dividerId}"]`);
 }
 
 /**
  * Get all dividers on the page
  */
 export async function getAllDividers(page: Page): Promise<Locator> {
-  return page.locator('[data-block-type="divider"]');
+  return page.locator('[data-divider-id]');
 }
 
 /**

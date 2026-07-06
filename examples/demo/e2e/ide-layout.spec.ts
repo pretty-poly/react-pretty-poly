@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { getBlock, dragDivider, getBlockSize, waitForGridReady, getAllDividers } from './helpers/grid-helpers';
+import { getBlock, getDivider, dragDivider, getBlockSize, waitForGridReady, getAllDividers } from './helpers/grid-helpers';
 
 test.describe('IDE Layout Example', () => {
   test.beforeEach(async ({ page }) => {
@@ -220,11 +220,7 @@ test.describe('IDE Layout Example', () => {
       const terminal = await getBlock(page, 'terminal');
       const initialSize = await getBlockSize(terminal);
 
-      // Find the horizontal divider between editor and terminal
-      const dividers = await getAllDividers(page);
-
-      // Find horizontal divider by checking cursor style or try the second one
-      const horizontalDivider = dividers.nth(1);
+      const horizontalDivider = await getDivider(page, 'terminal');
 
       // Drag divider up (negative Y) to make terminal smaller, then verify it changed
       await dragDivider(horizontalDivider, 0, -50);
@@ -239,9 +235,7 @@ test.describe('IDE Layout Example', () => {
       const properties = await getBlock(page, 'properties');
       const initialSize = await getBlockSize(properties);
 
-      // Find the last vertical divider (before properties)
-      const dividers = await getAllDividers(page);
-      const lastDivider = dividers.last();
+      const lastDivider = await getDivider(page, 'properties');
 
       // Drag divider to the left
       await dragDivider(lastDivider, -50, 0);
@@ -267,8 +261,7 @@ test.describe('IDE Layout Example', () => {
 
     test('respects min size constraints on terminal', async ({ page }) => {
       const terminal = await getBlock(page, 'terminal');
-      const dividers = await getAllDividers(page);
-      const horizontalDivider = dividers.nth(1);
+      const horizontalDivider = await getDivider(page, 'terminal');
 
       // Try to drag far up (should hit min constraint)
       await dragDivider(horizontalDivider, 0, -300);
@@ -306,7 +299,7 @@ test.describe('IDE Layout Example', () => {
       await expect(page.locator('[data-block-id="editor"] >> text=index.ts')).toBeVisible();
 
       // Resize terminal
-      await dragDivider(dividers.nth(1), 0, 30);
+      await dragDivider(await getDivider(page, 'terminal'), 0, 30);
       await page.waitForTimeout(200);
 
       // Terminal should still be visible

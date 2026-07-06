@@ -1,5 +1,7 @@
 # Pretty Poly vs VS Code: Feature Comparison Matrix
 
+> Status: historical design note. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `README.md`, `registry/README.md`, and `AGENTS.md` for current commands and paths. Any `src/...` implementation paths below are stale unless they refer to tests.
+
 ## Architecture Comparison
 
 | Feature | Pretty Poly (Current) | VS Code | Gap Analysis |

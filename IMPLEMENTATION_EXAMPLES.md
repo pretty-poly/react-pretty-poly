@@ -1,5 +1,7 @@
 # Implementation Examples: VS Code Patterns in Pretty Poly
 
+> Status: historical design note. Current installable source lives in `components/`, `hooks/`, and `lib/`; see `README.md`, `registry/README.md`, and `AGENTS.md` for current commands and paths. Any `src/...` implementation paths below are stale unless they refer to tests.
+
 This document provides concrete code examples showing how VS Code's architectural patterns could be implemented in pretty_poly.
 
 ## Example 1: View Registry System

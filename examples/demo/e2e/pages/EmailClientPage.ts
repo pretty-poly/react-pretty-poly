@@ -41,7 +41,7 @@ export class EmailClientPage {
 
     // Email list elements
     this.searchInput = page.getByPlaceholder('Search emails...');
-    this.emailListItems = page.locator('[data-block-id="email-list"] button');
+    this.emailListItems = page.locator('[data-block-id="email-list"] [data-email-id]');
 
     // Email preview elements
     this.emailSubject = page.locator('[data-block-id="email-preview"] h2');
@@ -89,13 +89,11 @@ export class EmailClientPage {
   }
 
   async getDividerBetweenFoldersAndList() {
-    // This divider ID might vary based on implementation
-    // Adjust based on actual data-divider-id values
-    return getDivider(this.page, 'folders-email-list');
+    return getDivider(this.page, 'folders');
   }
 
   async getDividerBetweenListAndPreview() {
-    return getDivider(this.page, 'email-list-email-preview');
+    return getDivider(this.page, 'email-list');
   }
 
   async getEmailCount(): Promise<number> {

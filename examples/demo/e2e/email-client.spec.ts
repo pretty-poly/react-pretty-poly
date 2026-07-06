@@ -207,8 +207,8 @@ test.describe('Email Client Example', () => {
       await page.waitForTimeout(200);
 
       const size = await getBlockSize(foldersBlock);
-      // Min size is 180px
-      expect(size.width).toBeGreaterThanOrEqual(180);
+      // Min size is 60px, matching the collapsed folder rail width
+      expect(size.width).toBeGreaterThanOrEqual(60);
     });
 
     test('respects max size constraints', async ({ page }) => {

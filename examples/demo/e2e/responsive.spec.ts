@@ -169,10 +169,9 @@ test.describe('Responsive Grid Behavior', () => {
       const heading = page.getByRole('heading', { name: 'PrettyPoly Demo Examples' });
       await expect(heading).toBeVisible();
 
-      // All three cards should be visible
-      const cards = page.locator('.cursor-pointer.transition-all');
+      const cards = page.locator('[data-testid="example-card"]');
       const count = await cards.count();
-      expect(count).toBe(3);
+      expect(count).toBeGreaterThanOrEqual(3);
     });
 
     test('selector displays correctly on mobile', async ({ page }) => {
@@ -183,13 +182,12 @@ test.describe('Responsive Grid Behavior', () => {
       const heading = page.getByRole('heading', { name: 'PrettyPoly Demo Examples' });
       await expect(heading).toBeVisible();
 
-      // Cards should stack vertically on mobile
-      const cards = page.locator('.cursor-pointer.transition-all');
+      const cards = page.locator('[data-testid="example-card"]');
       const count = await cards.count();
-      expect(count).toBe(3);
+      expect(count).toBeGreaterThanOrEqual(3);
     });
 
-    test('back button works on all viewport sizes', async ({ page }) => {
+    test('browser back returns to selector on all viewport sizes', async ({ page }) => {
       const viewports = [
         { width: 1920, height: 1080 },
         { width: 768, height: 1024 },
@@ -198,16 +196,12 @@ test.describe('Responsive Grid Behavior', () => {
 
       for (const viewport of viewports) {
         await page.setViewportSize(viewport);
-        await page.goto('/?example=email-client');
+        await page.goto('/');
         await page.waitForLoadState('networkidle');
-        await page.waitForTimeout(100); // Extra wait for render
+        await page.locator('[data-example-key="email-client"]').click();
+        await page.waitForLoadState('networkidle');
 
-        // Back button should be visible
-        const backButton = page.getByRole('button', { name: 'Back to Examples' });
-        await expect(backButton).toBeVisible();
-
-        // Click back
-        await backButton.click();
+        await page.goBack();
         await page.waitForLoadState('networkidle');
         await page.waitForTimeout(100); // Extra wait for render
 

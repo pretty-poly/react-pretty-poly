@@ -9,15 +9,15 @@ export class ExampleSelectorPage {
   readonly basicDashboardCard: Locator;
   readonly ideLayoutCard: Locator;
   readonly emailClientCard: Locator;
-  readonly backButton: Locator;
+  readonly exampleCards: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.heading = page.getByRole('heading', { name: 'PrettyPoly Demo Examples' });
-    this.basicDashboardCard = page.getByText('Basic Dashboard').locator('..');
-    this.ideLayoutCard = page.getByText('IDE Layout').locator('..');
-    this.emailClientCard = page.getByText('Email Client').locator('..');
-    this.backButton = page.getByRole('button', { name: 'Back to Examples' });
+    this.basicDashboardCard = page.locator('[data-example-key="basic-dashboard"]');
+    this.ideLayoutCard = page.locator('[data-example-key="ide-layout"]');
+    this.emailClientCard = page.locator('[data-example-key="email-client"]');
+    this.exampleCards = page.locator('[data-testid="example-card"]');
   }
 
   async goto() {
@@ -38,7 +38,7 @@ export class ExampleSelectorPage {
   }
 
   async goBack() {
-    await this.backButton.click();
+    await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
   }
 

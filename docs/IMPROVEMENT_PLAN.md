@@ -1,5 +1,7 @@
 # Pretty Poly Improvement Plan
 
+> Status: historical plan. This plan predates the GitHub shadcn registry-source transition. See `../README.md`, `../registry/README.md`, and `../AGENTS.md` for current source layout, commands, and release workflow.
+
 ## Executive Summary
 
 Comprehensive plan to fix issues and enhance PrettyPoly. This plan addresses test failures, adds missing tooling, improves code quality, and implements performance optimizations.
