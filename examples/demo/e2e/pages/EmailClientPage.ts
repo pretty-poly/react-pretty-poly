@@ -54,7 +54,7 @@ export class EmailClientPage {
   }
 
   async goto() {
-    await this.page.goto('/?example=email-client');
+    await this.page.goto('/embed/email-client');
     await waitForGridReady(this.page);
   }
 

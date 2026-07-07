@@ -3,7 +3,7 @@ import { getBlock, dragDivider, getBlockSize, waitForGridReady, getAllDividers }
 
 test.describe('Basic Dashboard Example', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?example=basic-dashboard');
+    await page.goto('/embed/basic-dashboard');
     await waitForGridReady(page);
   });
 

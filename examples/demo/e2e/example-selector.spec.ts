@@ -1,117 +1,107 @@
 import { test, expect } from '@playwright/test';
-import { ExampleSelectorPage } from './pages/ExampleSelectorPage';
+import { DocsShellPage } from './pages/DocsShellPage';
+import { dragDivider, getBlockSize } from './helpers/grid-helpers';
 
-test.describe('Example Selector', () => {
-  let selectorPage: ExampleSelectorPage;
+test.describe('Demo Docs Shell', () => {
+  let docsPage: DocsShellPage;
 
   test.beforeEach(async ({ page }) => {
-    selectorPage = new ExampleSelectorPage(page);
-    await selectorPage.goto();
+    docsPage = new DocsShellPage(page);
   });
 
-  test('displays the example selector page', async ({ page }) => {
-    await expect(selectorPage.heading).toBeVisible();
-    await expect(selectorPage.heading).toHaveText('PrettyPoly Demo Examples');
+  test('redirects the root route to the default example docs shell', async ({ page }) => {
+    await docsPage.goto('/');
+
+    await expect(page).toHaveURL(/\/examples\/basic-dashboard$/);
+    await expect(docsPage.detailsTitle).toHaveText('Basic Dashboard');
+    await expect(docsPage.navItem('basic-dashboard')).toHaveAttribute('aria-current', 'page');
+    await docsPage.waitForEmbeddedGrid();
   });
 
-  test('displays expected example cards', async ({ page }) => {
-    expect(await selectorPage.exampleCards.count()).toBeGreaterThanOrEqual(3);
-    await expect(selectorPage.basicDashboardCard).toBeVisible();
-    await expect(selectorPage.ideLayoutCard).toBeVisible();
-    await expect(selectorPage.emailClientCard).toBeVisible();
+  test('displays navigation groups and core examples', async ({ page }) => {
+    await docsPage.goto('/examples/basic-dashboard');
+
+    await expect(page.getByRole('heading', { name: 'Normal App Patterns' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Dense Context Tools' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Under Review' })).toBeVisible();
+    await expect(docsPage.navItem('basic-dashboard')).toBeVisible();
+    await expect(docsPage.navItem('email-client')).toBeVisible();
+    await expect(docsPage.navItem('ide-layout')).toBeVisible();
+    await expect(docsPage.navItem('view-registry-demo')).toBeVisible();
   });
 
-  test('navigates to Basic Dashboard example', async ({ page }) => {
-    await selectorPage.selectExample('Basic Dashboard');
+  test('navigates between examples and updates iframe plus details', async ({ page }) => {
+    await docsPage.goto('/examples/basic-dashboard');
+    await docsPage.selectExample('email-client');
 
-    // Check URL updated
-    expect(await selectorPage.getCurrentUrl()).toContain('example=basic-dashboard');
-
-    // Check selector is hidden and example content is visible
-    await expect(selectorPage.heading).not.toBeVisible();
-    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
+    await expect(page).toHaveURL(/\/examples\/email-client$/);
+    await expect(docsPage.detailsTitle).toHaveText('Email Client');
+    await expect(docsPage.docsPanel).toContainText('folder navigation');
+    await expect(docsPage.docsPanel).toContainText('inbox-like workflow');
+    await expect(docsPage.demoFrame.locator('[data-block-id="folders"]')).toBeVisible();
+    await expect(docsPage.demoFrame.locator('[data-block-id="email-list"]')).toBeVisible();
   });
 
-  test('navigates to IDE Layout example', async ({ page }) => {
-    await selectorPage.selectExample('IDE Layout');
+  test('keeps full-page launch in the notes panel instead of the demo pane', async ({ page }) => {
+    await docsPage.goto('/examples/basic-dashboard');
 
-    // Check URL updated
-    expect(await selectorPage.getCurrentUrl()).toContain('example=ide-layout');
-
-    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
+    await expect(page.getByText('Open full page')).not.toBeVisible();
+    await expect(page.getByRole('link', { name: 'Open Basic Dashboard full page' })).toBeVisible();
   });
 
-  test('navigates to Email Client example', async ({ page }) => {
-    await selectorPage.selectExample('Email Client');
+  test('shows raw source for the selected example', async ({ page }) => {
+    await docsPage.goto('/examples/email-client');
 
-    // Check URL updated
-    expect(await selectorPage.getCurrentUrl()).toContain('example=email-client');
+    await page.getByRole('tab', { name: 'Source' }).click();
 
-    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
+    await expect(page.locator('[data-testid="example-source"]')).toContainText('const emailLayout');
+    await expect(page.locator('[data-testid="example-source"]')).toContainText('<Grid');
   });
 
-  test('navigates back to selector from example', async ({ page }) => {
-    // Go to an example
-    await selectorPage.selectExample('Email Client');
-    await expect(selectorPage.heading).not.toBeVisible();
+  test('resizes docs shell dividers without the iframe stealing drag events', async ({ page }) => {
+    await docsPage.goto('/examples/basic-dashboard');
 
-    // Use browser history
-    await selectorPage.goBack();
+    const navBlock = page.locator('[data-block-id="docs-nav"]');
+    const navDivider = page.locator('[data-divider-id="docs-nav-end-divider"]');
+    await expect(navDivider).toBeVisible();
 
-    // Should be back on selector page
-    await expect(selectorPage.heading).toBeVisible();
-    expect(await selectorPage.getCurrentUrl()).not.toContain('example=');
+    const initialSize = await getBlockSize(navBlock);
+    await dragDivider(navDivider, 120, 0);
+
+    const resizedSize = await getBlockSize(navBlock);
+    expect(resizedSize.width).toBeGreaterThan(initialSize.width + 50);
   });
 
-  test('supports direct URL navigation to examples', async ({ page }) => {
-    // Navigate directly via URL
-    await page.goto('/?example=email-client');
-    await page.waitForLoadState('networkidle');
+  test('supports browser back and forward between docs routes', async ({ page }) => {
+    await docsPage.goto('/examples/basic-dashboard');
+    await docsPage.selectExample('email-client');
+    await docsPage.selectExample('ide-layout');
 
-    // Should show the example, not the selector
-    await expect(selectorPage.heading).not.toBeVisible();
-    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
-  });
-
-  test('handles browser back button', async ({ page }) => {
-    // Navigate to example
-    await selectorPage.selectExample('Basic Dashboard');
-    await expect(selectorPage.heading).not.toBeVisible();
-
-    // Use browser back
     await page.goBack();
-    await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(/\/examples\/email-client$/);
+    await expect(docsPage.detailsTitle).toHaveText('Email Client');
 
-    // Should be back on selector
-    await expect(selectorPage.heading).toBeVisible();
-  });
-
-  test('handles browser forward button', async ({ page }) => {
-    // Navigate to example and back
-    await selectorPage.selectExample('IDE Layout');
-    await page.goBack();
-    await page.waitForLoadState('networkidle');
-
-    // Use browser forward
     await page.goForward();
-    await page.waitForLoadState('networkidle');
-
-    // Should be on the example again
-    expect(await selectorPage.getCurrentUrl()).toContain('example=ide-layout');
-    await expect(page.locator('[data-grid-id]').first()).toBeVisible();
+    await expect(page).toHaveURL(/\/examples\/ide-layout$/);
+    await expect(docsPage.detailsTitle).toHaveText('IDE Layout');
   });
 
-  test('maintains state across navigation', async ({ page }) => {
-    // Visit multiple examples
-    await selectorPage.selectExample('Email Client');
-    await selectorPage.goBack();
-    await selectorPage.selectExample('IDE Layout');
-    await selectorPage.goBack();
+  test('redirects invalid docs and embed routes to the default example', async ({ page }) => {
+    await page.goto('/examples/not-real');
+    await expect(page).toHaveURL(/\/examples\/basic-dashboard$/);
+    await expect(docsPage.detailsTitle).toHaveText('Basic Dashboard');
 
-    // Should still show selector correctly
-    await expect(selectorPage.heading).toBeVisible();
-    await expect(selectorPage.basicDashboardCard).toBeVisible();
-    await expect(selectorPage.ideLayoutCard).toBeVisible();
-    await expect(selectorPage.emailClientCard).toBeVisible();
+    await page.goto('/embed/not-real');
+    await expect(page).toHaveURL(/\/embed\/basic-dashboard$/);
+    await expect(page.locator('[data-block-id="sidebar"]')).toBeVisible();
+    await expect(page.locator('[data-testid="docs-shell"]')).not.toBeVisible();
+  });
+
+  test('renders embed routes without the docs shell', async ({ page }) => {
+    await page.goto('/embed/email-client');
+
+    await expect(page.locator('[data-testid="docs-shell"]')).not.toBeVisible();
+    await expect(page.locator('[data-block-id="folders"]')).toBeVisible();
+    await expect(page.locator('[data-block-id="email-preview"]')).toBeVisible();
   });
 });

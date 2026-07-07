@@ -3,7 +3,7 @@ import { getBlock, getDivider, dragDivider, getBlockSize, waitForGridReady, getA
 
 test.describe('IDE Layout Example', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?example=ide-layout');
+    await page.goto('/embed/ide-layout');
     await waitForGridReady(page);
   });
 

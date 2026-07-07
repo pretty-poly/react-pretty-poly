@@ -70,7 +70,7 @@ npm run test:e2e:report
 Test configuration is in `playwright.config.ts`:
 
 - **Projects**: chromium, firefox, webkit (desktop), tablet, mobile
-- **Base URL**: http://localhost:5173
+- **Base URL**: http://127.0.0.1:4173 by default, override with `PLAYWRIGHT_PORT`
 - **Auto-start**: Dev server starts automatically
 - **Artifacts**: Screenshots/videos on failure
 - **CI Ready**: GitHub Actions compatible

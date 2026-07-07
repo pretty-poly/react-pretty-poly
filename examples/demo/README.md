@@ -27,6 +27,7 @@ npm install
 
 # Start development server
 npm run dev
+# Opens at http://127.0.0.1:5174
 
 # Validate the demo
 npm run type-check
@@ -40,6 +41,14 @@ npm run test:e2e:chromium
 
 # Preview built app
 npm run preview
+# Opens at http://127.0.0.1:4174
+```
+
+The default docs/dev port is `5174` so this demo does not compete with other
+Vite apps on `5173`. Override it when needed:
+
+```bash
+VITE_DEMO_PORT=5180 npm run dev
 ```
 
 ## Library Development

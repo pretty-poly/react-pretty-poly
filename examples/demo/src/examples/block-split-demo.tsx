@@ -367,7 +367,7 @@ function TerminalPane({ blockId }: { blockId: string }) {
               &gt; Starting development server...
             </div>
             <div className="text-gray-400">
-              &gt; Server running at http://localhost:5173
+              &gt; Server running at http://127.0.0.1:5174
             </div>
             <div className="mt-4">$ # Terminal pane: {blockId}</div>
             <div className="text-gray-400">

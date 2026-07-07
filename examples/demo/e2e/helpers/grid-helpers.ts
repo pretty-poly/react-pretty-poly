@@ -101,12 +101,12 @@ export async function isBlockVisible(block: Locator): Promise<boolean> {
  * Navigate to a specific example
  */
 export async function navigateToExample(page: Page, exampleKey: string): Promise<void> {
-  await page.goto(`/?example=${exampleKey}`);
+  await page.goto(`/embed/${exampleKey}`);
   await page.waitForLoadState('networkidle');
 }
 
 /**
- * Navigate back to the example selector
+ * Navigate back to the docs shell
  */
 export async function navigateToSelector(page: Page): Promise<void> {
   await page.goto('/');

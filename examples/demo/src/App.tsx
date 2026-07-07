@@ -1,7 +1,19 @@
-import ExampleSelector from '@/components/ExampleSelector'
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-function App() {
-  return <ExampleSelector />
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+});
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-export default App
+function App() {
+  return <RouterProvider router={router} />;
+}
+
+export default App;

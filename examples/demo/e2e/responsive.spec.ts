@@ -6,7 +6,7 @@ test.describe('Responsive Grid Behavior', () => {
     test.use({ viewport: { width: 1920, height: 1080 } });
 
     test('email client uses grid layout on desktop', async ({ page }) => {
-      await page.goto('/?example=email-client');
+      await page.goto('/embed/email-client');
       await waitForGridReady(page);
 
       // All three panes should be visible side-by-side
@@ -30,7 +30,7 @@ test.describe('Responsive Grid Behavior', () => {
     });
 
     test('dashboard uses grid layout on desktop', async ({ page }) => {
-      await page.goto('/?example=basic-dashboard');
+      await page.goto('/embed/basic-dashboard');
       await waitForGridReady(page);
 
       // All three panels visible side-by-side
@@ -53,7 +53,7 @@ test.describe('Responsive Grid Behavior', () => {
     });
 
     test('IDE layout uses nested grid on desktop', async ({ page }) => {
-      await page.goto('/?example=ide-layout');
+      await page.goto('/embed/ide-layout');
       await waitForGridReady(page);
 
       // All four panes visible
@@ -73,7 +73,7 @@ test.describe('Responsive Grid Behavior', () => {
     test.use({ viewport: { width: 768, height: 1024 } });
 
     test('maintains reasonable layout on tablet', async ({ page }) => {
-      await page.goto('/?example=email-client');
+      await page.goto('/embed/email-client');
       await waitForGridReady(page);
 
       // Grid should still work on tablet
@@ -87,7 +87,7 @@ test.describe('Responsive Grid Behavior', () => {
     });
 
     test('dashboard adapts to tablet width', async ({ page }) => {
-      await page.goto('/?example=basic-dashboard');
+      await page.goto('/embed/basic-dashboard');
       await waitForGridReady(page);
 
       const sidebar = page.locator('[data-block-id="sidebar"]');
@@ -102,7 +102,7 @@ test.describe('Responsive Grid Behavior', () => {
     test.use({ viewport: { width: 375, height: 667 } });
 
     test('grid renders on mobile viewport', async ({ page }) => {
-      await page.goto('/?example=email-client');
+      await page.goto('/embed/email-client');
       await waitForGridReady(page);
 
       // Grid container should exist
@@ -111,7 +111,7 @@ test.describe('Responsive Grid Behavior', () => {
     });
 
     test('dashboard renders on mobile', async ({ page }) => {
-      await page.goto('/?example=basic-dashboard');
+      await page.goto('/embed/basic-dashboard');
       await waitForGridReady(page);
 
       const grid = page.locator('[data-grid-id]').first();
@@ -123,7 +123,7 @@ test.describe('Responsive Grid Behavior', () => {
     test('handles viewport resize from desktop to mobile', async ({ page }) => {
       // Start desktop
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await page.goto('/?example=email-client');
+      await page.goto('/embed/email-client');
       await waitForGridReady(page);
 
       // Verify desktop layout
@@ -142,7 +142,7 @@ test.describe('Responsive Grid Behavior', () => {
     test('handles viewport resize from mobile to desktop', async ({ page }) => {
       // Start mobile
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/?example=basic-dashboard');
+      await page.goto('/embed/basic-dashboard');
       await waitForGridReady(page);
 
       // Resize to desktop
@@ -160,34 +160,42 @@ test.describe('Responsive Grid Behavior', () => {
     });
   });
 
-  test.describe('Example Selector Responsive Behavior', () => {
-    test('selector displays correctly on desktop', async ({ page }) => {
+  test.describe('Docs Shell Responsive Behavior', () => {
+    test('docs shell uses the PrettyPoly grid on desktop', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await expect(page).toHaveURL(/\/examples\/basic-dashboard$/);
 
-      const heading = page.getByRole('heading', { name: 'PrettyPoly Demo Examples' });
-      await expect(heading).toBeVisible();
+      const nav = page.locator('[data-block-id="docs-nav"]');
+      const demo = page.locator('[data-block-id="demo-preview"]');
+      const details = page.locator('[data-block-id="example-details"]');
 
-      const cards = page.locator('[data-testid="example-card"]');
-      const count = await cards.count();
-      expect(count).toBeGreaterThanOrEqual(3);
+      await expect(nav).toBeVisible();
+      await expect(demo).toBeVisible();
+      await expect(details).toBeVisible();
+
+      const navBox = await nav.boundingBox();
+      const demoBox = await demo.boundingBox();
+      const detailsBox = await details.boundingBox();
+
+      if (navBox && demoBox && detailsBox) {
+        expect(navBox.x).toBeLessThan(demoBox.x);
+        expect(demoBox.x).toBeLessThan(detailsBox.x);
+      }
     });
 
-    test('selector displays correctly on mobile', async ({ page }) => {
+    test('docs shell stacks navigation, demo, and notes on mobile', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.goto('/examples/basic-dashboard');
 
-      const heading = page.getByRole('heading', { name: 'PrettyPoly Demo Examples' });
-      await expect(heading).toBeVisible();
-
-      const cards = page.locator('[data-testid="example-card"]');
-      const count = await cards.count();
-      expect(count).toBeGreaterThanOrEqual(3);
+      await expect(page.locator('[data-testid="docs-shell"]')).toBeVisible();
+      await expect(page.locator('[data-testid="docs-nav"]').first()).toBeVisible();
+      await expect(page.locator('[data-testid="demo-frame"]')).toBeVisible();
+      await expect(page.locator('[data-testid="example-docs-panel"]').first()).toBeVisible();
+      await expect(page.locator('[data-block-id="docs-nav"]')).not.toBeVisible();
     });
 
-    test('browser back returns to selector on all viewport sizes', async ({ page }) => {
+    test('browser back returns to the previous docs example on all viewport sizes', async ({ page }) => {
       const viewports = [
         { width: 1920, height: 1080 },
         { width: 768, height: 1024 },
@@ -196,24 +204,20 @@ test.describe('Responsive Grid Behavior', () => {
 
       for (const viewport of viewports) {
         await page.setViewportSize(viewport);
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-        await page.locator('[data-example-key="email-client"]').click();
-        await page.waitForLoadState('networkidle');
+        await page.goto('/examples/basic-dashboard');
+        await page.locator('[data-testid="docs-nav-item"][data-example-id="email-client"]').first().click();
+        await expect(page).toHaveURL(/\/examples\/email-client$/);
 
         await page.goBack();
-        await page.waitForLoadState('networkidle');
-        await page.waitForTimeout(100); // Extra wait for render
-
-        // Should be on selector - check URL instead of heading for reliability
-        expect(page.url()).not.toContain('example=');
+        await expect(page).toHaveURL(/\/examples\/basic-dashboard$/);
+        await expect(page.locator('[data-testid="example-details-title"]')).toHaveText('Basic Dashboard');
       }
     });
   });
 
   test.describe('Cross-browser Responsive Tests', () => {
     test('email client works across different browsers', async ({ page }) => {
-      await page.goto('/?example=email-client');
+      await page.goto('/embed/email-client');
       await waitForGridReady(page);
 
       // Basic functionality should work regardless of browser
@@ -230,7 +234,7 @@ test.describe('Responsive Grid Behavior', () => {
     });
 
     test('dashboard works across different browsers', async ({ page }) => {
-      await page.goto('/?example=basic-dashboard');
+      await page.goto('/embed/basic-dashboard');
       await waitForGridReady(page);
 
       const sidebar = page.locator('[data-block-id="sidebar"]');

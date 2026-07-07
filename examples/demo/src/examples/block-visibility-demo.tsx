@@ -253,7 +253,7 @@ function DemoBlocks() {
               </div>
               <div>Starting development server...</div>
               <div className="text-blue-600 dark:text-blue-400">
-                → Local: http://localhost:5173
+                → Local: http://127.0.0.1:5174
               </div>
               <div className="text-muted-foreground/50 mt-2">
                 This panel started hidden via <code>isHidden: true</code>

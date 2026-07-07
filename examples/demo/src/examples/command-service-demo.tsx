@@ -5,7 +5,7 @@
  * helpers belong in PrettyPoly or should stay in consuming applications.
  */
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Grid } from "@/components/grid/grid";
 import { Block } from "@/components/grid/block";
 import { BlockContent } from "@/components/grid/block-content";
@@ -37,7 +37,12 @@ interface DemoState {
   counter: number
   lastAction: string
   sidebarVisible: boolean
-  notifications: string[]
+  notifications: NotificationMessage[]
+}
+
+interface NotificationMessage {
+  id: number
+  message: string
 }
 
 // ============================================================================
@@ -145,6 +150,7 @@ function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 // ============================================================================
 
 function CommandServiceDemoInternal() {
+  const nextNotificationId = useRef(0)
   const [state, setState] = useState<DemoState>({
     counter: 0,
     lastAction: 'None',
@@ -155,9 +161,15 @@ function CommandServiceDemoInternal() {
   const [paletteOpen, setPaletteOpen] = useState(false)
 
   const addNotification = (message: string) => {
+    const notification = {
+      id: nextNotificationId.current,
+      message,
+    }
+    nextNotificationId.current += 1
+
     setState(prev => ({
       ...prev,
-      notifications: [...prev.notifications.slice(-4), message],
+      notifications: [...prev.notifications.slice(-4), notification],
     }))
   }
 
@@ -280,27 +292,9 @@ function CommandServiceDemoInternal() {
 
   return (
     <div className="h-screen flex flex-col">
-      {/* Info Banner */}
-      <div className="bg-purple-50 dark:bg-purple-950 border-b border-purple-200 dark:border-purple-800 p-4">
-        <h1 className="text-xl font-bold mb-2">Action Helper Experiment</h1>
-        <p className="text-sm text-muted-foreground mb-2">
-          This under-review source centralizes actions and keyboard shortcuts.
-          It is kept here to evaluate whether that belongs in PrettyPoly.
-        </p>
-        <div className="flex gap-6 text-xs">
-          <div>
-            <strong>Try this:</strong> Use the buttons or optional shortcuts.
-          </div>
-          <div>
-            <strong>Shortcuts:</strong> Ctrl+I (increment), Ctrl+D (decrement), Ctrl+R (reset),
-            Ctrl+B (sidebar), Ctrl+P (action search)
-          </div>
-        </div>
-      </div>
-
       {/* Grid with Blocks */}
-      <div className="flex-1">
-        <Grid defaultLayout={blocks}>
+      <div className="flex-1 min-h-0">
+        <Grid defaultLayout={blocks} className="h-full">
           {state.sidebarVisible && (
             <Block id="sidebar">
               <BlockHeader>
@@ -413,9 +407,9 @@ function CommandServiceDemoInternal() {
                       <CommandButton commandId="demo.clearNotifications" variant="ghost" />
                     </div>
                     <div className="space-y-1">
-                      {state.notifications.map((notif, i) => (
-                        <div key={i} className="text-sm text-muted-foreground">
-                          • {notif}
+                      {state.notifications.map((notification) => (
+                        <div key={notification.id} className="text-sm text-muted-foreground">
+                          • {notification.message}
                         </div>
                       ))}
                     </div>
